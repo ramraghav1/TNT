@@ -1,0 +1,36 @@
+<div class="login-container">
+    <h1>Tour & Travel Login</h1>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+          [class.invalid]="isFieldInvalid('username')"
+          placeholder="Enter your username"
+        />
+        <div *ngIf="isFieldInvalid('username')" class="error-message">
+          Username is required.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          [class.invalid]="isFieldInvalid('password')"
+          placeholder="Enter your password"
+        />
+        <div *ngIf="isFieldInvalid('password')" class="error-message">
+          Password is required.
+        </div>
+      </div>
+  
+      <button type="submit" class="login-button">Login</button>
+      <a href="#" class="forgot-password">Forgot Password?</a>
+    </form>
+  </div>
+  

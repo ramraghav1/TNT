@@ -1,0 +1,25 @@
+<header class="header">
+  <!-- Logo Section -->
+  <div class="logo">
+    <img src="logo.png" alt="Logo" />
+  </div>
+
+  <!-- Header Right Section -->
+  <div class="header-right">
+    <!-- Notification Bell Icon -->
+    <button class="icon-btn">
+      <span class="material-icons">notifications</span>
+      <span class="badge">3</span>
+    </button>
+
+    <!-- User Icon with Dropdown -->
+    <div class="user-menu" (click)="toggleDropdown()" tabindex="0" (blur)="closeDropdown()">
+      <span class="material-icons user-icon">account_circle</span>
+
+      <div class="dropdown" *ngIf="dropdownOpen">
+        <a (click)="viewProfile()">My Profile</a>
+        <a (click)="logout()">Logout</a>
+      </div>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,43 @@
+<div class="dashboard-container">
+
+  <!-- Card Section -->
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Reports</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🧭</div>
+      <div class="card-title">Bookings</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🛫</div>
+      <div class="card-title">Tours</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">👥</div>
+      <div class="card-title">Users</div>
+    </div>
+  </div>
+
+  <!-- Chart Section -->
+  <div class="chart-row">
+    <div class="chart-box">
+      <h3 class="chart-title">Monthly Status (Bar)</h3>
+      <canvas baseChart
+        [data]="barChartData"
+        [options]="barChartOptions"
+        [type]="barChartType">
+      </canvas>
+    </div>
+
+    <div class="chart-box">
+      <h3 class="chart-title">Top Approved Itineraries (Pie)</h3>
+      <canvas baseChart
+        [data]="pieChartData"
+        [options]="pieChartOptions"
+        [type]="pieChartType">
+      </canvas>
+    </div>
+  </div>
+</div>
