@@ -1,11 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-header',
-  standalone: true,
-  imports: [CommonModule], // Import CommonModule for directives like *ngIf
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
@@ -19,16 +16,17 @@ export class HeaderComponent {
   }
 
   closeDropdown() {
-    setTimeout(() => (this.dropdownOpen = false), 200); // allow click events
+    this.dropdownOpen = false;
   }
 
   viewProfile() {
-    this.router.navigate(['/profile']);
+    console.log('View Profile clicked');
+    // Add navigation logic here if needed
   }
 
   logout() {
-    // Handle logout logic here
-    console.log('Logging out...');
+    console.log('Logout clicked');
+    // Redirect to login page
     this.router.navigate(['/login']);
   }
 }
