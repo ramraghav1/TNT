@@ -1,12 +1,19 @@
 ﻿<Properties StartupConfiguration="{DB9EF3E8-B224-4BC6-BAD1-99A064B35147}|https">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Bussiness FirstBuild="True" />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.ItemProperties.Server PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints />
+  <MonoDevelop.Ide.ItemProperties.Repository FirstBuild="True" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Bussiness/MiddleWare/GlobalExceptionHandler.cs">
+    <Files>
+      <File FileName="Server/Controller/LoginController.cs" Line="41" Column="42" />
+      <File FileName="Server/Program.cs" Line="35" Column="20" />
+      <File FileName="Domain/Class1.cs" Line="1" Column="1" />
+      <File FileName="Domain/Models/LoginModel.cs" Line="7" Column="23" />
+      <File FileName="Server/appsettings.json" Line="16" Column="1" />
+      <File FileName="Domain/Models/JwtSettings.cs" Line="10" Column="6" />
+      <File FileName="Bussiness/Class1.cs" Line="1" Column="1" />
+      <File FileName="Bussiness/MiddleWare/GlobalExceptionHandler.cs" Line="7" Column="1" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
@@ -17,4 +24,7 @@
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.Server PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MultiItemStartupConfigurations />
 </Properties>

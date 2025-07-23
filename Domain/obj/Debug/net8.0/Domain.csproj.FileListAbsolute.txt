@@ -1,0 +1,12 @@
+/Users/ramsharanlamichhane/Projects/TNT/Domain/bin/Debug/net8.0/Domain.deps.json
+/Users/ramsharanlamichhane/Projects/TNT/Domain/bin/Debug/net8.0/Domain.dll
+/Users/ramsharanlamichhane/Projects/TNT/Domain/bin/Debug/net8.0/Domain.pdb
+/Users/ramsharanlamichhane/Projects/TNT/Domain/obj/Debug/net8.0/Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/ramsharanlamichhane/Projects/TNT/Domain/obj/Debug/net8.0/Domain.AssemblyInfoInputs.cache
+/Users/ramsharanlamichhane/Projects/TNT/Domain/obj/Debug/net8.0/Domain.AssemblyInfo.cs
+/Users/ramsharanlamichhane/Projects/TNT/Domain/obj/Debug/net8.0/Domain.csproj.CoreCompileInputs.cache
+/Users/ramsharanlamichhane/Projects/TNT/Domain/obj/Debug/net8.0/Domain.sourcelink.json
+/Users/ramsharanlamichhane/Projects/TNT/Domain/obj/Debug/net8.0/Domain.dll
+/Users/ramsharanlamichhane/Projects/TNT/Domain/obj/Debug/net8.0/refint/Domain.dll
+/Users/ramsharanlamichhane/Projects/TNT/Domain/obj/Debug/net8.0/Domain.pdb
+/Users/ramsharanlamichhane/Projects/TNT/Domain/obj/Debug/net8.0/ref/Domain.dll
