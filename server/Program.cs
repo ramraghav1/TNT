@@ -1,6 +1,9 @@
 using Domain.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Repository.Dapper;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +31,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("Jwt")
 );
+builder.Services.AddSingleton<IDapperDbContext, DapperDbContext>();
 var app = builder.Build();
 
 // 2. Add Middleware

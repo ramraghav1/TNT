@@ -1,8 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "Yp7KClA5VkHiTNRPMuA+Hxr+NEQ18LhESgkBXxLzpt1bsNqMWSGK9oH9jbKdtCFuS9fjcIPMHxPNXCbrBhlITw==",
+  "dgSpecHash": "f1xEtJxKFwQ52QYcgfk3aRos7JXzFjFy1FP+/xtWK4iUa0pEosHlKzOBd5BGZGixBc60X3rP2EGpFALlGlITpg==",
   "success": true,
   "projectFilePath": "/Users/ramsharanlamichhane/Projects/TNT/Repository/Repository.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/Users/ramsharanlamichhane/.nuget/packages/microsoft.extensions.configuration.abstractions/9.0.7/microsoft.extensions.configuration.abstractions.9.0.7.nupkg.sha512",
+    "/Users/ramsharanlamichhane/.nuget/packages/microsoft.extensions.primitives/9.0.7/microsoft.extensions.primitives.9.0.7.nupkg.sha512",
+    "/Users/ramsharanlamichhane/.nuget/packages/runtime.native.system.data.sqlclient.sni/4.4.0/runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "/Users/ramsharanlamichhane/.nuget/packages/runtime.win-arm64.runtime.native.system.data.sqlclient.sni/4.4.0/runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "/Users/ramsharanlamichhane/.nuget/packages/runtime.win-x64.runtime.native.system.data.sqlclient.sni/4.4.0/runtime.win-x64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "/Users/ramsharanlamichhane/.nuget/packages/runtime.win-x86.runtime.native.system.data.sqlclient.sni/4.4.0/runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "/Users/ramsharanlamichhane/.nuget/packages/system.data.sqlclient/4.9.0/system.data.sqlclient.4.9.0.nupkg.sha512"
+  ],
   "logs": []
 }

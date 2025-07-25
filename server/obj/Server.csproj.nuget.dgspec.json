@@ -1,7 +1,7 @@
 {
   "format": 1,
   "restore": {
-    "/Users/ramsharanlamichhane/Projects/TNT/Server/Server.csproj": {}
+    "/Users/ramsharanlamichhane/Projects/TNT/server/server.csproj": {}
   },
   "projects": {
     "/Users/ramsharanlamichhane/Projects/TNT/Domain/Domain.csproj": {
@@ -57,14 +57,77 @@
         }
       }
     },
-    "/Users/ramsharanlamichhane/Projects/TNT/Server/Server.csproj": {
+    "/Users/ramsharanlamichhane/Projects/TNT/Repository/Repository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/ramsharanlamichhane/Projects/TNT/Server/Server.csproj",
-        "projectName": "Server",
-        "projectPath": "/Users/ramsharanlamichhane/Projects/TNT/Server/Server.csproj",
+        "projectUniqueName": "/Users/ramsharanlamichhane/Projects/TNT/Repository/Repository.csproj",
+        "projectName": "Repository",
+        "projectPath": "/Users/ramsharanlamichhane/Projects/TNT/Repository/Repository.csproj",
         "packagesPath": "/Users/ramsharanlamichhane/.nuget/packages/",
-        "outputPath": "/Users/ramsharanlamichhane/Projects/TNT/Server/obj/",
+        "outputPath": "/Users/ramsharanlamichhane/Projects/TNT/Repository/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/ramsharanlamichhane/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.Extensions.Configuration.Abstractions": {
+              "target": "Package",
+              "version": "[9.0.7, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.9.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.405/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/ramsharanlamichhane/Projects/TNT/server/server.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/ramsharanlamichhane/Projects/TNT/server/server.csproj",
+        "projectName": "server",
+        "projectPath": "/Users/ramsharanlamichhane/Projects/TNT/server/server.csproj",
+        "packagesPath": "/Users/ramsharanlamichhane/.nuget/packages/",
+        "outputPath": "/Users/ramsharanlamichhane/Projects/TNT/server/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/ramsharanlamichhane/.nuget/NuGet/NuGet.Config"
@@ -81,6 +144,9 @@
             "projectReferences": {
               "/Users/ramsharanlamichhane/Projects/TNT/Domain/Domain.csproj": {
                 "projectPath": "/Users/ramsharanlamichhane/Projects/TNT/Domain/Domain.csproj"
+              },
+              "/Users/ramsharanlamichhane/Projects/TNT/Repository/Repository.csproj": {
+                "projectPath": "/Users/ramsharanlamichhane/Projects/TNT/Repository/Repository.csproj"
               }
             }
           }

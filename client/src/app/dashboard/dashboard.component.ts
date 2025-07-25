@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { NgChartsModule } from 'ng2-charts';
-import {
-  ChartConfiguration,
-  ChartType,
-} from 'chart.js';
+import { ChartConfiguration } from 'chart.js';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,7 +21,7 @@ export class DashboardComponent {
         position: 'top' as const
       }
     }
-  };
+  }; // Fixed closing brace for barChartOptions
 
   public barChartLabels: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
 
@@ -34,8 +32,9 @@ export class DashboardComponent {
       { data: [28, 48, 40, 19, 86, 27, 90], label: 'Engaged', backgroundColor: '#FDD835' }
     ]
   };
+
   public barChartType: 'bar' = 'bar';
-  
+
   public pieChartLabels: string[] = [
     'Europe Explorer',
     'Himalayan Adventure',
@@ -44,7 +43,7 @@ export class DashboardComponent {
     'Tokyo City Lights',
     'Amazon Jungle Trek'
   ];
-  
+
   public pieChartData = {
     labels: this.pieChartLabels,
     datasets: [
@@ -61,7 +60,7 @@ export class DashboardComponent {
       }
     ]
   };
-  
+
   public pieChartOptions: ChartConfiguration<'pie'>['options'] = {
     responsive: true,
     maintainAspectRatio: false, // ✅ important
@@ -75,8 +74,12 @@ export class DashboardComponent {
       }
     }
   };
-  
-  public pieChartType: 'pie' = 'pie';
-  
 
+  public pieChartType: 'pie' = 'pie';
+
+  constructor(private router: Router) {} // Fixed closing brace for constructor
+
+  navigateToAddItinerary() {
+    this.router.navigate(['/add-itinerary']);
+  }
 }

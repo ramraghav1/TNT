@@ -1,30 +1,38 @@
-﻿<Properties StartupConfiguration="{DB9EF3E8-B224-4BC6-BAD1-99A064B35147}|https">
-  <MonoDevelop.Ide.ItemProperties.Bussiness FirstBuild="True" />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.DebuggingService.Breakpoints />
-  <MonoDevelop.Ide.ItemProperties.Repository FirstBuild="True" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Bussiness/MiddleWare/GlobalExceptionHandler.cs">
+﻿<Properties GitUserInfo="UsingGIT" StartupConfiguration="{DB9EF3E8-B224-4BC6-BAD1-99A064B35147}|https">
+  <MonoDevelop.Ide.Workbench ActiveDocument="server/Dockerfile">
     <Files>
-      <File FileName="Server/Controller/LoginController.cs" Line="41" Column="42" />
-      <File FileName="Server/Program.cs" Line="35" Column="20" />
-      <File FileName="Domain/Class1.cs" Line="1" Column="1" />
-      <File FileName="Domain/Models/LoginModel.cs" Line="7" Column="23" />
-      <File FileName="Server/appsettings.json" Line="16" Column="1" />
-      <File FileName="Domain/Models/JwtSettings.cs" Line="10" Column="6" />
-      <File FileName="Bussiness/Class1.cs" Line="1" Column="1" />
-      <File FileName="Bussiness/MiddleWare/GlobalExceptionHandler.cs" Line="7" Column="1" />
+      <File FileName="Server/Controller/LoginController.cs" Line="35" Column="1" />
+      <File FileName="Server/appsettings.json" />
+      <File FileName="Domain/Models/JwtSettings.cs" />
+      <File FileName="Repository/Dapper/IDapperDbContext.cs" />
+      <File FileName="Repository/Dapper/DapperDbContext.cs" />
+      <File FileName="DbDeployment/Program.cs" />
+      <File FileName="DbDeployment/Migrations/CreateLoginDetailTable.cs" />
+      <File FileName="DbDeployment/DbDeployment.csproj" />
+      <File FileName="DbDeployment/Migrations/InsertIntoLoginDetailTable.cs" />
+      <File FileName="Server/Dockerfile" Line="35" Column="10" />
+      <File FileName="Server/appsettings.Development.json" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Solution" expanded="True">
-            <Node name="Server" selected="True" />
+            <Node name="server">
+              <Node name="Controller" expanded="True" />
+              <Node name="Dockerfile" selected="True" />
+            </Node>
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.ItemProperties.Server PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Bussiness FirstBuild="True" />
   <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.Server PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.server PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
 </Properties>

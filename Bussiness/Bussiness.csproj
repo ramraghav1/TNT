@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="MappingProfiles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MappingProfiles\" />
+  </ItemGroup>
 </Project>

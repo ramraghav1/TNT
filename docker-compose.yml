@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=host.docker.internal;Port=5432;Database=TNT;Username=postgres;Password=1234
+    networks:
+      - appnet
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+    depends_on:
+      - server
+    networks:
+      - appnet
+
+networks:
+  appnet:

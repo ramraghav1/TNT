@@ -42,3 +42,13 @@
 /Users/ramsharanlamichhane/Projects/TNT/server/bin/Debug/net8.0/System.IdentityModel.Tokens.Jwt.dll
 /Users/ramsharanlamichhane/Projects/TNT/server/bin/Debug/net8.0/Domain.dll
 /Users/ramsharanlamichhane/Projects/TNT/server/bin/Debug/net8.0/Domain.pdb
+/Users/ramsharanlamichhane/Projects/TNT/server/bin/Debug/net8.0/Microsoft.Extensions.Configuration.Abstractions.dll
+/Users/ramsharanlamichhane/Projects/TNT/server/bin/Debug/net8.0/Microsoft.Extensions.Primitives.dll
+/Users/ramsharanlamichhane/Projects/TNT/server/bin/Debug/net8.0/System.Data.SqlClient.dll
+/Users/ramsharanlamichhane/Projects/TNT/server/bin/Debug/net8.0/runtimes/win-arm64/native/sni.dll
+/Users/ramsharanlamichhane/Projects/TNT/server/bin/Debug/net8.0/runtimes/win-x64/native/sni.dll
+/Users/ramsharanlamichhane/Projects/TNT/server/bin/Debug/net8.0/runtimes/win-x86/native/sni.dll
+/Users/ramsharanlamichhane/Projects/TNT/server/bin/Debug/net8.0/runtimes/unix/lib/net8.0/System.Data.SqlClient.dll
+/Users/ramsharanlamichhane/Projects/TNT/server/bin/Debug/net8.0/runtimes/win/lib/net8.0/System.Data.SqlClient.dll
+/Users/ramsharanlamichhane/Projects/TNT/server/bin/Debug/net8.0/Repository.dll
+/Users/ramsharanlamichhane/Projects/TNT/server/bin/Debug/net8.0/Repository.pdb
