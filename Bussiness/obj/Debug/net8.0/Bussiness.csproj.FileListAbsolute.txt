@@ -1,0 +1,6 @@
+/Users/ramsharanlamichhane/Projects/TNT/Bussiness/obj/Debug/net8.0/Bussiness.csproj.AssemblyReference.cache
+/Users/ramsharanlamichhane/Projects/TNT/Bussiness/obj/Debug/net8.0/Bussiness.GeneratedMSBuildEditorConfig.editorconfig
+/Users/ramsharanlamichhane/Projects/TNT/Bussiness/obj/Debug/net8.0/Bussiness.AssemblyInfoInputs.cache
+/Users/ramsharanlamichhane/Projects/TNT/Bussiness/obj/Debug/net8.0/Bussiness.AssemblyInfo.cs
+/Users/ramsharanlamichhane/Projects/TNT/Bussiness/obj/Debug/net8.0/Bussiness.csproj.CoreCompileInputs.cache
+/Users/ramsharanlamichhane/Projects/TNT/Bussiness/obj/Debug/net8.0/Bussiness.sourcelink.json

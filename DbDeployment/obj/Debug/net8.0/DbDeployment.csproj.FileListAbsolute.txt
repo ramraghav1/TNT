@@ -5,6 +5,8 @@
 /Users/ramsharanlamichhane/Projects/TNT/DbDeployment/bin/Debug/net8.0/DbDeployment.pdb
 /Users/ramsharanlamichhane/Projects/TNT/DbDeployment/bin/Debug/net8.0/Azure.Core.dll
 /Users/ramsharanlamichhane/Projects/TNT/DbDeployment/bin/Debug/net8.0/Azure.Identity.dll
+/Users/ramsharanlamichhane/Projects/TNT/DbDeployment/bin/Debug/net8.0/BCrypt.Net-Next.dll
+/Users/ramsharanlamichhane/Projects/TNT/DbDeployment/bin/Debug/net8.0/Dapper.dll
 /Users/ramsharanlamichhane/Projects/TNT/DbDeployment/bin/Debug/net8.0/FirebirdSql.Data.FirebirdClient.dll
 /Users/ramsharanlamichhane/Projects/TNT/DbDeployment/bin/Debug/net8.0/FluentMigrator.dll
 /Users/ramsharanlamichhane/Projects/TNT/DbDeployment/bin/Debug/net8.0/FluentMigrator.Abstractions.dll
@@ -89,4 +91,3 @@
 /Users/ramsharanlamichhane/Projects/TNT/DbDeployment/obj/Debug/net8.0/DbDeployment.pdb
 /Users/ramsharanlamichhane/Projects/TNT/DbDeployment/obj/Debug/net8.0/DbDeployment.genruntimeconfig.cache
 /Users/ramsharanlamichhane/Projects/TNT/DbDeployment/obj/Debug/net8.0/ref/DbDeployment.dll
-/Users/ramsharanlamichhane/Projects/TNT/DbDeployment/bin/Debug/net8.0/BCrypt.Net-Next.dll

@@ -1,20 +1,29 @@
 {
   "version": 2,
-  "dgSpecHash": "XgFMYHg0qkS2faB7cmNbcRh41mSW7DZ1ov/I7MBhkuz/fLrrWoEjD2znc7JvuiZo8Vts+ESBrvNOPcpFx1r7vw==",
+  "dgSpecHash": "nTPHqvqH0LZUKDKlVmq0Y4PQkISGBG5EZ5adJkrPoy5VBu58V6Xf2HP9+B6036VNbQdjSwGer3pcvVflX43dgQ==",
   "success": true,
   "projectFilePath": "/Users/ramsharanlamichhane/Projects/TNT/server/server.csproj",
   "expectedPackageFiles": [
+    "/Users/ramsharanlamichhane/.nuget/packages/automapper/15.0.1/automapper.15.0.1.nupkg.sha512",
+    "/Users/ramsharanlamichhane/.nuget/packages/automapper.extensions.microsoft.dependencyinjection/12.0.1/automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
+    "/Users/ramsharanlamichhane/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
+    "/Users/ramsharanlamichhane/.nuget/packages/dapper/2.1.66/dapper.2.1.66.nupkg.sha512",
     "/Users/ramsharanlamichhane/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/8.0.7/microsoft.aspnetcore.authentication.jwtbearer.8.0.7.nupkg.sha512",
     "/Users/ramsharanlamichhane/.nuget/packages/microsoft.aspnetcore.openapi/8.0.12/microsoft.aspnetcore.openapi.8.0.12.nupkg.sha512",
     "/Users/ramsharanlamichhane/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "/Users/ramsharanlamichhane/.nuget/packages/microsoft.extensions.configuration.abstractions/9.0.7/microsoft.extensions.configuration.abstractions.9.0.7.nupkg.sha512",
+    "/Users/ramsharanlamichhane/.nuget/packages/microsoft.extensions.dependencyinjection/8.0.0/microsoft.extensions.dependencyinjection.8.0.0.nupkg.sha512",
+    "/Users/ramsharanlamichhane/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/8.0.0/microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
+    "/Users/ramsharanlamichhane/.nuget/packages/microsoft.extensions.logging/8.0.0/microsoft.extensions.logging.8.0.0.nupkg.sha512",
+    "/Users/ramsharanlamichhane/.nuget/packages/microsoft.extensions.logging.abstractions/8.0.0/microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",
+    "/Users/ramsharanlamichhane/.nuget/packages/microsoft.extensions.options/8.0.0/microsoft.extensions.options.8.0.0.nupkg.sha512",
     "/Users/ramsharanlamichhane/.nuget/packages/microsoft.extensions.primitives/9.0.7/microsoft.extensions.primitives.9.0.7.nupkg.sha512",
-    "/Users/ramsharanlamichhane/.nuget/packages/microsoft.identitymodel.abstractions/7.1.2/microsoft.identitymodel.abstractions.7.1.2.nupkg.sha512",
-    "/Users/ramsharanlamichhane/.nuget/packages/microsoft.identitymodel.jsonwebtokens/7.1.2/microsoft.identitymodel.jsonwebtokens.7.1.2.nupkg.sha512",
-    "/Users/ramsharanlamichhane/.nuget/packages/microsoft.identitymodel.logging/7.1.2/microsoft.identitymodel.logging.7.1.2.nupkg.sha512",
+    "/Users/ramsharanlamichhane/.nuget/packages/microsoft.identitymodel.abstractions/8.0.1/microsoft.identitymodel.abstractions.8.0.1.nupkg.sha512",
+    "/Users/ramsharanlamichhane/.nuget/packages/microsoft.identitymodel.jsonwebtokens/8.0.1/microsoft.identitymodel.jsonwebtokens.8.0.1.nupkg.sha512",
+    "/Users/ramsharanlamichhane/.nuget/packages/microsoft.identitymodel.logging/8.0.1/microsoft.identitymodel.logging.8.0.1.nupkg.sha512",
     "/Users/ramsharanlamichhane/.nuget/packages/microsoft.identitymodel.protocols/7.1.2/microsoft.identitymodel.protocols.7.1.2.nupkg.sha512",
     "/Users/ramsharanlamichhane/.nuget/packages/microsoft.identitymodel.protocols.openidconnect/7.1.2/microsoft.identitymodel.protocols.openidconnect.7.1.2.nupkg.sha512",
-    "/Users/ramsharanlamichhane/.nuget/packages/microsoft.identitymodel.tokens/7.1.2/microsoft.identitymodel.tokens.7.1.2.nupkg.sha512",
+    "/Users/ramsharanlamichhane/.nuget/packages/microsoft.identitymodel.tokens/8.0.1/microsoft.identitymodel.tokens.8.0.1.nupkg.sha512",
     "/Users/ramsharanlamichhane/.nuget/packages/microsoft.openapi/1.6.14/microsoft.openapi.1.6.14.nupkg.sha512",
     "/Users/ramsharanlamichhane/.nuget/packages/runtime.native.system.data.sqlclient.sni/4.4.0/runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
     "/Users/ramsharanlamichhane/.nuget/packages/runtime.win-arm64.runtime.native.system.data.sqlclient.sni/4.4.0/runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
@@ -27,5 +36,16 @@
     "/Users/ramsharanlamichhane/.nuget/packages/system.data.sqlclient/4.9.0/system.data.sqlclient.4.9.0.nupkg.sha512",
     "/Users/ramsharanlamichhane/.nuget/packages/system.identitymodel.tokens.jwt/7.1.2/system.identitymodel.tokens.jwt.7.1.2.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1608",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Detected package version outside of dependency constraint: AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.1 requires AutoMapper (= 12.0.1) but version AutoMapper 15.0.1 was resolved.",
+      "libraryId": "AutoMapper",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "funsFGbUsOZstTUlXRzhGrxt8miWSE9jhpPnDPZ26PfeEUP5A9lEkvwjDJwA2ofqhTjNAmVlBficY/XqvHR7Qg==",
+  "dgSpecHash": "eiB6raAxdz5NLHfYst2UElaOhy+BtVjZeNIaxoS8PLXq8wnRLP4F1qu1qKN2vEPzNoAr1dYmSBXebWU98T4O7Q==",
   "success": true,
   "projectFilePath": "/Users/ramsharanlamichhane/Projects/TNT/DbDeployment/DbDeployment.csproj",
   "expectedPackageFiles": [
     "/Users/ramsharanlamichhane/.nuget/packages/azure.core/1.38.0/azure.core.1.38.0.nupkg.sha512",
     "/Users/ramsharanlamichhane/.nuget/packages/azure.identity/1.11.4/azure.identity.1.11.4.nupkg.sha512",
     "/Users/ramsharanlamichhane/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
+    "/Users/ramsharanlamichhane/.nuget/packages/dapper/2.1.66/dapper.2.1.66.nupkg.sha512",
     "/Users/ramsharanlamichhane/.nuget/packages/firebirdsql.data.firebirdclient/10.3.2/firebirdsql.data.firebirdclient.10.3.2.nupkg.sha512",
     "/Users/ramsharanlamichhane/.nuget/packages/fluentmigrator/7.1.0/fluentmigrator.7.1.0.nupkg.sha512",
     "/Users/ramsharanlamichhane/.nuget/packages/fluentmigrator.abstractions/7.1.0/fluentmigrator.abstractions.7.1.0.nupkg.sha512",

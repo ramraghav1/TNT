@@ -10,13 +10,16 @@
     <None Remove="Dapper\" />
     <None Remove="Repositories\" />
     <None Remove="Interfaces\" />
+    <None Remove="DataModels\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Dapper\" />
     <Folder Include="Repositories\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="DataModels\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.7" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
   </ItemGroup>

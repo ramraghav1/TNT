@@ -42,6 +42,10 @@
               "target": "Package",
               "version": "[4.0.3, )"
             },
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.1.66, )"
+            },
             "FluentMigrator.Runner": {
               "target": "Package",
               "version": "[7.1.0, )"

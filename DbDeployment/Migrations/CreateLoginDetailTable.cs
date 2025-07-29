@@ -8,7 +8,7 @@ public class LoginDetailTable : Migration
     public override void Up()
     {
         Create.Table("logindetail")
-            .WithColumn("id").AsInt32().PrimaryKey().Identity()
+            .WithColumn("loginid").AsInt32().PrimaryKey().Identity()
             .WithColumn("userid").AsInt32().NotNullable()
             .WithColumn("username").AsString(100).Nullable()
             .WithColumn("password").AsString(255).NotNullable()

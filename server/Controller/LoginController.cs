@@ -6,21 +6,25 @@ using System.Security.Claims;
 using System.Text;
 using Domain.Models;
 using System;
+using Business.Services;
 
 [ApiController]
 [Route("api/[controller]")]
 public class LoginController : ControllerBase
 {
     private readonly JwtSettings _jwtSettings;
+    private readonly ILoginService _loginService;
 
-    public LoginController(IOptions<JwtSettings> jwtOptions)
+    public LoginController(IOptions<JwtSettings> jwtOptions,ILoginService loginService)
     {
         _jwtSettings = jwtOptions.Value;
+        _loginService = loginService;
     }
 
     [HttpPost]
     public IActionResult Post([FromBody] LoginRequest request)
     {
+        bool result = _loginService.CheckUserValid(request);
         // Simulate credential validation (replace with real logic)
         if (request.Username == "admin" && request.Password == "password")
         {
