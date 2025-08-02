@@ -1,44 +1,44 @@
 ﻿<Properties GitUserInfo="UsingGIT" StartupConfiguration="{DB9EF3E8-B224-4BC6-BAD1-99A064B35147}|https">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Repository/Repositories/UserInformationRepository.cs">
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Bussiness/MappingProfiles/UserInformationProfile.cs">
     <Files>
-      <File FileName="DbDeployment/Migrations/CreateUserInformationTable.cs" />
-      <File FileName="DbDeployment/Migrations/InsertIntoLoginDetailTable.cs" />
-      <File FileName="DbDeployment/Migrations/CreateLoginDetailTable.cs" />
-      <File FileName="DbDeployment/Migrations/InsertIntoUserInformation.cs" />
-      <File FileName="Domain/Models/UserInformation.cs" Line="13" Column="6" />
-      <File FileName="Repository/Repositories/UserInformationRepository.cs" Line="16" Column="64" />
-      <File FileName="Repository/Interfaces/IUserInformationRepository.cs" />
-      <File FileName="Repository/Dapper/DapperDbContext.cs" Line="20" Column="57" />
-      <File FileName="Repository/Dapper/IDapperDbContext.cs" Line="20" Column="81" />
-      <File FileName="Repository/DataModels/UserInformationDTO.cs" Line="4" Column="33" />
-      <File FileName="Bussiness/MappingProfiles/UserInformationMappingProfile.cs" Line="17" Column="2" />
-      <File FileName="Bussiness/Services/UserService.cs" Line="27" Column="24" />
-      <File FileName="Bussiness/Services/LoginService.cs" Line="1" Column="1" />
+      <File FileName="Bussiness/MappingProfiles/UserInformationProfile.cs" Line="2" Column="17" />
+      <File FileName="Domain/Models/UserInformation.cs" Line="15" Column="1" />
+      <File FileName="Repository/DataModels/UserInformationDTO.cs" Line="14" Column="2" />
+      <File FileName="Bussiness/Services/UserService.cs" Line="27" Column="56" />
+      <File FileName="Repository/Repositories/UserInformationRepository.cs" Line="15" Column="10" />
+      <File FileName="Repository/Interfaces/IUserInformationRepository.cs" Line="15" Column="1" />
+      <File FileName="server/Controller/UserController.cs" Line="26" Column="26" />
+      <File FileName="server/Program.cs" Line="30" Column="11" />
+      <File FileName="server/server.csproj" Line="20" Column="34" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Solution" expanded="True">
-            <Node name="Bussiness">
+            <Node name="Bussiness" selected="True">
+              <Node name="MappingProfiles" expanded="True" />
               <Node name="Services" expanded="True" />
             </Node>
-            <Node name="Repository">
+            <Node name="Repository" expanded="True">
+              <Node name="Dapper" expanded="True" />
               <Node name="DataModels" expanded="True" />
-              <Node name="Repositories" expanded="True">
-                <Node name="UserInformationRepository.cs" selected="True" />
-              </Node>
+              <Node name="Interfaces" expanded="True" />
+              <Node name="Repositories" expanded="True" />
             </Node>
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.Server PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/server/Controller/UserController.cs" relfile="server/Controller/UserController.cs" line="20" column="1" />
+      <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/Bussiness/Services/UserService.cs" relfile="Bussiness/Services/UserService.cs" line="46" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.ItemProperties.Server PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.server PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
 </Properties>

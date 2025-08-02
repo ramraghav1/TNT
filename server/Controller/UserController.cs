@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Domain.Models;
 using Business.Services;
+using Bussiness.Services;
 
 namespace Server.Controllers
 {
@@ -15,61 +16,29 @@ namespace Server.Controllers
             _userService = userService;
         }
 
-        // GET: api/user
-        [HttpGet]
+        [HttpGet]  // GET at api/user
+        [Route("GetAll")] // Optional, explicitly maps to api/user
         public IActionResult GetAllUsers()
         {
-            var users = _userService.GetAll();
-            return Ok(users);
-        }
-
-        // GET: api/user/{id}
-        [HttpGet("{id}")]
-        public IActionResult GetUserById(int id)
-        {
-            var user = _userService.GetById(id);
-            if (user == null)
-                return NotFound();
-            return Ok(user);
+            return Ok(_userService.GetAllUserInformation());
         }
 
         // POST: api/user
         [HttpPost]
-        public IActionResult AddUser([FromBody] User user)
+        [Route("Add")]
+        public IActionResult AddUser([FromBody] InsertUserInformation user)
         {
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
 
-            _userService.Add(user);
-            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
+
+            return Ok(_userService.AddUser(user));
+            
         }
 
-        // PUT: api/user/{id}
-        [HttpPut("{id}")]
-        public IActionResult UpdateUser(int id, [FromBody] User user)
-        {
-            if (id != user.Id)
-                return BadRequest("User ID mismatch");
-
-            var existingUser = _userService.GetById(id);
-            if (existingUser == null)
-                return NotFound();
-
-            _userService.Update(user);
-            return NoContent();
-        }
-
-        // DELETE: api/user/{id}
-        [HttpDelete("{id}")]
-        public IActionResult DeleteUser(int id)
-        {
-            var user = _userService.GetById(id);
-            if (user == null)
-                return NotFound();
-
-            _userService.Delete(id);
-            return NoContent();
-        }
+        
 
     }
 }

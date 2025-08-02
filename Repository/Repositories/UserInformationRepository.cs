@@ -13,18 +13,52 @@ namespace Repository.Repositories
 		{
             _dbConnection = dbConnection;
         }
-        public void AddUserInformation(UserInformationDTO user)
+        public int AddUserInformation(UserInformationDTO user)
         {
-            var sql = @"
-            INSERT INTO userinformation 
-            (userfullname, address, emailaddress, mobilenumber, createdby, updatedby, createdat, updatedat)
-            VALUES 
-            (@UserFullName, @Address, @EmailAddress, @MobileNumber, @CreatedBy, @UpdatedBy, @CreatedAt, @UpdatedAt);";
+            using (var transaction = _dbConnection.BeginTransaction())
+            {
+                int userId = 0;
+                try
+                {
+                    // Insert user and return the generated userid
+                    var insertUserSql = @"
+                INSERT INTO userinformation 
+                (userfullname, address, emailaddress, mobilenumber, createdby, updatedby, createdat, updatedat)
+                VALUES 
+                (@UserFullName, @Address, @EmailAddress, @MobileNumber, @CreatedBy, @UpdatedBy, @CreatedAt, @UpdatedAt)
+                RETURNING userid;";
 
-            
+                     userId = _dbConnection.QuerySingle<int>(insertUserSql, user, transaction);
 
-            _dbConnection.Execute(sql, user);
+                    // Insert login detail using the returned userId
+                    var insertLoginSql = @"
+                INSERT INTO logindetail 
+                (userid, username, passwordhash, createdat)
+                VALUES 
+                (@UserId, @Username, @PasswordHash, @CreatedAt);";
+                    var passwordHash = BCrypt.Net.BCrypt.HashPassword(user.emailaddress);
+                    var loginParams = new
+                    {
+                        UserId = userId,
+                        Username = user.emailaddress,
+                        PasswordHash = passwordHash,
+                        CreatedAt = DateTime.UtcNow
+                    };
+
+                    _dbConnection.Execute(insertLoginSql, loginParams, transaction);
+
+                    // Commit transaction
+                    transaction.Commit();
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    throw; // Let the exception bubble up
+                }
+                return userId;
+            }
         }
+
 
         public void UpdateUserInformation(UserInformationDTO user)
         {
@@ -41,6 +75,11 @@ namespace Repository.Repositories
          
 
             _dbConnection.Execute(sql, user);
+        }
+        public List<UserInformationDTO> GetAllUsers()
+        {
+            string sql = "SELECT * FROM userinformation";
+            return _dbConnection.Query<UserInformationDTO>(sql).AsList();
         }
     }
 }

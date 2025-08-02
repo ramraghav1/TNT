@@ -328,6 +328,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "BCrypt.Net-Next": "4.0.3",
           "Dapper": "2.1.66",
           "Microsoft.Extensions.Configuration.Abstractions": "9.0.7",
           "System.Data.SqlClient": "4.9.0"
@@ -944,6 +945,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {

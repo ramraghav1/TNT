@@ -12,6 +12,13 @@ public class UserInformationProfile : Profile
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.address))
             .ForMember(dest => dest.EmailAddress, opt => opt.MapFrom(src => src.emailaddress))
             .ForMember(dest => dest.MobileNumber, opt => opt.MapFrom(src => src.mobilenumber))
-            .ReverseMap(); // Also creates reverse mapping UserInformation -> UserInformationDTO
+            .ReverseMap(); // Also maps UserInformation -> UserInformationDTO
+
+        CreateMap<UserInformationDTO, InsertUserInformation>()
+            .ForMember(dest => dest.UserFullName, opt => opt.MapFrom(src => src.userfullname))
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.address))
+            .ForMember(dest => dest.EmailAddress, opt => opt.MapFrom(src => src.emailaddress))
+            .ForMember(dest => dest.MobileNumber, opt => opt.MapFrom(src => src.mobilenumber))
+            .ReverseMap();
     }
 }

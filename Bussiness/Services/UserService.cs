@@ -6,7 +6,13 @@ using Repository.Interfaces;
 
 namespace Bussiness.Services
 {
-    public class UserService
+    public interface IUserService
+    {
+        bool AddUser(InsertUserInformation user);
+        void UpdateUser(UserInformation user);
+        List<UserInformation> GetAllUserInformation();
+    }
+    public class UserService : IUserService
     {
         private readonly IUserInformationRepository _userRepo;
         private readonly IMapper _mapper;
@@ -18,13 +24,14 @@ namespace Bussiness.Services
             _mapper = mapper;
         }
 
-        public void AddUser(UserInformation user)
+        public bool AddUser(InsertUserInformation user)
         {
             // Map domain model to DTO
             var dto = _mapper.Map<UserInformationDTO>(user);
 
             // Call repository method with DTO
-            _userRepo.u(dto);
+            int userId = _userRepo.AddUserInformation(dto);
+            return (userId > 0);
         }
 
         public void UpdateUser(UserInformation user)
@@ -33,7 +40,13 @@ namespace Bussiness.Services
             var dto = _mapper.Map<UserInformationDTO>(user);
 
             // Call repository method with DTO
-            _userRepo.UpdateUserInformation(dto);
+            //_userRepo.UpdateUserInformation(dto);
+        }
+        public List<UserInformation> GetAllUserInformation()
+        {
+            var userInfoList = _userRepo.GetAllUsers(); // List<UserInformationDTO>
+            var domainUsers = _mapper.Map<List<UserInformation>>(userInfoList);
+            return domainUsers;
         }
     }
 }

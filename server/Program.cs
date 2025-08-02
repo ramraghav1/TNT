@@ -1,13 +1,18 @@
+using Bussiness.Services;
 using Domain.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Npgsql;
 using Repository.Dapper;
+using Repository.Interfaces;
+using Repository.Repositories;
+using System.Data;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddAutoMapper(typeof(Program));
 // 1. Add Authentication + JWT Bearer
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -32,6 +37,15 @@ builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("Jwt")
 );
 builder.Services.AddSingleton<IDapperDbContext, DapperDbContext>();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddAutoMapper(typeof(UserInformationProfile));
+// Register IDbConnection as transient (new connection each time)
+builder.Services.AddTransient<IDbConnection>(sp => new NpgsqlConnection(connectionString));
+
+// Register your repository and service
+builder.Services.AddScoped<IUserInformationRepository, UserInformationRepository>();
+builder.Services.AddTransient<IUserService, UserService>();
+
 var app = builder.Build();
 
 // 2. Add Middleware
@@ -40,7 +54,7 @@ app.UseSwaggerUI();
 app.UseMiddleware<GlobalExceptionHandler>();
 app.UseHttpsRedirection();
 
-app.UseAuthentication(); // 👈 Add this before UseAuthorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
