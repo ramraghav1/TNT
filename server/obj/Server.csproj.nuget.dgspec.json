@@ -1,36 +1,43 @@
 {
   "format": 1,
   "restore": {
-    "/Users/ramsharanlamichhane/Projects/TNT/server/server.csproj": {}
+    "C:\\DotNetProjects\\TNT\\server\\server.csproj": {}
   },
   "projects": {
-    "/Users/ramsharanlamichhane/Projects/TNT/Bussiness/Bussiness.csproj": {
+    "C:\\DotNetProjects\\TNT\\Bussiness\\Bussiness.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/ramsharanlamichhane/Projects/TNT/Bussiness/Bussiness.csproj",
+        "projectUniqueName": "C:\\DotNetProjects\\TNT\\Bussiness\\Bussiness.csproj",
         "projectName": "Bussiness",
-        "projectPath": "/Users/ramsharanlamichhane/Projects/TNT/Bussiness/Bussiness.csproj",
-        "packagesPath": "/Users/ramsharanlamichhane/.nuget/packages/",
-        "outputPath": "/Users/ramsharanlamichhane/Projects/TNT/Bussiness/obj/",
+        "projectPath": "C:\\DotNetProjects\\TNT\\Bussiness\\Bussiness.csproj",
+        "packagesPath": "C:\\Users\\Laxmi\\.nuget\\packages\\",
+        "outputPath": "C:\\DotNetProjects\\TNT\\Bussiness\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/ramsharanlamichhane/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Laxmi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/ramsharanlamichhane/Projects/TNT/Domain/Domain.csproj": {
-                "projectPath": "/Users/ramsharanlamichhane/Projects/TNT/Domain/Domain.csproj"
+              "C:\\DotNetProjects\\TNT\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\DotNetProjects\\TNT\\Domain\\Domain.csproj"
               },
-              "/Users/ramsharanlamichhane/Projects/TNT/Repository/Repository.csproj": {
-                "projectPath": "/Users/ramsharanlamichhane/Projects/TNT/Repository/Repository.csproj"
+              "C:\\DotNetProjects\\TNT\\Repository\\Repository.csproj": {
+                "projectPath": "C:\\DotNetProjects\\TNT\\Repository\\Repository.csproj"
               }
             }
           }
@@ -39,7 +46,13 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -74,26 +87,33 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.405/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/ramsharanlamichhane/Projects/TNT/Domain/Domain.csproj": {
+    "C:\\DotNetProjects\\TNT\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/ramsharanlamichhane/Projects/TNT/Domain/Domain.csproj",
+        "projectUniqueName": "C:\\DotNetProjects\\TNT\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "/Users/ramsharanlamichhane/Projects/TNT/Domain/Domain.csproj",
-        "packagesPath": "/Users/ramsharanlamichhane/.nuget/packages/",
-        "outputPath": "/Users/ramsharanlamichhane/Projects/TNT/Domain/obj/",
+        "projectPath": "C:\\DotNetProjects\\TNT\\Domain\\Domain.csproj",
+        "packagesPath": "C:\\Users\\Laxmi\\.nuget\\packages\\",
+        "outputPath": "C:\\DotNetProjects\\TNT\\Domain\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/ramsharanlamichhane/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Laxmi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -106,7 +126,13 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -127,26 +153,33 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.405/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/ramsharanlamichhane/Projects/TNT/Repository/Repository.csproj": {
+    "C:\\DotNetProjects\\TNT\\Repository\\Repository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/ramsharanlamichhane/Projects/TNT/Repository/Repository.csproj",
+        "projectUniqueName": "C:\\DotNetProjects\\TNT\\Repository\\Repository.csproj",
         "projectName": "Repository",
-        "projectPath": "/Users/ramsharanlamichhane/Projects/TNT/Repository/Repository.csproj",
-        "packagesPath": "/Users/ramsharanlamichhane/.nuget/packages/",
-        "outputPath": "/Users/ramsharanlamichhane/Projects/TNT/Repository/obj/",
+        "projectPath": "C:\\DotNetProjects\\TNT\\Repository\\Repository.csproj",
+        "packagesPath": "C:\\Users\\Laxmi\\.nuget\\packages\\",
+        "outputPath": "C:\\DotNetProjects\\TNT\\Repository\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/ramsharanlamichhane/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Laxmi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -159,7 +192,13 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -206,40 +245,47 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.405/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/ramsharanlamichhane/Projects/TNT/server/server.csproj": {
+    "C:\\DotNetProjects\\TNT\\server\\server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/ramsharanlamichhane/Projects/TNT/server/server.csproj",
+        "projectUniqueName": "C:\\DotNetProjects\\TNT\\server\\server.csproj",
         "projectName": "server",
-        "projectPath": "/Users/ramsharanlamichhane/Projects/TNT/server/server.csproj",
-        "packagesPath": "/Users/ramsharanlamichhane/.nuget/packages/",
-        "outputPath": "/Users/ramsharanlamichhane/Projects/TNT/server/obj/",
+        "projectPath": "C:\\DotNetProjects\\TNT\\server\\server.csproj",
+        "packagesPath": "C:\\Users\\Laxmi\\.nuget\\packages\\",
+        "outputPath": "C:\\DotNetProjects\\TNT\\server\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/ramsharanlamichhane/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Laxmi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/ramsharanlamichhane/Projects/TNT/Bussiness/Bussiness.csproj": {
-                "projectPath": "/Users/ramsharanlamichhane/Projects/TNT/Bussiness/Bussiness.csproj"
+              "C:\\DotNetProjects\\TNT\\Bussiness\\Bussiness.csproj": {
+                "projectPath": "C:\\DotNetProjects\\TNT\\Bussiness\\Bussiness.csproj"
               },
-              "/Users/ramsharanlamichhane/Projects/TNT/Domain/Domain.csproj": {
-                "projectPath": "/Users/ramsharanlamichhane/Projects/TNT/Domain/Domain.csproj"
+              "C:\\DotNetProjects\\TNT\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\DotNetProjects\\TNT\\Domain\\Domain.csproj"
               },
-              "/Users/ramsharanlamichhane/Projects/TNT/Repository/Repository.csproj": {
-                "projectPath": "/Users/ramsharanlamichhane/Projects/TNT/Repository/Repository.csproj"
+              "C:\\DotNetProjects\\TNT\\Repository\\Repository.csproj": {
+                "projectPath": "C:\\DotNetProjects\\TNT\\Repository\\Repository.csproj"
               }
             }
           }
@@ -248,7 +294,13 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -298,7 +350,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.405/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

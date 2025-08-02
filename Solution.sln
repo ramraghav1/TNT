@@ -2,9 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "server\server.csproj", "{DB9EF3E8-B224-4BC6-BAD1-99A064B35147}"
-EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "client", "client\client.njsproj", "{E9D64A85-CC2C-4543-8B3B-BE3F36F27F83}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "server", "server\server.csproj", "{DB9EF3E8-B224-4BC6-BAD1-99A064B35147}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{2C5A3E87-70E5-46EB-BF6C-2C7AA8E21992}"
 EndProject
@@ -24,10 +22,6 @@ Global
 		{DB9EF3E8-B224-4BC6-BAD1-99A064B35147}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB9EF3E8-B224-4BC6-BAD1-99A064B35147}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB9EF3E8-B224-4BC6-BAD1-99A064B35147}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E9D64A85-CC2C-4543-8B3B-BE3F36F27F83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E9D64A85-CC2C-4543-8B3B-BE3F36F27F83}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E9D64A85-CC2C-4543-8B3B-BE3F36F27F83}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E9D64A85-CC2C-4543-8B3B-BE3F36F27F83}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2C5A3E87-70E5-46EB-BF6C-2C7AA8E21992}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2C5A3E87-70E5-46EB-BF6C-2C7AA8E21992}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C5A3E87-70E5-46EB-BF6C-2C7AA8E21992}.Release|Any CPU.ActiveCfg = Release|Any CPU

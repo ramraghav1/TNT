@@ -10,3 +10,15 @@
 /Users/ramsharanlamichhane/Projects/TNT/Domain/obj/Debug/net8.0/refint/Domain.dll
 /Users/ramsharanlamichhane/Projects/TNT/Domain/obj/Debug/net8.0/Domain.pdb
 /Users/ramsharanlamichhane/Projects/TNT/Domain/obj/Debug/net8.0/ref/Domain.dll
+C:\DotNetProjects\TNT\Domain\bin\Debug\net8.0\Domain.deps.json
+C:\DotNetProjects\TNT\Domain\bin\Debug\net8.0\Domain.dll
+C:\DotNetProjects\TNT\Domain\bin\Debug\net8.0\Domain.pdb
+C:\DotNetProjects\TNT\Domain\obj\Debug\net8.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\DotNetProjects\TNT\Domain\obj\Debug\net8.0\Domain.AssemblyInfoInputs.cache
+C:\DotNetProjects\TNT\Domain\obj\Debug\net8.0\Domain.AssemblyInfo.cs
+C:\DotNetProjects\TNT\Domain\obj\Debug\net8.0\Domain.csproj.CoreCompileInputs.cache
+C:\DotNetProjects\TNT\Domain\obj\Debug\net8.0\Domain.sourcelink.json
+C:\DotNetProjects\TNT\Domain\obj\Debug\net8.0\Domain.dll
+C:\DotNetProjects\TNT\Domain\obj\Debug\net8.0\refint\Domain.dll
+C:\DotNetProjects\TNT\Domain\obj\Debug\net8.0\Domain.pdb
+C:\DotNetProjects\TNT\Domain\obj\Debug\net8.0\ref\Domain.dll
