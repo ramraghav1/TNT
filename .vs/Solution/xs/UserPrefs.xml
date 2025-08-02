@@ -8,7 +8,7 @@
       <File FileName="Repository/Repositories/UserInformationRepository.cs" />
       <File FileName="Repository/Interfaces/IUserInformationRepository.cs" />
       <File FileName="server/Controller/UserController.cs" />
-      <File FileName="server/Program.cs" Line="24" Column="62" />
+      <File FileName="server/Program.cs" Line="24" Column="74" />
       <File FileName="server/server.csproj" />
       <File FileName="DbDeployment/Migrations/CreateLoginDetailTable.cs" />
       <File FileName="server/Controller/LoginController.cs" />
@@ -20,16 +20,7 @@
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Solution">
-            <Node name="Bussiness" expanded="True">
-              <Node name="MappingProfiles" expanded="True" />
-              <Node name="Services" expanded="True" />
-            </Node>
-            <Node name="Domain" expanded="True">
-              <Node name="Models" expanded="True" />
-            </Node>
-            <Node name="server" expanded="True" />
-          </Node>
+          <Node name="Solution" selected="True" />
         </State>
       </Pad>
     </Pads>
