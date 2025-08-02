@@ -1,6 +1,5 @@
-﻿<Properties GitUserInfo="UsingGIT" StartupConfiguration="{DB9EF3E8-B224-4BC6-BAD1-99A064B35147}|https">
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.Workbench ActiveDocument="server/Controller/UserController.cs">
+﻿<Properties StartupConfiguration="{DB9EF3E8-B224-4BC6-BAD1-99A064B35147}|https" GitUserInfo="UsingGIT">
+  <MonoDevelop.Ide.Workbench ActiveDocument="server/Program.cs">
     <Files>
       <File FileName="Bussiness/MappingProfiles/UserInformationProfile.cs" />
       <File FileName="Domain/Models/UserInformation.cs" />
@@ -8,34 +7,40 @@
       <File FileName="Bussiness/Services/UserService.cs" />
       <File FileName="Repository/Repositories/UserInformationRepository.cs" />
       <File FileName="Repository/Interfaces/IUserInformationRepository.cs" />
-      <File FileName="server/Controller/UserController.cs" Line="23" Column="1" />
-      <File FileName="server/Program.cs" />
+      <File FileName="server/Controller/UserController.cs" />
+      <File FileName="server/Program.cs" Line="24" Column="62" />
       <File FileName="server/server.csproj" />
       <File FileName="DbDeployment/Migrations/CreateLoginDetailTable.cs" />
       <File FileName="server/Controller/LoginController.cs" />
       <File FileName="server/appsettings.json" />
-      <File FileName="server/MiddleWare/GlobalExceptionHandler.cs" Line="24" Column="1" />
+      <File FileName="server/MiddleWare/GlobalExceptionHandler.cs" />
       <File FileName="Domain/Models/JwtSettings.cs" />
-      <File FileName="Bussiness/Bussiness.csproj" Line="20" Column="15" />
+      <File FileName="Bussiness/Bussiness.csproj" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Solution" expanded="True">
-            <Node name="Bussiness">
+          <Node name="Solution">
+            <Node name="Bussiness" expanded="True">
               <Node name="MappingProfiles" expanded="True" />
+              <Node name="Services" expanded="True" />
             </Node>
-            <Node name="server">
-              <Node name="Controller" expanded="True" />
-              <Node name="MiddleWare" expanded="True">
-                <Node name="GlobalExceptionHandler.cs" selected="True" />
-              </Node>
+            <Node name="Domain" expanded="True">
+              <Node name="Models" expanded="True" />
             </Node>
+            <Node name="server" expanded="True" />
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
+  <DisabledProjects>
+    <String>client/client.njsproj</String>
+  </DisabledProjects>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.server PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/server/Controller/UserController.cs" relfile="server/Controller/UserController.cs" line="20" column="1" />
@@ -45,7 +50,4 @@
       <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/server/MiddleWare/GlobalExceptionHandler.cs" relfile="server/MiddleWare/GlobalExceptionHandler.cs" line="21" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.ItemProperties.server PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
 </Properties>

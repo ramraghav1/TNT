@@ -2786,32 +2786,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Laxmi\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "/Users/ramsharanlamichhane/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\DotNetProjects\\TNT\\DbDeployment\\DbDeployment.csproj",
+      "projectUniqueName": "/Users/ramsharanlamichhane/Projects/TNT/DbDeployment/DbDeployment.csproj",
       "projectName": "DbDeployment",
-      "projectPath": "C:\\DotNetProjects\\TNT\\DbDeployment\\DbDeployment.csproj",
-      "packagesPath": "C:\\Users\\Laxmi\\.nuget\\packages\\",
-      "outputPath": "C:\\DotNetProjects\\TNT\\DbDeployment\\obj\\",
+      "projectPath": "/Users/ramsharanlamichhane/Projects/TNT/DbDeployment/DbDeployment.csproj",
+      "packagesPath": "/Users/ramsharanlamichhane/.nuget/packages/",
+      "outputPath": "/Users/ramsharanlamichhane/Projects/TNT/DbDeployment/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Laxmi\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/Users/ramsharanlamichhane/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -2824,13 +2816,7 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
-      },
-      "SdkAnalysisLevel": "9.0.100"
+      }
     },
     "frameworks": {
       "net8.0": {
@@ -2873,7 +2859,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.405/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
