@@ -1,7 +1,6 @@
 using Bussiness.Services;
 using Domain.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
@@ -12,8 +11,12 @@ using System.Data;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddAutoMapper(typeof(Program));
-// 1. Add Authentication + JWT Bearer
+
+// Load JWT settings
+var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
+
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -23,40 +26,36 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-
-            ValidIssuer = "TNT-server",
-            ValidAudience = "TNT-users",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("s3cr3tK3y!@#2025-Super$LongAndRandomKey1234")) // Use a strong key!
+            ValidIssuer = jwtSettings.Issuer,
+            ValidAudience = jwtSettings.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
         };
     });
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.Configure<JwtSettings>(
-    builder.Configuration.GetSection("Jwt")
-);
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddSingleton<IDapperDbContext, DapperDbContext>();
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddAutoMapper(typeof(UserInformationProfile));
-// Register IDbConnection as transient (new connection each time)
-builder.Services.AddTransient<IDbConnection>(sp => new NpgsqlConnection(connectionString));
 
-// Register your repository and service
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddTransient<IDbConnection>(sp => new NpgsqlConnection(connectionString));
 builder.Services.AddScoped<IUserInformationRepository, UserInformationRepository>();
 builder.Services.AddTransient<IUserService, UserService>();
 
+// Optional: CORS
+builder.Services.AddCors();
+
 var app = builder.Build();
 
-// 2. Add Middleware
 app.UseSwagger();
 app.UseSwaggerUI();
+
 app.UseMiddleware<GlobalExceptionHandler>();
 app.UseHttpsRedirection();
-
-//app.UseAuthentication();
-//app.UseAuthorization();
-
+app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();

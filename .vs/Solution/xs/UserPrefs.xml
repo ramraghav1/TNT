@@ -8,38 +8,44 @@
       <File FileName="Bussiness/Services/UserService.cs" />
       <File FileName="Repository/Repositories/UserInformationRepository.cs" />
       <File FileName="Repository/Interfaces/IUserInformationRepository.cs" />
-      <File FileName="server/Controller/UserController.cs" Line="31" Column="37" />
+      <File FileName="server/Controller/UserController.cs" Line="23" Column="1" />
       <File FileName="server/Program.cs" />
       <File FileName="server/server.csproj" />
-      <File FileName="DbDeployment/Migrations/CreateLoginDetailTable.cs" Line="23" Column="90" />
+      <File FileName="DbDeployment/Migrations/CreateLoginDetailTable.cs" />
+      <File FileName="server/Controller/LoginController.cs" />
+      <File FileName="server/appsettings.json" />
+      <File FileName="server/MiddleWare/GlobalExceptionHandler.cs" Line="24" Column="1" />
+      <File FileName="Domain/Models/JwtSettings.cs" />
+      <File FileName="Bussiness/Bussiness.csproj" Line="20" Column="15" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Solution" expanded="True">
-            <Node name="Bussiness" expanded="True">
+            <Node name="Bussiness">
               <Node name="MappingProfiles" expanded="True" />
-              <Node name="Services" expanded="True" />
             </Node>
-            <Node name="DbDeployment" expanded="True">
-              <Node name="Migrations" expanded="True">
-                <Node name="InsertIntoUserInformation.cs" selected="True" />
-              </Node>
-            </Node>
-            <Node name="server" expanded="True">
+            <Node name="server">
               <Node name="Controller" expanded="True" />
+              <Node name="MiddleWare" expanded="True">
+                <Node name="GlobalExceptionHandler.cs" selected="True" />
+              </Node>
             </Node>
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.ItemProperties.Server PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/server/Controller/UserController.cs" relfile="server/Controller/UserController.cs" line="20" column="1" />
-    <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/Bussiness/Services/UserService.cs" relfile="Bussiness/Services/UserService.cs" line="46" column="1" />
-    <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/server/Controller/UserController.cs" relfile="server/Controller/UserController.cs" line="12" column="1" />
+    <BreakpointStore>
+      <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/server/Controller/UserController.cs" relfile="server/Controller/UserController.cs" line="20" column="1" />
+      <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/Bussiness/Services/UserService.cs" relfile="Bussiness/Services/UserService.cs" line="46" column="1" />
+      <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/server/Controller/UserController.cs" relfile="server/Controller/UserController.cs" line="14" column="1" />
+      <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/server/Controller/LoginController.cs" relfile="server/Controller/LoginController.cs" line="26" column="1" />
+      <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/server/MiddleWare/GlobalExceptionHandler.cs" relfile="server/MiddleWare/GlobalExceptionHandler.cs" line="21" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.server PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
 </Properties>

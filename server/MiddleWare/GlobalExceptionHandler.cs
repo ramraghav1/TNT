@@ -46,4 +46,6 @@ public class GlobalExceptionHandler
         var json = JsonSerializer.Serialize(errorResponse);
         await context.Response.WriteAsync(json);
     }
+   
+
 }
