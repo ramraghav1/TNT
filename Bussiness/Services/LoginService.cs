@@ -1,9 +1,13 @@
 ﻿using System;
 using Domain.Models;
 using BCrypt.Net;
+using Repository.Interfaces;
+using AutoMapper;
 
 namespace Business.Services
 {
+    
+
     public interface ILoginService
     {
         bool CheckUserValid(LoginRequest loginRequest);
@@ -12,9 +16,12 @@ namespace Business.Services
 
     public class LoginService : ILoginService
     {
-        public LoginService()
+        private readonly ILoginRepository _loginRepository;
+        private readonly IMapper _mapper;
+        public LoginService(ILoginRepository loginRepository,IMapper mapper)
         {
-            // Inject dependencies here (e.g., a user repository) if needed
+            _loginRepository = loginRepository;
+            _mapper = mapper;
         }
 
         public bool CheckUserValid(LoginRequest loginRequest)
@@ -42,5 +49,19 @@ namespace Business.Services
             // TODO: Implement password expiration or change logic here
             return false;
         }
+        private LoggedInUserInformation GetLoggedInUserInformation(string userName)
+        {
+            var result = _loginRepository.GetLoginUserInformation(userName);
+
+            if (result == null)
+            {
+                return null;
+            }
+
+            var loginUserInfo = _mapper.Map<LoggedInUserInformation>(result);
+            return loginUserInfo;
+        }
+        
+
     }
 }

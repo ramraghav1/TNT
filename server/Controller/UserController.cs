@@ -32,8 +32,6 @@ namespace Server.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-
             return Ok(_userService.AddUser(user));
             
         }

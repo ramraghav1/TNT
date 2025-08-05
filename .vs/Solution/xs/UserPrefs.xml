@@ -1,26 +1,29 @@
 ﻿<Properties StartupConfiguration="{DB9EF3E8-B224-4BC6-BAD1-99A064B35147}|https" GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workbench ActiveDocument="server/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Repository/Repositories/UserInformationRepository.cs">
     <Files>
-      <File FileName="Bussiness/MappingProfiles/UserInformationProfile.cs" />
-      <File FileName="Domain/Models/UserInformation.cs" />
-      <File FileName="Repository/DataModels/UserInformationDTO.cs" />
-      <File FileName="Bussiness/Services/UserService.cs" />
-      <File FileName="Repository/Repositories/UserInformationRepository.cs" />
-      <File FileName="Repository/Interfaces/IUserInformationRepository.cs" />
-      <File FileName="server/Controller/UserController.cs" />
-      <File FileName="server/Program.cs" Line="24" Column="74" />
-      <File FileName="server/server.csproj" />
-      <File FileName="DbDeployment/Migrations/CreateLoginDetailTable.cs" />
-      <File FileName="server/Controller/LoginController.cs" />
-      <File FileName="server/appsettings.json" />
-      <File FileName="server/MiddleWare/GlobalExceptionHandler.cs" />
-      <File FileName="Domain/Models/JwtSettings.cs" />
-      <File FileName="Bussiness/Bussiness.csproj" />
+      <File FileName="Repository/Repositories/UserInformationRepository.cs" Line="45" Column="52" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Solution" selected="True" />
+          <Node name="Solution" expanded="True">
+            <Node name="Bussiness" expanded="True">
+              <Node name="MappingProfiles" expanded="True" />
+              <Node name="Services" expanded="True" />
+            </Node>
+            <Node name="Domain" expanded="True">
+              <Node name="Models" expanded="True" />
+            </Node>
+            <Node name="Repository">
+              <Node name="Repositories">
+                <Node name="UserInformationRepository.cs" selected="True" />
+              </Node>
+            </Node>
+            <Node name="server" expanded="True">
+              <Node name="Controller" expanded="True" />
+              <Node name="MiddleWare" expanded="True" />
+            </Node>
+          </Node>
         </State>
       </Pad>
     </Pads>
@@ -38,7 +41,6 @@
       <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/Bussiness/Services/UserService.cs" relfile="Bussiness/Services/UserService.cs" line="46" column="1" />
       <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/server/Controller/UserController.cs" relfile="server/Controller/UserController.cs" line="14" column="1" />
       <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/server/Controller/LoginController.cs" relfile="server/Controller/LoginController.cs" line="26" column="1" />
-      <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/server/MiddleWare/GlobalExceptionHandler.cs" relfile="server/MiddleWare/GlobalExceptionHandler.cs" line="21" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
 </Properties>

@@ -23,9 +23,9 @@ namespace Repository.Repositories
                     // Insert user and return the generated userid
                     var insertUserSql = @"
                 INSERT INTO userinformation 
-                (userfullname, address, emailaddress, mobilenumber, createdby, updatedby, createdat, updatedat)
+                (userfullname, address, emailaddress, mobilenumber)
                 VALUES 
-                (@UserFullName, @Address, @EmailAddress, @MobileNumber, @CreatedBy, @UpdatedBy, @CreatedAt, @UpdatedAt)
+                (@UserFullName, @Address, @EmailAddress, @MobileNumber)
                 RETURNING userid;";
 
                      userId = _dbConnection.QuerySingle<int>(insertUserSql, user, transaction);
