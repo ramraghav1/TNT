@@ -15,12 +15,14 @@ namespace Repository.Repositories
         }
         public int AddUserInformation(UserInformationDTO user)
         {
+            if (_dbConnection.State != System.Data.ConnectionState.Open)
+                _dbConnection.Open(); 
+
             using (var transaction = _dbConnection.BeginTransaction())
             {
                 int userId = 0;
                 try
                 {
-                    // Insert user and return the generated userid
                     var insertUserSql = @"
                 INSERT INTO userinformation 
                 (userfullname, address, emailaddress, mobilenumber)
@@ -28,14 +30,14 @@ namespace Repository.Repositories
                 (@UserFullName, @Address, @EmailAddress, @MobileNumber)
                 RETURNING userid;";
 
-                     userId = _dbConnection.QuerySingle<int>(insertUserSql, user, transaction);
+                    userId = _dbConnection.QuerySingle<int>(insertUserSql, user, transaction);
 
-                    // Insert login detail using the returned userId
                     var insertLoginSql = @"
                 INSERT INTO logindetail 
-                (userid, username, passwordhash, createdat)
+                (userid, username, password, createdat)
                 VALUES 
                 (@UserId, @Username, @PasswordHash, @CreatedAt);";
+
                     var passwordHash = BCrypt.Net.BCrypt.HashPassword(user.emailaddress);
                     var loginParams = new
                     {
@@ -47,17 +49,18 @@ namespace Repository.Repositories
 
                     _dbConnection.Execute(insertLoginSql, loginParams, transaction);
 
-                    // Commit transaction
                     transaction.Commit();
                 }
                 catch
                 {
                     transaction.Rollback();
-                    throw; // Let the exception bubble up
+                    throw;
                 }
+
                 return userId;
             }
         }
+
 
 
         public void UpdateUserInformation(UserInformationDTO user)

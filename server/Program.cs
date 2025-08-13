@@ -1,4 +1,7 @@
+using Business.Services;
 using Bussiness.Services;
+using Bussiness.Services.Organization;
+using Bussiness.Services.Transaction;
 using Domain.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,7 +53,13 @@ builder.Services.AddTransient<IDbConnection>(sp => new NpgsqlConnection(connecti
 // Register repository and service layers
 builder.Services.AddScoped<IUserInformationRepository, UserInformationRepository>();
 builder.Services.AddTransient<IUserService, UserService>();
-
+builder.Services.AddTransient<ILoginService, LoginService>();
+builder.Services.AddScoped<ILoginRepository, LoginRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddTransient<ICreateTransactionService, CreateTransactionService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddTransient<IOrganizationRepository, OrganizationRepository>();
+builder.Services.AddScoped<IOrganizationService, OrganizationService>();
 // Optional: Configure CORS (update policies as needed)
 builder.Services.AddCors(options =>
 {

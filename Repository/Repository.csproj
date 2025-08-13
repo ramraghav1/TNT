@@ -11,12 +11,16 @@
     <None Remove="Repositories\" />
     <None Remove="Interfaces\" />
     <None Remove="DataModels\" />
+    <None Remove="DataModels\Transaction\" />
+    <None Remove="DataModels\Organization\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Dapper\" />
     <Folder Include="Repositories\" />
     <Folder Include="Interfaces\" />
     <Folder Include="DataModels\" />
+    <Folder Include="DataModels\Transaction\" />
+    <Folder Include="DataModels\Organization\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />

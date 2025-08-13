@@ -3,7 +3,7 @@ using FluentMigrator;
 
 namespace DbDeployment.Migrations
 {
-    [Migration(20250724001)]
+    [Migration(20250809001)]
     public class CreateAuthTokenTable: Migration
     {
 

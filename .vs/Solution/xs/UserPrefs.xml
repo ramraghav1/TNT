@@ -1,7 +1,22 @@
 ﻿<Properties StartupConfiguration="{DB9EF3E8-B224-4BC6-BAD1-99A064B35147}|https" GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Repository/Repositories/UserInformationRepository.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Bussiness/Services/TokenService.cs">
     <Files>
-      <File FileName="Repository/Repositories/UserInformationRepository.cs" Line="45" Column="52" />
+      <File FileName="Repository/Repositories/UserInformationRepository.cs" Line="62" Column="1" />
+      <File FileName="server/Controller/UserController.cs" Line="27" Column="19" />
+      <File FileName="server/Controller/LoginController.cs" Line="46" Column="15" />
+      <File FileName="Bussiness/Services/TokenService.cs" Line="29" Column="61" />
+      <File FileName="Bussiness/Services/UserService.cs" Line="48" Column="80" />
+      <File FileName="DbDeployment/Migrations/CreateLoginDetailTable.cs" Line="5" Column="1" />
+      <File FileName="DbDeployment/Migrations/CreateAuthTokenTable.cs" Line="12" Column="38" />
+      <File FileName="Bussiness/Services/LoginService.cs" Line="59" Column="14" />
+      <File FileName="Repository/Repositories/LoginRepository.cs" Line="21" Column="37" />
+      <File FileName="Repository/Interfaces/ILoginRepository.cs" Line="8" Column="77" />
+      <File FileName="Domain/Models/LoggedInUserInformation.cs" Line="11" Column="29" />
+      <File FileName="Repository/DataModels/LoginDetailDTO.cs" Line="6" Column="9" />
+      <File FileName="Bussiness/MappingProfiles/LoggedInUserInformationProfile.cs" Line="8" Column="6" />
+      <File FileName="Bussiness/MappingProfiles/UserInformationProfile.cs" Line="17" Column="60" />
+      <File FileName="Repository/DataModels/LoggedInUserInformation.cs" Line="4" Column="41" />
+      <File FileName="Domain/Models/UserInformation.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -14,14 +29,12 @@
             <Node name="Domain" expanded="True">
               <Node name="Models" expanded="True" />
             </Node>
-            <Node name="Repository">
-              <Node name="Repositories">
-                <Node name="UserInformationRepository.cs" selected="True" />
-              </Node>
+            <Node name="Repository" expanded="True">
+              <Node name="Interfaces" expanded="True" />
+              <Node name="Repositories" expanded="True" />
             </Node>
             <Node name="server" expanded="True">
               <Node name="Controller" expanded="True" />
-              <Node name="MiddleWare" expanded="True" />
             </Node>
           </Node>
         </State>
@@ -37,10 +50,7 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/server/Controller/UserController.cs" relfile="server/Controller/UserController.cs" line="20" column="1" />
       <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/Bussiness/Services/UserService.cs" relfile="Bussiness/Services/UserService.cs" line="46" column="1" />
-      <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/server/Controller/UserController.cs" relfile="server/Controller/UserController.cs" line="14" column="1" />
-      <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/server/Controller/LoginController.cs" relfile="server/Controller/LoginController.cs" line="26" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
 </Properties>

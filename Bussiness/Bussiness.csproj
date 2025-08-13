@@ -9,10 +9,18 @@
   <ItemGroup>
     <None Remove="MappingProfiles\" />
     <None Remove="Services\" />
+    <None Remove="MappingProfiles\Transaction\" />
+    <None Remove="Services\Transaction\" />
+    <None Remove="MappingProfiles\Organization\" />
+    <None Remove="Services\Organization\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="MappingProfiles\" />
     <Folder Include="Services\" />
+    <Folder Include="MappingProfiles\Transaction\" />
+    <Folder Include="Services\Transaction\" />
+    <Folder Include="MappingProfiles\Organization\" />
+    <Folder Include="Services\Organization\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
