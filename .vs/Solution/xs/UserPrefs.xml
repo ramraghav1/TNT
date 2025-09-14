@@ -1,56 +1,34 @@
 ﻿<Properties StartupConfiguration="{DB9EF3E8-B224-4BC6-BAD1-99A064B35147}|https" GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Bussiness/Services/TokenService.cs">
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <DisabledProjects>
+    <String>client/client.njsproj</String>
+  </DisabledProjects>
+  <MonoDevelop.Ide.Workbench ActiveDocument="DbDeployment/Migrations/CreateBranchTable.cs">
     <Files>
-      <File FileName="Repository/Repositories/UserInformationRepository.cs" Line="62" Column="1" />
-      <File FileName="server/Controller/UserController.cs" Line="27" Column="19" />
-      <File FileName="server/Controller/LoginController.cs" Line="46" Column="15" />
-      <File FileName="Bussiness/Services/TokenService.cs" Line="29" Column="61" />
-      <File FileName="Bussiness/Services/UserService.cs" Line="48" Column="80" />
-      <File FileName="DbDeployment/Migrations/CreateLoginDetailTable.cs" Line="5" Column="1" />
-      <File FileName="DbDeployment/Migrations/CreateAuthTokenTable.cs" Line="12" Column="38" />
-      <File FileName="Bussiness/Services/LoginService.cs" Line="59" Column="14" />
-      <File FileName="Repository/Repositories/LoginRepository.cs" Line="21" Column="37" />
-      <File FileName="Repository/Interfaces/ILoginRepository.cs" Line="8" Column="77" />
-      <File FileName="Domain/Models/LoggedInUserInformation.cs" Line="11" Column="29" />
-      <File FileName="Repository/DataModels/LoginDetailDTO.cs" Line="6" Column="9" />
-      <File FileName="Bussiness/MappingProfiles/LoggedInUserInformationProfile.cs" Line="8" Column="6" />
-      <File FileName="Bussiness/MappingProfiles/UserInformationProfile.cs" Line="17" Column="60" />
-      <File FileName="Repository/DataModels/LoggedInUserInformation.cs" Line="4" Column="41" />
-      <File FileName="Domain/Models/UserInformation.cs" Line="1" Column="1" />
+      <File FileName="Repository/DataModels/Branch/CreateBranchDTO.cs" Line="1" Column="1" />
+      <File FileName="Repository/DataModels/Branch/BranchDetailDTO.cs" Line="12" Column="1" />
+      <File FileName="DbDeployment/Migrations/CreateBranchTable.cs" Line="27" Column="59" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Solution" expanded="True">
-            <Node name="Bussiness" expanded="True">
-              <Node name="MappingProfiles" expanded="True" />
-              <Node name="Services" expanded="True" />
-            </Node>
-            <Node name="Domain" expanded="True">
-              <Node name="Models" expanded="True" />
-            </Node>
-            <Node name="Repository" expanded="True">
-              <Node name="Interfaces" expanded="True" />
-              <Node name="Repositories" expanded="True" />
-            </Node>
-            <Node name="server" expanded="True">
-              <Node name="Controller" expanded="True" />
+          <Node name="Solution">
+            <Node name="DbDeployment" expanded="True">
+              <Node name="Migrations" expanded="True">
+                <Node name="CreateBranchTable.cs" selected="True" />
+              </Node>
             </Node>
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <DisabledProjects>
-    <String>client/client.njsproj</String>
-  </DisabledProjects>
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.ItemProperties.server PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.server PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/Bussiness/Services/UserService.cs" relfile="Bussiness/Services/UserService.cs" line="46" column="1" />
+      <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/Repository/Repositories/OrganizationRepository.cs" relfile="Repository/Repositories/OrganizationRepository.cs" line="18" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
 </Properties>
