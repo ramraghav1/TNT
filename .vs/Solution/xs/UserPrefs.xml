@@ -1,21 +1,31 @@
 ﻿<Properties StartupConfiguration="{DB9EF3E8-B224-4BC6-BAD1-99A064B35147}|https" GitUserInfo="UsingGIT">
+  <MonoDevelop.Ide.ItemProperties.server PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
   <DisabledProjects>
     <String>client/client.njsproj</String>
   </DisabledProjects>
-  <MonoDevelop.Ide.Workbench ActiveDocument="DbDeployment/Migrations/CreateBranchTable.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Domain/Models/UserInformation.cs">
     <Files>
-      <File FileName="Repository/DataModels/Branch/CreateBranchDTO.cs" Line="1" Column="1" />
-      <File FileName="Repository/DataModels/Branch/BranchDetailDTO.cs" Line="12" Column="1" />
-      <File FileName="DbDeployment/Migrations/CreateBranchTable.cs" Line="27" Column="59" />
+      <File FileName="Repository/DataModels/Branch/CreateBranchDTO.cs" />
+      <File FileName="Repository/DataModels/Branch/BranchDetailDTO.cs" />
+      <File FileName="DbDeployment/Migrations/CreateBranchTable.cs" />
+      <File FileName="DbDeployment/Migrations/CreateTransactionDetailTable.cs" />
+      <File FileName="DbDeployment/Migrations/CreateMemberTable.cs" />
+      <File FileName="DbDeployment/Migrations/CreateLoginDetailTable.cs" />
+      <File FileName="Bussiness/Services/LoginService.cs" />
+      <File FileName="server/Program.cs" />
+      <File FileName="Bussiness/Services/TokenService.cs" />
+      <File FileName="Bussiness/Services/UserService.cs" Line="27" Column="39" />
+      <File FileName="Domain/Models/UserInformation.cs" Line="13" Column="35" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Solution">
-            <Node name="DbDeployment" expanded="True">
-              <Node name="Migrations" expanded="True">
-                <Node name="CreateBranchTable.cs" selected="True" />
+          <Node name="Solution" expanded="True">
+            <Node name="Domain" expanded="True">
+              <Node name="Models" expanded="True">
+                <Node name="UserInformation.cs" selected="True" />
               </Node>
             </Node>
           </Node>
@@ -23,12 +33,10 @@
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.server PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/ramsharanlamichhane/Projects/TNT/Repository/Repositories/OrganizationRepository.cs" relfile="Repository/Repositories/OrganizationRepository.cs" line="18" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
 </Properties>
