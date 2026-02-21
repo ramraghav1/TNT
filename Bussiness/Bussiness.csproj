@@ -13,6 +13,8 @@
     <None Remove="Services\Transaction\" />
     <None Remove="MappingProfiles\Organization\" />
     <None Remove="Services\Organization\" />
+    <None Remove="Services\TourAndTravels\" />
+    <None Remove="MappingProfiles\TourAndTravels\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="MappingProfiles\" />
@@ -21,6 +23,8 @@
     <Folder Include="Services\Transaction\" />
     <Folder Include="MappingProfiles\Organization\" />
     <Folder Include="Services\Organization\" />
+    <Folder Include="Services\TourAndTravels\" />
+    <Folder Include="MappingProfiles\TourAndTravels\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />

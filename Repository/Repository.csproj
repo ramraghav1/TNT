@@ -14,6 +14,9 @@
     <None Remove="DataModels\Transaction\" />
     <None Remove="DataModels\Organization\" />
     <None Remove="DataModels\Branch\" />
+    <None Remove="DataModels\TourAndTravels\" />
+    <None Remove="Interfaces\TourAndTravels\" />
+    <None Remove="Repositories\TourAndTravels\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Dapper\" />
@@ -23,6 +26,9 @@
     <Folder Include="DataModels\Transaction\" />
     <Folder Include="DataModels\Organization\" />
     <Folder Include="DataModels\Branch\" />
+    <Folder Include="DataModels\TourAndTravels\" />
+    <Folder Include="Interfaces\TourAndTravels\" />
+    <Folder Include="Repositories\TourAndTravels\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />

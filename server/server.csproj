@@ -20,10 +20,12 @@
   <ItemGroup>
     <None Remove="Controller\" />
     <None Remove="MiddleWare\" />
+    <None Remove="Controller\TourAndTravels\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controller\" />
     <Folder Include="MiddleWare\" />
+    <Folder Include="Controller\TourAndTravels\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj">

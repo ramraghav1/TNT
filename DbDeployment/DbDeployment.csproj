@@ -17,8 +17,10 @@
 
   <ItemGroup>
     <None Remove="Migrations\" />
+    <None Remove="Migrations\TourAndTravels\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="Migrations\TourAndTravels\" />
   </ItemGroup>
 </Project>
