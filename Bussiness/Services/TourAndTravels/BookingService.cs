@@ -13,12 +13,12 @@ namespace Bussiness.Services.TourAndTravels
         List<BookingResponse> GetAllBookings();
         BookingDetailResponse? GetBookingById(long id);
         BookingResponse? UpdateBooking(long id, UpdateBookingRequest request);
-        void ApproveBookingByTraveler(long id);
-        void ApproveBookingByAdmin(long id);
-        void AddPayment(long id, AddPaymentRequest request);
-        List<PaymentResponse> GetPayments(long id);
+        // void ApproveBookingByTraveler(long id);
+        //    void ApproveBookingByAdmin(long id);
+        //    void AddPayment(long id, AddPaymentRequest request);
+        //    List<PaymentResponse> GetPayments(long id);
+        //}
     }
-
     public class BookingService : IBookingService
     {
         private readonly IBookingRepository _repository;
@@ -76,29 +76,29 @@ namespace Bussiness.Services.TourAndTravels
         // ===========================
         // Approvals
         // ===========================
-        public void ApproveBookingByTraveler(long id)
-        {
-            _repository.ApproveBookingByTraveler(id);
-        }
+        //public void ApproveBookingByTraveler(long id)
+        //{
+        //    _repository.ApproveBookingByTraveler(id);
+        //}
 
-        public void ApproveBookingByAdmin(long id)
-        {
-            _repository.ApproveBookingByAdmin(id);
-        }
+        //public void ApproveBookingByAdmin(long id)
+        //{
+        //    _repository.ApproveBookingByAdmin(id);
+        //}
 
         // ===========================
         // Payments
         // ===========================
-        public void AddPayment(long id, AddPaymentRequest request)
-        {
-            var repoRequest = _mapper.Map<Repository.DataModels.TourAndTravels.BookingDTO.AddPaymentRequest>(request);
-            _repository.AddPayment(id, repoRequest);
-        }
+        //public void AddPayment(long id, AddPaymentRequest request)
+        //{
+        //    var repoRequest = _mapper.Map<Repository.DataModels.TourAndTravels.BookingDTO.AddPaymentRequest>(request);
+        //    _repository.AddPayment(id, repoRequest);
+        //}
 
-        public List<PaymentResponse> GetPayments(long id)
-        {
-            var repoResponses = _repository.GetPayments(id);
-            return _mapper.Map<List<PaymentResponse>>(repoResponses);
-        }
+        //public List<PaymentResponse> GetPayments(long id)
+        //{
+        //    var repoResponses = _repository.GetPayments(id);
+        //    return _mapper.Map<List<PaymentResponse>>(repoResponses);
+        //}
     }
 }

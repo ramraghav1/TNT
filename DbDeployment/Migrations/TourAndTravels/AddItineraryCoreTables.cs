@@ -3,7 +3,7 @@ using FluentMigrator;
 
 namespace DbDeployment.Migrations.TourAndTravels
 {
-    [Migration(2026022102)]
+    [Migration(2026022202)]
     public class AddItineraryCoreTables : Migration
     {
         public override void Up()
@@ -11,159 +11,157 @@ namespace DbDeployment.Migrations.TourAndTravels
             // ============================================================
             // 1️⃣ TEMPLATE: Itineraries
             // ============================================================
-            Create.Table("Itineraries")
-                .WithColumn("Id").AsInt64().PrimaryKey().Identity()
-                .WithColumn("Title").AsString(300).NotNullable()
-                .WithColumn("Description").AsString(int.MaxValue).Nullable()
-                .WithColumn("DurationDays").AsInt32().NotNullable()
-                .WithColumn("DifficultyLevel").AsString(100).Nullable()
-                .WithColumn("IsActive").AsBoolean().NotNullable().WithDefaultValue(true)
-                .WithColumn("CreatedBy").AsString(150).Nullable()
-                .WithColumn("CreatedAt").AsDateTime().NotNullable()
+            Create.Table("itineraries")
+                .WithColumn("id").AsInt64().PrimaryKey().Identity()
+                .WithColumn("title").AsString(300).NotNullable()
+                .WithColumn("description").AsString(int.MaxValue).Nullable()
+                .WithColumn("durationdays").AsInt32().NotNullable()
+                .WithColumn("difficultylevel").AsString(100).Nullable()
+                .WithColumn("isactive").AsBoolean().NotNullable().WithDefaultValue(true)
+                .WithColumn("createdby").AsString(150).Nullable()
+                .WithColumn("createdat").AsDateTime().NotNullable()
                 .WithDefault(SystemMethods.CurrentUTCDateTime);
 
             // ============================================================
             // 2️⃣ TEMPLATE: Itinerary Days
             // ============================================================
-            Create.Table("ItineraryDays")
-                .WithColumn("Id").AsInt64().PrimaryKey().Identity()
-                .WithColumn("ItineraryId").AsInt64().NotNullable()
-                .ForeignKey("FK_ItineraryDays_Itineraries", "Itineraries", "Id")
+            Create.Table("itinerarydays")
+                .WithColumn("id").AsInt64().PrimaryKey().Identity()
+                .WithColumn("itineraryid").AsInt64().NotNullable()
+                .ForeignKey("fk_itinerarydays_itineraries", "itineraries", "id")
                 .OnDelete(System.Data.Rule.Cascade)
-                .WithColumn("DayNumber").AsInt32().NotNullable()
-                .WithColumn("Title").AsString(200).Nullable()
-                .WithColumn("Location").AsString(200).Nullable()
-                .WithColumn("Accommodation").AsString(200).Nullable()
-                .WithColumn("Transport").AsString(150).Nullable()
-                .WithColumn("BreakfastIncluded").AsBoolean().NotNullable().WithDefaultValue(false)
-                .WithColumn("LunchIncluded").AsBoolean().NotNullable().WithDefaultValue(false)
-                .WithColumn("DinnerIncluded").AsBoolean().NotNullable().WithDefaultValue(false);
+                .WithColumn("daynumber").AsInt32().NotNullable()
+                .WithColumn("title").AsString(200).Nullable()
+                .WithColumn("location").AsString(200).Nullable()
+                .WithColumn("accommodation").AsString(200).Nullable()
+                .WithColumn("transport").AsString(150).Nullable()
+                .WithColumn("breakfastincluded").AsBoolean().NotNullable().WithDefaultValue(false)
+                .WithColumn("lunchincluded").AsBoolean().NotNullable().WithDefaultValue(false)
+                .WithColumn("dinnerincluded").AsBoolean().NotNullable().WithDefaultValue(false);
 
-            Create.Index("IX_ItineraryDays_ItineraryId")
-                .OnTable("ItineraryDays")
-                .OnColumn("ItineraryId").Ascending();
+            Create.Index("ix_itinerarydays_itineraryid")
+                .OnTable("itinerarydays")
+                .OnColumn("itineraryid").Ascending();
 
             // ============================================================
             // 3️⃣ TEMPLATE: Day Activities
             // ============================================================
-            Create.Table("ItineraryDayActivities")
-                .WithColumn("Id").AsInt64().PrimaryKey().Identity()
-                .WithColumn("ItineraryDayId").AsInt64().NotNullable()
-                .ForeignKey("FK_Activities_ItineraryDays", "ItineraryDays", "Id")
+            Create.Table("itinerarydayactivities")
+                .WithColumn("id").AsInt64().PrimaryKey().Identity()
+                .WithColumn("itinerarydayid").AsInt64().NotNullable()
+                .ForeignKey("fk_activities_itinerarydays", "itinerarydays", "id")
                 .OnDelete(System.Data.Rule.Cascade)
-                .WithColumn("Activity").AsString(500).NotNullable();
+                .WithColumn("activity").AsString(500).NotNullable();
 
-            Create.Index("IX_Activities_ItineraryDayId")
-                .OnTable("ItineraryDayActivities")
-                .OnColumn("ItineraryDayId").Ascending();
+            Create.Index("ix_activities_itinerarydayid")
+                .OnTable("itinerarydayactivities")
+                .OnColumn("itinerarydayid").Ascending();
 
             // ============================================================
             // 4️⃣ INSTANCE: Itinerary Instance (Customer Copy)
             // ============================================================
-            Create.Table("ItineraryInstances")
-                .WithColumn("Id").AsInt64().PrimaryKey().Identity()
-                .WithColumn("TemplateItineraryId").AsInt64().NotNullable()
-                .ForeignKey("FK_Instance_Template", "Itineraries", "Id")
-                .WithColumn("Status").AsString(50).NotNullable() // Draft, Customized, Accepted, Confirmed
-                .WithColumn("StartDate").AsDate().Nullable()
-                .WithColumn("EndDate").AsDate().Nullable()
-                .WithColumn("TotalPrice").AsDecimal(18, 2).Nullable()
-                .WithColumn("Currency").AsString(20).Nullable()
-                .WithColumn("IsCustomized").AsBoolean().NotNullable().WithDefaultValue(false)
-                .WithColumn("CreatedAt").AsDateTime().NotNullable()
+            Create.Table("itineraryinstances")
+                .WithColumn("id").AsInt64().PrimaryKey().Identity()
+                .WithColumn("templateitineraryid").AsInt64().NotNullable()
+                .ForeignKey("fk_instance_template", "itineraries", "id")
+                .WithColumn("status").AsString(50).NotNullable() // Draft, Customized, Accepted, Confirmed
+                .WithColumn("startdate").AsDate().Nullable()
+                .WithColumn("enddate").AsDate().Nullable()
+                .WithColumn("totalprice").AsDecimal(18, 2).Nullable()
+                .WithColumn("currency").AsString(20).Nullable()
+                .WithColumn("iscustomized").AsBoolean().NotNullable().WithDefaultValue(false)
+                .WithColumn("createdat").AsDateTime().NotNullable()
                 .WithDefault(SystemMethods.CurrentUTCDateTime);
 
+            Create.Index("ix_itineraryinstances_templateid")
+                .OnTable("itineraryinstances")
+                .OnColumn("templateitineraryid").Ascending();
 
-            Create.Index("IX_ItineraryInstances_TemplateId")
-                .OnTable("ItineraryInstances")
-                .OnColumn("TemplateItineraryId").Ascending();
-
-            Alter.Table("ItineraryInstances")
-    .AddColumn("BookingReference").AsString(100).Nullable()
-    .AddColumn("PaymentStatus").AsString(50).NotNullable().WithDefaultValue("Unpaid")
-    .AddColumn("TotalAmount").AsDecimal(18, 2).NotNullable().WithDefaultValue(0)
-    .AddColumn("AmountPaid").AsDecimal(18, 2).NotNullable().WithDefaultValue(0)
-    .AddColumn("BalanceAmount").AsDecimal(18, 2).NotNullable().WithDefaultValue(0)
-    .AddColumn("TravelerApproved").AsBoolean().NotNullable().WithDefaultValue(false)
-    .AddColumn("AdminApproved").AsBoolean().NotNullable().WithDefaultValue(false)
-    .AddColumn("ConfirmedAt").AsDateTime().Nullable();
+            Alter.Table("itineraryinstances")
+                .AddColumn("bookingreference").AsString(100).Nullable()
+                .AddColumn("paymentstatus").AsString(50).NotNullable().WithDefaultValue("Unpaid")
+                .AddColumn("totalamount").AsDecimal(18, 2).NotNullable().WithDefaultValue(0)
+                .AddColumn("amountpaid").AsDecimal(18, 2).NotNullable().WithDefaultValue(0)
+                .AddColumn("balanceamount").AsDecimal(18, 2).NotNullable().WithDefaultValue(0)
+                .AddColumn("travelerapproved").AsBoolean().NotNullable().WithDefaultValue(false)
+                .AddColumn("adminapproved").AsBoolean().NotNullable().WithDefaultValue(false)
+                .AddColumn("confirmedat").AsDateTime().Nullable();
 
             // ============================================================
             // 5️⃣ INSTANCE: Instance Days
             // ============================================================
-            Create.Table("ItineraryInstanceDays")
-                .WithColumn("Id").AsInt64().PrimaryKey().Identity()
-                .WithColumn("ItineraryInstanceId").AsInt64().NotNullable()
-                .ForeignKey("FK_InstanceDays_Instance", "ItineraryInstances", "Id")
+            Create.Table("itineraryinstancedays")
+                .WithColumn("id").AsInt64().PrimaryKey().Identity()
+                .WithColumn("itineraryinstanceid").AsInt64().NotNullable()
+                .ForeignKey("fk_instancedays_instance", "itineraryinstances", "id")
                 .OnDelete(System.Data.Rule.Cascade)
-                .WithColumn("DayNumber").AsInt32().NotNullable()
-                .WithColumn("Date").AsDate().Nullable()
-                .WithColumn("Title").AsString(200).Nullable()
-                .WithColumn("Location").AsString(200).Nullable()
-                .WithColumn("Accommodation").AsString(200).Nullable()
-                .WithColumn("Transport").AsString(150).Nullable()
-                .WithColumn("BreakfastIncluded").AsBoolean().NotNullable().WithDefaultValue(false)
-                .WithColumn("LunchIncluded").AsBoolean().NotNullable().WithDefaultValue(false)
-                .WithColumn("DinnerIncluded").AsBoolean().NotNullable().WithDefaultValue(false);
+                .WithColumn("daynumber").AsInt32().NotNullable()
+                .WithColumn("date").AsDate().Nullable()
+                .WithColumn("title").AsString(200).Nullable()
+                .WithColumn("location").AsString(200).Nullable()
+                .WithColumn("accommodation").AsString(200).Nullable()
+                .WithColumn("transport").AsString(150).Nullable()
+                .WithColumn("breakfastincluded").AsBoolean().NotNullable().WithDefaultValue(false)
+                .WithColumn("lunchincluded").AsBoolean().NotNullable().WithDefaultValue(false)
+                .WithColumn("dinnerincluded").AsBoolean().NotNullable().WithDefaultValue(false);
 
-            Create.Index("IX_InstanceDays_InstanceId")
-                .OnTable("ItineraryInstanceDays")
-                .OnColumn("ItineraryInstanceId").Ascending();
+            Create.Index("ix_instancedays_instanceid")
+                .OnTable("itineraryinstancedays")
+                .OnColumn("itineraryinstanceid").Ascending();
 
             // ============================================================
             // 6️⃣ INSTANCE: Day Activities
             // ============================================================
-            Create.Table("ItineraryInstanceDayActivities")
-                .WithColumn("Id").AsInt64().PrimaryKey().Identity()
-                .WithColumn("InstanceDayId").AsInt64().NotNullable()
-                .ForeignKey("FK_InstanceActivities_InstanceDay", "ItineraryInstanceDays", "Id")
+            Create.Table("itineraryinstancedayactivities")
+                .WithColumn("id").AsInt64().PrimaryKey().Identity()
+                .WithColumn("instancedayid").AsInt64().NotNullable()
+                .ForeignKey("fk_instanceactivities_instanceday", "itineraryinstancedays", "id")
                 .OnDelete(System.Data.Rule.Cascade)
-                .WithColumn("Activity").AsString(500).NotNullable();
+                .WithColumn("activity").AsString(500).NotNullable();
 
-            Create.Index("IX_InstanceActivities_InstanceDayId")
-                .OnTable("ItineraryInstanceDayActivities")
-                .OnColumn("InstanceDayId").Ascending();
+            Create.Index("ix_instanceactivities_instancedayid")
+                .OnTable("itineraryinstancedayactivities")
+                .OnColumn("instancedayid").Ascending();
 
             // ============================================================
             // 7️⃣ Travelers (Added After Accept)
             // ============================================================
-            Create.Table("Travelers")
-                .WithColumn("Id").AsInt64().PrimaryKey().Identity()
-                .WithColumn("ItineraryInstanceId").AsInt64().NotNullable()
-                .ForeignKey("FK_Travelers_Instance", "ItineraryInstances", "Id")
+            Create.Table("travelers")
+                .WithColumn("id").AsInt64().PrimaryKey().Identity()
+                .WithColumn("itineraryinstanceid").AsInt64().NotNullable()
+                .ForeignKey("fk_travelers_instance", "itineraryinstances", "id")
                 .OnDelete(System.Data.Rule.Cascade)
-                .WithColumn("FullName").AsString(200).NotNullable()
-                .WithColumn("ContactNumber").AsString(50).Nullable()
-                .WithColumn("Email").AsString(200).Nullable()
-                .WithColumn("Nationality").AsString(100).Nullable()
-                .WithColumn("Adults").AsInt32().NotNullable()
-                .WithColumn("Children").AsInt32().NotNullable()
-                .WithColumn("Seniors").AsInt32().NotNullable();
+                .WithColumn("fullname").AsString(200).NotNullable()
+                .WithColumn("contactnumber").AsString(50).Nullable()
+                .WithColumn("email").AsString(200).Nullable()
+                .WithColumn("nationality").AsString(100).Nullable()
+                .WithColumn("adults").AsInt32().NotNullable()
+                .WithColumn("children").AsInt32().NotNullable()
+                .WithColumn("seniors").AsInt32().NotNullable();
 
-            Create.Index("IX_Travelers_InstanceId")
-                .OnTable("Travelers")
-                .OnColumn("ItineraryInstanceId").Ascending();
+            Create.Index("ix_travelers_instanceid")
+                .OnTable("travelers")
+                .OnColumn("itineraryinstanceid").Ascending();
 
-            Create.Table("ItineraryApprovals")
-    .WithColumn("Id").AsInt64().PrimaryKey().Identity()
-    .WithColumn("ItineraryInstanceId").AsInt64().NotNullable()
-    .ForeignKey("FK_Approval_Instance", "ItineraryInstances", "Id")
-    .WithColumn("ApprovedBy").AsString(100).NotNullable() // Traveler/Admin
-    .WithColumn("Approved").AsBoolean().NotNullable()
-    .WithColumn("Remarks").AsString(500).Nullable()
-    .WithColumn("ApprovedAt").AsDateTime().NotNullable();
+            Create.Table("itineraryapprovals")
+                .WithColumn("id").AsInt64().PrimaryKey().Identity()
+                .WithColumn("itineraryinstanceid").AsInt64().NotNullable()
+                .ForeignKey("fk_approval_instance", "itineraryinstances", "id")
+                .WithColumn("approvedby").AsString(100).NotNullable()
+                .WithColumn("approved").AsBoolean().NotNullable()
+                .WithColumn("remarks").AsString(500).Nullable()
+                .WithColumn("approvedat").AsDateTime().NotNullable();
         }
 
         public override void Down()
         {
-            Delete.Table("Travelers");
-            Delete.Table("ItineraryInstanceDayActivities");
-            Delete.Table("ItineraryInstanceDays");
-            Delete.Table("ItineraryInstances");
-            Delete.Table("ItineraryDayActivities");
-            Delete.Table("ItineraryDays");
-            Delete.Table("Itineraries");
+            Delete.Table("travelers");
+            Delete.Table("itineraryinstancedayactivities");
+            Delete.Table("itineraryinstancedays");
+            Delete.Table("itineraryinstances");
+            Delete.Table("itinerarydayactivities");
+            Delete.Table("itinerarydays");
+            Delete.Table("itineraries");
         }
     }
 }
-

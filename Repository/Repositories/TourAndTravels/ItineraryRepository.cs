@@ -23,21 +23,100 @@ namespace Repository.Repositories.TourAndTravels
         // ============================================================
         public ItineraryResponse CreateItinerary(CreateItineraryRequest request)
         {
-            string sql = @"
-                INSERT INTO Itineraries (Title, Description, DurationDays, DifficultyLevel)
-                VALUES (@Title, @Description, @DurationDays, @DifficultyLevel);
-                SELECT CAST(SCOPE_IDENTITY() as BIGINT);";
+            if (_dbConnection.State != System.Data.ConnectionState.Open)
+                _dbConnection.Open();
 
-            var id = _dbConnection.ExecuteScalar<long>(sql, request);
-
-            return new ItineraryResponse
+            using (var transaction = _dbConnection.BeginTransaction())
             {
-                Id = id,
-                Title = request.Title,
-                Description = request.Description,
-                DurationDays = request.DurationDays,
-                DifficultyLevel = request.DifficultyLevel
-            };
+                try
+                {
+                    // 1️⃣ Insert Itinerary
+                    string insertItineraryQuery = @"
+                INSERT INTO itineraries
+                (title, description, durationdays, difficultylevel)
+                VALUES
+                (@Title, @Description, @DurationDays, @DifficultyLevel)
+                RETURNING id;";
+
+                    long itineraryId = _dbConnection.QuerySingle<long>(
+                        insertItineraryQuery,
+                        request,
+                        transaction
+                    );
+
+                    // 2️⃣ Insert Days
+                    if (request.Days != null && request.Days.Any())
+                    {
+                        foreach (var day in request.Days)
+                        {
+                            string insertDayQuery = @"
+                        INSERT INTO itinerarydays
+                        (itineraryid, daynumber, title, location, accommodation, transport,
+                         breakfastincluded, lunchincluded, dinnerincluded)
+                        VALUES
+                        (@ItineraryId, @DayNumber, @Title, @Location, @Accommodation, @Transport,
+                         @BreakfastIncluded, @LunchIncluded, @DinnerIncluded)
+                        RETURNING id;";
+
+                            long dayId = _dbConnection.QuerySingle<long>(
+                                insertDayQuery,
+                                new
+                                {
+                                    ItineraryId = itineraryId,
+                                    day.DayNumber,
+                                    day.Title,
+                                    day.Location,
+                                    day.Accommodation,
+                                    day.Transport,
+                                    day.BreakfastIncluded,
+                                    day.LunchIncluded,
+                                    day.DinnerIncluded
+                                },
+                                transaction
+                            );
+
+                            // 3️⃣ Insert Activities
+                            if (day.Activities != null && day.Activities.Any())
+                            {
+                                foreach (var activity in day.Activities)
+                                {
+                                    string insertActivityQuery = @"
+                                INSERT INTO itinerarydayactivities
+                                (itinerarydayid, activity)
+                                VALUES
+                                (@DayId, @Activity);";
+
+                                    _dbConnection.Execute(
+                                        insertActivityQuery,
+                                        new
+                                        {
+                                            DayId = dayId,
+                                            Activity = activity
+                                        },
+                                        transaction
+                                    );
+                                }
+                            }
+                        }
+                    }
+
+                    transaction.Commit();
+
+                    return new ItineraryResponse
+                    {
+                        Id = itineraryId,
+                        Title = request.Title,
+                        Description = request.Description,
+                        DurationDays = request.DurationDays,
+                        DifficultyLevel = request.DifficultyLevel,
+                    };
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
         }
 
         // ============================================================

@@ -67,7 +67,7 @@ namespace server.Controller.TourAndTravels
         [HttpPost("{id:long}/approve/traveler")]
         public IActionResult ApproveBookingByTraveler(long id)
         {
-            _bookingService.ApproveBookingByTraveler(id);
+            //_bookingService.ApproveBookingByTraveler(id);
             return Ok();
         }
 
@@ -77,7 +77,7 @@ namespace server.Controller.TourAndTravels
         [HttpPost("{id:long}/approve/admin")]
         public IActionResult ApproveBookingByAdmin(long id)
         {
-            _bookingService.ApproveBookingByAdmin(id);
+            //_bookingService.ApproveBookingByAdmin(id);
             return Ok();
         }
 
@@ -87,7 +87,7 @@ namespace server.Controller.TourAndTravels
         [HttpPost("{id:long}/payment")]
         public IActionResult AddPayment(long id, [FromBody] Domain.Models.TourAndTravels.Booking.AddPaymentRequest request)
         {
-            _bookingService.AddPayment(id, request);
+            //_bookingService.AddPayment(id, request);
             return Ok();
         }
 
@@ -97,8 +97,8 @@ namespace server.Controller.TourAndTravels
         [HttpGet("{id:long}/payments")]
         public ActionResult<List<Domain.Models.TourAndTravels.Booking.PaymentResponse>> GetPayments(long id)
         {
-            var payments = _bookingService.GetPayments(id);
-            return Ok(payments);
+            //var payments = _bookingService.GetPayments(id);
+            return Ok();
         }
     }
 }

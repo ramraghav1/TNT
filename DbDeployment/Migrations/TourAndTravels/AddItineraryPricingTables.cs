@@ -11,94 +11,97 @@ namespace DbDeployment.Migrations.TourAndTravels
             // ============================================================
             // 1️⃣ COST ITEMS (Master Catalog)
             // ============================================================
-            Create.Table("CostItems")
-                .WithColumn("Id").AsInt64().PrimaryKey().Identity()
-                .WithColumn("Name").AsString(200).NotNullable()          // Breakfast, Porter
-                .WithColumn("Category").AsString(100).NotNullable()     // Meal, Transport, Permit
-                .WithColumn("UnitType").AsString(50).NotNullable()      // PerPerson, PerDay, Fixed
-                .WithColumn("IsActive").AsBoolean().NotNullable().WithDefaultValue(true)
-                .WithColumn("CreatedAt").AsDateTime().NotNullable()
+            Create.Table("costitems")
+                .WithColumn("id").AsInt64().PrimaryKey().Identity()
+                .WithColumn("name").AsString(200).NotNullable()          // Breakfast, Porter
+                .WithColumn("category").AsString(100).NotNullable()     // Meal, Transport, Permit
+                .WithColumn("unittype").AsString(50).NotNullable()      // PerPerson, PerDay, Fixed
+                .WithColumn("isactive").AsBoolean().NotNullable().WithDefaultValue(true)
+                .WithColumn("createdat").AsDateTime().NotNullable()
                 .WithDefault(SystemMethods.CurrentUTCDateTime);
 
-            Create.Index("IX_CostItems_Name")
-                .OnTable("CostItems")
-                .OnColumn("Name").Ascending()
+            Create.Index("ix_costitems_name")
+                .OnTable("costitems")
+                .OnColumn("name").Ascending()
                 .WithOptions().Unique();
 
             // ============================================================
             // 2️⃣ COST ITEM RATES (Flexible Pricing Rules)
             // ============================================================
-            Create.Table("CostItemRates")
-                .WithColumn("Id").AsInt64().PrimaryKey().Identity()
-                .WithColumn("CostItemId").AsInt64().NotNullable()
-                .ForeignKey("FK_CostRates_CostItems", "CostItems", "Id")
+            Create.Table("costitemrates")
+                .WithColumn("id").AsInt64().PrimaryKey().Identity()
+                .WithColumn("costitemid").AsInt64().NotNullable()
+                .ForeignKey("fk_costrates_costitems", "costitems", "id")
                 .OnDelete(System.Data.Rule.Cascade)
-                .WithColumn("Location").AsString(200).Nullable()     // Optional
-                .WithColumn("ItineraryId").AsInt64().Nullable()
-                .ForeignKey("FK_CostRates_Itinerary", "Itineraries", "Id")
-                .WithColumn("Price").AsDecimal(18, 2).NotNullable()
-                .WithColumn("Currency").AsString(20).NotNullable()
-                .WithColumn("EffectiveFrom").AsDate().Nullable()
-                .WithColumn("EffectiveTo").AsDate().Nullable();
+                .WithColumn("location").AsString(200).Nullable()     // Optional
+                .WithColumn("itineraryid").AsInt64().Nullable()
+                .ForeignKey("fk_costrates_itinerary", "itineraries", "id")
+                .WithColumn("price").AsDecimal(18, 2).NotNullable()
+                .WithColumn("currency").AsString(20).NotNullable()
+                .WithColumn("effectivefrom").AsDate().Nullable()
+                .WithColumn("effectiveto").AsDate().Nullable();
 
-            Create.Index("IX_CostRates_CostItemId")
-                .OnTable("CostItemRates")
-                .OnColumn("CostItemId").Ascending();
+            Create.Index("ix_costrates_costitemid")
+                .OnTable("costitemrates")
+                .OnColumn("costitemid").Ascending();
 
             // ============================================================
             // 3️⃣ TEMPLATE DAY COST MAPPING
             // ============================================================
-            Create.Table("ItineraryDayCosts")
-                .WithColumn("Id").AsInt64().PrimaryKey().Identity()
-                .WithColumn("ItineraryDayId").AsInt64().NotNullable()
-                .ForeignKey("FK_DayCosts_ItineraryDay", "ItineraryDays", "Id")
+            Create.Table("itinerarydaycosts")
+                .WithColumn("id").AsInt64().PrimaryKey().Identity()
+                .WithColumn("itinerarydayid").AsInt64().NotNullable()
+                .ForeignKey("fk_daycosts_itineraryday", "itinerarydays", "id")
                 .OnDelete(System.Data.Rule.Cascade)
-                .WithColumn("CostItemId").AsInt64().NotNullable()
-                .ForeignKey("FK_DayCosts_CostItem", "CostItems", "Id")
-                .WithColumn("Quantity").AsInt32().NotNullable().WithDefaultValue(1);
+                .WithColumn("costitemid").AsInt64().NotNullable()
+                .ForeignKey("fk_daycosts_costitem", "costitems", "id")
+                .WithColumn("quantity").AsInt32().NotNullable().WithDefaultValue(1);
 
-            Create.Index("IX_DayCosts_DayId")
-                .OnTable("ItineraryDayCosts")
-                .OnColumn("ItineraryDayId").Ascending();
+            Create.Index("ix_daycosts_dayid")
+                .OnTable("itinerarydaycosts")
+                .OnColumn("itinerarydayid").Ascending();
 
             // ============================================================
             // 4️⃣ INSTANCE DAY COST SNAPSHOT
             // ============================================================
-            Create.Table("ItineraryInstanceDayCosts")
-                .WithColumn("Id").AsInt64().PrimaryKey().Identity()
-                .WithColumn("InstanceDayId").AsInt64().NotNullable()
-                .ForeignKey("FK_InstanceDayCosts_InstanceDay", "ItineraryInstanceDays", "Id")
+            Create.Table("itineraryinstancedaycosts")
+                .WithColumn("id").AsInt64().PrimaryKey().Identity()
+                .WithColumn("instancedayid").AsInt64().NotNullable()
+                .ForeignKey("fk_instancedaycosts_instanceday", "itineraryinstancedays", "id")
                 .OnDelete(System.Data.Rule.Cascade)
-                .WithColumn("CostItemId").AsInt64().NotNullable()
-                .ForeignKey("FK_InstanceDayCosts_CostItem", "CostItems", "Id")
-                .WithColumn("UnitPrice").AsDecimal(18, 2).NotNullable()
-                .WithColumn("Quantity").AsInt32().NotNullable()
-                .WithColumn("TotalPrice").AsDecimal(18, 2).NotNullable()
-                .WithColumn("Currency").AsString(20).NotNullable();
+                .WithColumn("costitemid").AsInt64().NotNullable()
+                .ForeignKey("fk_instancedaycosts_costitem", "costitems", "id")
+                .WithColumn("unitprice").AsDecimal(18, 2).NotNullable()
+                .WithColumn("quantity").AsInt32().NotNullable()
+                .WithColumn("totalprice").AsDecimal(18, 2).NotNullable()
+                .WithColumn("currency").AsString(20).NotNullable();
 
-            Create.Index("IX_InstanceDayCosts_InstanceDayId")
-                .OnTable("ItineraryInstanceDayCosts")
-                .OnColumn("InstanceDayId").Ascending();
+            Create.Index("ix_instancedaycosts_instancedayid")
+                .OnTable("itineraryinstancedaycosts")
+                .OnColumn("instancedayid").Ascending();
 
-            Create.Table("Payments")
-            .WithColumn("Id").AsInt64().PrimaryKey().Identity()
-            .WithColumn("ItineraryInstanceId").AsInt64().NotNullable()
-            .ForeignKey("FK_Payments_Instance", "ItineraryInstances", "Id")
-            .WithColumn("PaymentMethod").AsString(100).NotNullable() // eSewa, Card, Bank
-            .WithColumn("Amount").AsDecimal(18, 2).NotNullable()
-            .WithColumn("Currency").AsString(20).NotNullable()
-            .WithColumn("PaymentDate").AsDateTime().NotNullable()
-            .WithColumn("TransactionReference").AsString(200).Nullable()
-            .WithColumn("Status").AsString(50).NotNullable(); // Success, Failed, Pending
+            // ============================================================
+            // 5️⃣ PAYMENTS
+            // ============================================================
+            Create.Table("payments")
+                .WithColumn("id").AsInt64().PrimaryKey().Identity()
+                .WithColumn("itineraryinstanceid").AsInt64().NotNullable()
+                .ForeignKey("fk_payments_instance", "itineraryinstances", "id")
+                .WithColumn("paymentmethod").AsString(100).NotNullable() // eSewa, Card, Bank
+                .WithColumn("amount").AsDecimal(18, 2).NotNullable()
+                .WithColumn("currency").AsString(20).NotNullable()
+                .WithColumn("paymentdate").AsDateTime().NotNullable()
+                .WithColumn("transactionreference").AsString(200).Nullable()
+                .WithColumn("status").AsString(50).NotNullable(); // Success, Failed, Pending
         }
 
         public override void Down()
         {
-            Delete.Table("ItineraryInstanceDayCosts");
-            Delete.Table("ItineraryDayCosts");
-            Delete.Table("CostItemRates");
-            Delete.Table("CostItems");
+            Delete.Table("payments");
+            Delete.Table("itineraryinstancedaycosts");
+            Delete.Table("itinerarydaycosts");
+            Delete.Table("costitemrates");
+            Delete.Table("costitems");
         }
     }
 }
-

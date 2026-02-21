@@ -1,6 +1,7 @@
 using Business.Services;
 using Bussiness.Services;
 using Bussiness.Services.Organization;
+using Bussiness.Services.TourAndTravels;
 using Bussiness.Services.Transaction;
 using Domain.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,7 +10,9 @@ using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using Repository.Dapper;
 using Repository.Interfaces;
+using Repository.Interfaces.TourAndTravels;
 using Repository.Repositories;
+using Repository.Repositories.TourAndTravels;
 using System.Data;
 using System.Text;
 
@@ -60,6 +63,8 @@ builder.Services.AddTransient<ICreateTransactionService, CreateTransactionServic
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddTransient<IOrganizationRepository, OrganizationRepository>();
 builder.Services.AddScoped<IOrganizationService, OrganizationService>();
+builder.Services.AddScoped<IItineraryService, ItineraryService>();
+builder.Services.AddScoped<IItineraryRepository, ItineraryRepository>();
 // Optional: Configure CORS (update policies as needed)
 builder.Services.AddCors(options =>
 {
