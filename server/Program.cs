@@ -16,7 +16,12 @@ using Repository.Repositories.TourAndTravels;
 using System.Data;
 using System.Text;
 
+using Dapper;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Enable Dapper snake_case to PascalCase property mapping
+DefaultTypeMap.MatchNamesWithUnderscores = true;
 
 // Load JWT settings from configuration
 var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
@@ -65,6 +70,8 @@ builder.Services.AddTransient<IOrganizationRepository, OrganizationRepository>()
 builder.Services.AddScoped<IOrganizationService, OrganizationService>();
 builder.Services.AddScoped<IItineraryService, ItineraryService>();
 builder.Services.AddScoped<IItineraryRepository, ItineraryRepository>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 // Optional: Configure CORS (update policies as needed)
 builder.Services.AddCors(options =>
 {

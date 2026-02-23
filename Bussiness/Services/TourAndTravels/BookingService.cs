@@ -10,15 +10,15 @@ namespace Bussiness.Services.TourAndTravels
     public interface IBookingService
     {
         BookingResponse CreateBooking(CreateBookingRequest request);
-        List<BookingResponse> GetAllBookings();
+        List<BookingListItem> GetAllBookings();
         BookingDetailResponse? GetBookingById(long id);
-        BookingResponse? UpdateBooking(long id, UpdateBookingRequest request);
-        // void ApproveBookingByTraveler(long id);
-        //    void ApproveBookingByAdmin(long id);
-        //    void AddPayment(long id, AddPaymentRequest request);
-        //    List<PaymentResponse> GetPayments(long id);
-        //}
+        BookingDayResponse? CustomizeDay(long instanceId, CustomizeDayRequest request);
+        bool ApproveBooking(long id, ApproveBookingRequest request);
+        PaymentResponse AddPayment(long id, AddPaymentRequest request);
+        List<PaymentResponse> GetPayments(long id);
+        bool UpdateStatus(long id, string status);
     }
+
     public class BookingService : IBookingService
     {
         private readonly IBookingRepository _repository;
@@ -31,31 +31,26 @@ namespace Bussiness.Services.TourAndTravels
         }
 
         // ===========================
-        // Create a new booking
+        // Create a new booking (from template or reuse existing instance)
         // ===========================
         public BookingResponse CreateBooking(CreateBookingRequest request)
         {
-            // Map domain request → repository DTO
             var repoRequest = _mapper.Map<Repository.DataModels.TourAndTravels.BookingDTO.CreateBookingRequest>(request);
-
-            // Call repository
             var repoResponse = _repository.CreateBooking(repoRequest);
-
-            // Map repository response → domain response
             return _mapper.Map<BookingResponse>(repoResponse);
         }
 
         // ===========================
-        // Get all bookings
+        // Get all bookings (lightweight list)
         // ===========================
-        public List<BookingResponse> GetAllBookings()
+        public List<BookingListItem> GetAllBookings()
         {
             var repoResponses = _repository.GetAllBookings();
-            return _mapper.Map<List<BookingResponse>>(repoResponses);
+            return _mapper.Map<List<BookingListItem>>(repoResponses);
         }
 
         // ===========================
-        // Get booking by id
+        // Get booking by id (full detail)
         // ===========================
         public BookingDetailResponse? GetBookingById(long id)
         {
@@ -64,41 +59,50 @@ namespace Bussiness.Services.TourAndTravels
         }
 
         // ===========================
-        // Update / customize booking
+        // Customize a single instance day
+        // Only updates that day — all other itinerary days stay intact
         // ===========================
-        public BookingResponse? UpdateBooking(long id, UpdateBookingRequest request)
+        public BookingDayResponse? CustomizeDay(long instanceId, CustomizeDayRequest request)
         {
-            var repoRequest = _mapper.Map<Repository.DataModels.TourAndTravels.BookingDTO.UpdateBookingRequest>(request);
-            var repoResponse = _repository.UpdateBooking(id, repoRequest);
-            return repoResponse == null ? null : _mapper.Map<BookingResponse>(repoResponse);
+            var repoRequest = _mapper.Map<Repository.DataModels.TourAndTravels.BookingDTO.CustomizeDayRequest>(request);
+            var repoResponse = _repository.CustomizeDay(instanceId, repoRequest);
+            return repoResponse == null ? null : _mapper.Map<BookingDayResponse>(repoResponse);
         }
 
         // ===========================
-        // Approvals
+        // Approve booking (traveler or admin)
         // ===========================
-        //public void ApproveBookingByTraveler(long id)
-        //{
-        //    _repository.ApproveBookingByTraveler(id);
-        //}
-
-        //public void ApproveBookingByAdmin(long id)
-        //{
-        //    _repository.ApproveBookingByAdmin(id);
-        //}
+        public bool ApproveBooking(long id, ApproveBookingRequest request)
+        {
+            var repoRequest = _mapper.Map<Repository.DataModels.TourAndTravels.BookingDTO.ApproveBookingRequest>(request);
+            return _repository.ApproveBooking(id, repoRequest);
+        }
 
         // ===========================
-        // Payments
+        // Add payment
         // ===========================
-        //public void AddPayment(long id, AddPaymentRequest request)
-        //{
-        //    var repoRequest = _mapper.Map<Repository.DataModels.TourAndTravels.BookingDTO.AddPaymentRequest>(request);
-        //    _repository.AddPayment(id, repoRequest);
-        //}
+        public PaymentResponse AddPayment(long id, AddPaymentRequest request)
+        {
+            var repoRequest = _mapper.Map<Repository.DataModels.TourAndTravels.BookingDTO.AddPaymentRequest>(request);
+            var repoResponse = _repository.AddPayment(id, repoRequest);
+            return _mapper.Map<PaymentResponse>(repoResponse);
+        }
 
-        //public List<PaymentResponse> GetPayments(long id)
-        //{
-        //    var repoResponses = _repository.GetPayments(id);
-        //    return _mapper.Map<List<PaymentResponse>>(repoResponses);
-        //}
+        // ===========================
+        // Get all payments for a booking
+        // ===========================
+        public List<PaymentResponse> GetPayments(long id)
+        {
+            var repoResponses = _repository.GetPayments(id);
+            return _mapper.Map<List<PaymentResponse>>(repoResponses);
+        }
+
+        // ===========================
+        // Update booking status
+        // ===========================
+        public bool UpdateStatus(long id, string status)
+        {
+            return _repository.UpdateStatus(id, status);
+        }
     }
 }

@@ -30,10 +30,9 @@ namespace Repository.Repositories.TourAndTravels
             {
                 try
                 {
-                    // 1️⃣ Insert Itinerary
                     string insertItineraryQuery = @"
                 INSERT INTO itineraries
-                (title, description, durationdays, difficultylevel)
+                (title, description, duration_days, difficulty_level)
                 VALUES
                 (@Title, @Description, @DurationDays, @DifficultyLevel)
                 RETURNING id;";
@@ -44,15 +43,14 @@ namespace Repository.Repositories.TourAndTravels
                         transaction
                     );
 
-                    // 2️⃣ Insert Days
                     if (request.Days != null && request.Days.Any())
                     {
                         foreach (var day in request.Days)
                         {
                             string insertDayQuery = @"
-                        INSERT INTO itinerarydays
-                        (itineraryid, daynumber, title, location, accommodation, transport,
-                         breakfastincluded, lunchincluded, dinnerincluded)
+                        INSERT INTO itinerary_days
+                        (itinerary_id, day_number, title, location, accommodation, transport,
+                         breakfast_included, lunch_included, dinner_included)
                         VALUES
                         (@ItineraryId, @DayNumber, @Title, @Location, @Accommodation, @Transport,
                          @BreakfastIncluded, @LunchIncluded, @DinnerIncluded)
@@ -75,14 +73,13 @@ namespace Repository.Repositories.TourAndTravels
                                 transaction
                             );
 
-                            // 3️⃣ Insert Activities
                             if (day.Activities != null && day.Activities.Any())
                             {
                                 foreach (var activity in day.Activities)
                                 {
                                     string insertActivityQuery = @"
-                                INSERT INTO itinerarydayactivities
-                                (itinerarydayid, activity)
+                                INSERT INTO itinerary_day_activities
+                                (itinerary_day_id, activity)
                                 VALUES
                                 (@DayId, @Activity);";
 
@@ -124,7 +121,7 @@ namespace Repository.Repositories.TourAndTravels
         // ============================================================
         public List<ItineraryResponse> GetAllItineraries()
         {
-            string sql = "SELECT Id, Title, Description, DurationDays, DifficultyLevel FROM Itineraries";
+            string sql = "SELECT id, title, description, duration_days, difficulty_level FROM itineraries";
             return _dbConnection.Query<ItineraryResponse>(sql).ToList();
         }
 
@@ -133,17 +130,17 @@ namespace Repository.Repositories.TourAndTravels
         // ============================================================
         public ItineraryDetailResponse? GetItineraryById(long id)
         {
-            string sqlItinerary = "SELECT Id, Title, Description, DurationDays, DifficultyLevel FROM Itineraries WHERE Id = @Id";
+            string sqlItinerary = "SELECT id, title, description, duration_days, difficulty_level FROM itineraries WHERE id = @Id";
             var itinerary = _dbConnection.QuerySingleOrDefault<ItineraryDetailResponse>(sqlItinerary, new { Id = id });
 
             if (itinerary == null)
                 return null;
 
             string sqlDays = @"
-                SELECT Id, DayNumber, Title, Location, Accommodation, Transport, BreakfastIncluded, LunchIncluded, DinnerIncluded
-                FROM ItineraryDays
-                WHERE ItineraryId = @ItineraryId
-                ORDER BY DayNumber";
+                SELECT id, day_number, title, location, accommodation, transport, breakfast_included, lunch_included, dinner_included
+                FROM itinerary_days
+                WHERE itinerary_id = @ItineraryId
+                ORDER BY day_number";
 
             var days = _dbConnection.Query<ItineraryDayResponse>(sqlDays, new { ItineraryId = id }).ToList();
             itinerary.Days = days;
@@ -157,12 +154,12 @@ namespace Repository.Repositories.TourAndTravels
         public ItineraryResponse? UpdateItinerary(long id, UpdateItineraryRequest request)
         {
             string sql = @"
-                UPDATE Itineraries
-                SET Title = COALESCE(@Title, Title),
-                    Description = COALESCE(@Description, Description),
-                    DurationDays = COALESCE(@DurationDays, DurationDays),
-                    DifficultyLevel = COALESCE(@DifficultyLevel, DifficultyLevel)
-                WHERE Id = @Id";
+                UPDATE itineraries
+                SET title = COALESCE(@Title, title),
+                    description = COALESCE(@Description, description),
+                    duration_days = COALESCE(@DurationDays, duration_days),
+                    difficulty_level = COALESCE(@DifficultyLevel, difficulty_level)
+                WHERE id = @Id";
 
             var affected = _dbConnection.Execute(sql, new { request.Title, request.Description, request.DurationDays, request.DifficultyLevel, Id = id });
             if (affected == 0)
@@ -177,10 +174,10 @@ namespace Repository.Repositories.TourAndTravels
         // ============================================================
         public bool DeleteItinerary(long id)
         {
-            string sqlDays = "DELETE FROM ItineraryDays WHERE ItineraryId = @Id";
+            string sqlDays = "DELETE FROM itinerary_days WHERE itinerary_id = @Id";
             _dbConnection.Execute(sqlDays, new { Id = id });
 
-            string sql = "DELETE FROM Itineraries WHERE Id = @Id";
+            string sql = "DELETE FROM itineraries WHERE id = @Id";
             var affected = _dbConnection.Execute(sql, new { Id = id });
             return affected > 0;
         }
@@ -191,11 +188,11 @@ namespace Repository.Repositories.TourAndTravels
         public ItineraryDayResponse? AddDayToItinerary(long itineraryId, CreateItineraryDayRequest request)
         {
             string sql = @"
-                INSERT INTO ItineraryDays 
-                    (ItineraryId, DayNumber, Title, Location, Accommodation, Transport, BreakfastIncluded, LunchIncluded, DinnerIncluded)
+                INSERT INTO itinerary_days 
+                    (itinerary_id, day_number, title, location, accommodation, transport, breakfast_included, lunch_included, dinner_included)
                 VALUES 
-                    (@ItineraryId, @DayNumber, @Title, @Location, @Accommodation, @Transport, @BreakfastIncluded, @LunchIncluded, @DinnerIncluded);
-                SELECT CAST(SCOPE_IDENTITY() as BIGINT);";
+                    (@ItineraryId, @DayNumber, @Title, @Location, @Accommodation, @Transport, @BreakfastIncluded, @LunchIncluded, @DinnerIncluded)
+                RETURNING id;";
 
             var dayId = _dbConnection.ExecuteScalar<long>(sql, new
             {
@@ -231,15 +228,15 @@ namespace Repository.Repositories.TourAndTravels
         public ItineraryDayResponse? UpdateDay(long itineraryId, long dayId, UpdateItineraryDayRequest request)
         {
             string sql = @"
-                UPDATE ItineraryDays
-                SET Title = COALESCE(@Title, Title),
-                    Location = COALESCE(@Location, Location),
-                    Accommodation = COALESCE(@Accommodation, Accommodation),
-                    Transport = COALESCE(@Transport, Transport),
-                    BreakfastIncluded = COALESCE(@BreakfastIncluded, BreakfastIncluded),
-                    LunchIncluded = COALESCE(@LunchIncluded, LunchIncluded),
-                    DinnerIncluded = COALESCE(@DinnerIncluded, DinnerIncluded)
-                WHERE Id = @DayId AND ItineraryId = @ItineraryId";
+                UPDATE itinerary_days
+                SET title = COALESCE(@Title, title),
+                    location = COALESCE(@Location, location),
+                    accommodation = COALESCE(@Accommodation, accommodation),
+                    transport = COALESCE(@Transport, transport),
+                    breakfast_included = COALESCE(@BreakfastIncluded, breakfast_included),
+                    lunch_included = COALESCE(@LunchIncluded, lunch_included),
+                    dinner_included = COALESCE(@DinnerIncluded, dinner_included)
+                WHERE id = @DayId AND itinerary_id = @ItineraryId";
 
             var affected = _dbConnection.Execute(sql, new
             {
@@ -257,7 +254,7 @@ namespace Repository.Repositories.TourAndTravels
             if (affected == 0)
                 return null;
 
-            string sqlGet = "SELECT * FROM ItineraryDays WHERE Id = @Id";
+            string sqlGet = "SELECT * FROM itinerary_days WHERE id = @Id";
             return _dbConnection.QuerySingleOrDefault<ItineraryDayResponse>(sqlGet, new { Id = dayId });
         }
     }

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Bussiness.Services.TourAndTravels;
-using Domain.Models.TourAndTravels;
 using static Domain.Models.TourAndTravels.Booking;
-using static Domain.Models.TourAndTravels.Payments;
 
 namespace server.Controller.TourAndTravels
 {
@@ -20,7 +18,9 @@ namespace server.Controller.TourAndTravels
         }
 
         // ===========================
-        // Create a new booking from an itinerary
+        // Create a new booking from template OR reuse existing instance
+        // POST /api/bookings/create
+        // Body: { itineraryId, sourceInstanceId?, startDate, endDate, travelers[], specialRequests? }
         // ===========================
         [HttpPost("create")]
         public ActionResult<BookingResponse> CreateBooking([FromBody] CreateBookingRequest request)
@@ -30,20 +30,22 @@ namespace server.Controller.TourAndTravels
         }
 
         // ===========================
-        // Get all bookings
+        // Get all bookings (lightweight list)
+        // GET /api/bookings
         // ===========================
         [HttpGet]
-        public ActionResult<List<BookingResponse>> GetAllBookings()
+        public ActionResult<List<BookingListItem>> GetAllBookings()
         {
             var bookings = _bookingService.GetAllBookings();
             return Ok(bookings);
         }
 
         // ===========================
-        // Get a specific booking by Id
+        // Get full booking detail by instance ID
+        // GET /api/bookings/{id}
         // ===========================
         [HttpGet("{id:long}")]
-        public ActionResult<BookingDetailResponse?> GetBookingById(long id)
+        public ActionResult<BookingDetailResponse> GetBookingById(long id)
         {
             var booking = _bookingService.GetBookingById(id);
             if (booking == null) return NotFound();
@@ -51,54 +53,72 @@ namespace server.Controller.TourAndTravels
         }
 
         // ===========================
-        // Update booking (customize)
+        // Customize a single day of the booking instance
+        // Only updates that specific day — other days remain intact
+        // PUT /api/bookings/{id}/customize-day
+        // Body: { instanceDayId, title?, location?, accommodation?, transport?, meals?, activities? }
         // ===========================
-        [HttpPut("{id:long}/update")]
-        public ActionResult<BookingResponse?> UpdateBooking(long id, [FromBody] UpdateBookingRequest request)
+        [HttpPut("{id:long}/customize-day")]
+        public ActionResult<BookingDayResponse> CustomizeDay(long id, [FromBody] CustomizeDayRequest request)
         {
-            var updatedBooking = _bookingService.UpdateBooking(id, request);
-            if (updatedBooking == null) return NotFound();
-            return Ok(updatedBooking);
+            var day = _bookingService.CustomizeDay(id, request);
+            if (day == null) return NotFound("Day not found for this booking instance.");
+            return Ok(day);
         }
 
         // ===========================
-        // Approve booking (traveler)
+        // Approve booking (traveler or admin)
+        // POST /api/bookings/{id}/approve
+        // Body: { approvedBy: "traveler"|"admin", approved: true/false, remarks? }
         // ===========================
-        [HttpPost("{id:long}/approve/traveler")]
-        public IActionResult ApproveBookingByTraveler(long id)
+        [HttpPost("{id:long}/approve")]
+        public IActionResult ApproveBooking(long id, [FromBody] ApproveBookingRequest request)
         {
-            //_bookingService.ApproveBookingByTraveler(id);
-            return Ok();
-        }
-
-        // ===========================
-        // Approve booking (admin)
-        // ===========================
-        [HttpPost("{id:long}/approve/admin")]
-        public IActionResult ApproveBookingByAdmin(long id)
-        {
-            //_bookingService.ApproveBookingByAdmin(id);
-            return Ok();
+            var result = _bookingService.ApproveBooking(id, request);
+            if (!result) return NotFound();
+            return Ok(new { message = "Approval recorded successfully." });
         }
 
         // ===========================
         // Add payment to booking
+        // POST /api/bookings/{id}/payment
+        // Body: { amount, currency?, paymentMethod?, transactionReference? }
         // ===========================
         [HttpPost("{id:long}/payment")]
-        public IActionResult AddPayment(long id, [FromBody] Domain.Models.TourAndTravels.Booking.AddPaymentRequest request)
+        public ActionResult<PaymentResponse> AddPayment(long id, [FromBody] AddPaymentRequest request)
         {
-            //_bookingService.AddPayment(id, request);
-            return Ok();
+            var payment = _bookingService.AddPayment(id, request);
+            return Ok(payment);
         }
 
         // ===========================
         // Get all payments for a booking
+        // GET /api/bookings/{id}/payments
         // ===========================
         [HttpGet("{id:long}/payments")]
-        public ActionResult<List<Domain.Models.TourAndTravels.Booking.PaymentResponse>> GetPayments(long id)
+        public ActionResult<List<PaymentResponse>> GetPayments(long id)
         {
-            //var payments = _bookingService.GetPayments(id);
-            return Ok();
+            var payments = _bookingService.GetPayments(id);
+            return Ok(payments);
         }
+
+        // ===========================
+        // Update booking status
+        // PUT /api/bookings/{id}/status
+        // Body: { status: "Draft"|"Pending"|"Confirmed"|"Cancelled" }
+        // ===========================
+        [HttpPut("{id:long}/status")]
+        public IActionResult UpdateStatus(long id, [FromBody] UpdateStatusRequest request)
+        {
+            var result = _bookingService.UpdateStatus(id, request.Status);
+            if (!result) return NotFound();
+            return Ok(new { message = $"Status updated to {request.Status}." });
+        }
+    }
+
+    // Helper class for status update endpoint
+    public class UpdateStatusRequest
+    {
+        public string Status { get; set; } = string.Empty;
     }
 }

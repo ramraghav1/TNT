@@ -5,27 +5,28 @@ namespace Repository.Interfaces.TourAndTravels
 {
     public interface IBookingRepository
     {
-        // Booking CRUD
+        // Create booking → creates itinerary instance + copies days + inserts travelers
         BookingResponse CreateBooking(CreateBookingRequest request);
-        List<BookingResponse> GetAllBookings();
-        BookingDetailResponse? GetBookingById(long id);
-        BookingResponse? UpdateBooking(long id, UpdateBookingRequest request);
-        bool DeleteBooking(long id);
 
-        // Booking Day operations
-        BookingDayResponse? AddDayToBooking(long bookingId, CustomizeDayRequest request);
-        BookingDayResponse? UpdateBookingDay(long bookingId, long dayId, UpdateBookingDayRequest request);
+        // Get all bookings (lightweight list)
+        List<BookingListItem> GetAllBookings();
 
-        // Payment operations
-        bool AddPayment(long bookingId, decimal amount, string paymentMethod);
-        List<BookingPaymentDTO> GetPaymentsForBooking(long bookingId);
-    }
+        // Get full booking detail by instance ID
+        BookingDetailResponse? GetBookingById(long instanceId);
 
-    public class BookingPaymentDTO
-    {
-        public long Id { get; set; }
-        public decimal Amount { get; set; }
-        public string PaymentMethod { get; set; } = string.Empty;
-        public DateTime PaymentDate { get; set; }
+        // Customize a single instance day (only that day is updated, others stay intact)
+        BookingDayResponse? CustomizeDay(long instanceId, CustomizeDayRequest request);
+
+        // Approve booking
+        bool ApproveBooking(long instanceId, ApproveBookingRequest request);
+
+        // Add payment
+        PaymentResponse AddPayment(long instanceId, AddPaymentRequest request);
+
+        // Get all payments for a booking
+        List<PaymentResponse> GetPayments(long instanceId);
+
+        // Update booking status
+        bool UpdateStatus(long instanceId, string status);
     }
 }
