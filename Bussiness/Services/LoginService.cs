@@ -1,67 +1,85 @@
 ﻿using System;
-using Domain.Models;
-using BCrypt.Net;
-using Repository.Interfaces;
 using AutoMapper;
+using Repository.Interfaces;
+using static Domain.Models.Auth;
 
 namespace Business.Services
 {
-    
-
     public interface ILoginService
     {
-        bool CheckUserValid(LoginRequest loginRequest);
-        
+        /// <summary>
+        /// Authenticate user credentials, record login attempt, and return tokens.
+        /// </summary>
+        AuthLoginResponse Login(AuthLoginRequest request);
+
+        /// <summary>
+        /// Refresh an access token using a valid refresh token (token rotation).
+        /// </summary>
+        RefreshTokenResponse RefreshToken(RefreshTokenRequest request);
+
+        /// <summary>
+        /// Logout by revoking the provided refresh token.
+        /// </summary>
+        void Logout(LogoutRequest request);
+
+        /// <summary>
+        /// Force logout from all devices by revoking all tokens for the user.
+        /// </summary>
+        void LogoutAll(int userId);
     }
 
     public class LoginService : ILoginService
     {
-        private readonly ILoginRepository _loginRepository;
+        private readonly IAuthTokenRepository _authTokenRepo;
+        private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
-        public LoginService(ILoginRepository loginRepository,IMapper mapper)
+
+        public LoginService(
+            IAuthTokenRepository authTokenRepo,
+            ITokenService tokenService,
+            IMapper mapper)
         {
-            _loginRepository = loginRepository;
+            _authTokenRepo = authTokenRepo;
+            _tokenService = tokenService;
             _mapper = mapper;
         }
 
-        public bool CheckUserValid(LoginRequest loginRequest)
+        public AuthLoginResponse Login(AuthLoginRequest request)
         {
-            // TODO: Retrieve hashed password from your database for this user
-            string hashedPasswordFromDb = GetHashedPasswordFromDatabase(loginRequest);
-
-            return ComparePassword(loginRequest.Password, hashedPasswordFromDb)
-                   && !IsPasswordChangeNeeded(loginRequest);
-        }
-
-        private string GetHashedPasswordFromDatabase(LoginRequest loginRequest)
-        {
-            // Placeholder - Replace this with actual DB lookup logic
-            return "dfdsfds"; // example hash, not valid!
-        }
-
-        private bool ComparePassword(string plainPassword, string hashedPassword)
-        {
-            return BCrypt.Net.BCrypt.Verify(plainPassword, hashedPassword);
-        }
-
-        private bool IsPasswordChangeNeeded(LoginRequest loginRequest)
-        {
-            // TODO: Implement password expiration or change logic here
-            return false;
-        }
-        private LoggedInUserInformation GetLoggedInUserInformation(string userName)
-        {
-            var result = _loginRepository.GetLoginUserInformation(userName);
-
-            if (result == null)
+            // 1. Look up user by username
+            var userRecord = _authTokenRepo.ValidateCredentials(request.Username);
+            if (userRecord == null)
             {
-                return null;
+                throw new UnauthorizedAccessException("Invalid username or password.");
             }
 
-            var loginUserInfo = _mapper.Map<LoggedInUserInformation>(result);
-            return loginUserInfo;
+            // 2. Verify BCrypt password
+            bool passwordValid = BCrypt.Net.BCrypt.Verify(request.Password, userRecord.PasswordHash);
+            if (!passwordValid)
+            {
+                throw new UnauthorizedAccessException("Invalid username or password.");
+            }
+
+            // 3. Map to domain ValidatedUser and generate tokens
+            var validatedUser = _mapper.Map<ValidatedUser>(userRecord);
+
+            return _tokenService.GenerateTokens(validatedUser, request.IpAddress, request.UserAgent);
         }
-        
+
+        public RefreshTokenResponse RefreshToken(RefreshTokenRequest request)
+        {
+            return _tokenService.RefreshTokens(request.RefreshToken, request.IpAddress, request.UserAgent);
+        }
+
+        public void Logout(LogoutRequest request)
+        {
+            _tokenService.RevokeToken(request.RefreshToken);
+        }
+
+        public void LogoutAll(int userId)
+        {
+            _tokenService.RevokeAllTokens(userId);
+        }
 
     }
 }

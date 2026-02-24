@@ -1,6 +1,7 @@
 using Business.Services;
 using Bussiness.Services;
 using Bussiness.Services.Organization;
+using Bussiness.Services.Remittance;
 using Bussiness.Services.TourAndTravels;
 using Bussiness.Services.Transaction;
 using Domain.Models;
@@ -10,8 +11,10 @@ using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using Repository.Dapper;
 using Repository.Interfaces;
+using Repository.Interfaces.Remittance;
 using Repository.Interfaces.TourAndTravels;
 using Repository.Repositories;
+using Repository.Repositories.Remittance;
 using Repository.Repositories.TourAndTravels;
 using System.Data;
 using System.Text;
@@ -72,6 +75,17 @@ builder.Services.AddScoped<IItineraryService, ItineraryService>();
 builder.Services.AddScoped<IItineraryRepository, ItineraryRepository>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+
+// Remittance module
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+builder.Services.AddScoped<ICountryService, CountryService>();
+builder.Services.AddScoped<IPaymentTypeRepository, PaymentTypeRepository>();
+builder.Services.AddScoped<IPaymentTypeService, PaymentTypeService>();
+builder.Services.AddScoped<IAgentRepository, AgentRepository>();
+builder.Services.AddScoped<IAgentService, AgentService>();
+builder.Services.AddScoped<IServiceChargeSetupRepository, ServiceChargeSetupRepository>();
+builder.Services.AddScoped<IServiceChargeSetupService, ServiceChargeSetupService>();
+
 // Optional: Configure CORS (update policies as needed)
 builder.Services.AddCors(options =>
 {
