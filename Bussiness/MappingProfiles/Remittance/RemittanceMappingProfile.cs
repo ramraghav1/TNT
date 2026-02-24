@@ -32,6 +32,25 @@ namespace Bussiness.MappingProfiles.Remittance
             CreateMap<ServiceChargeSetupDTO.SlabResponse, ServiceChargeSetup.SlabResponse>().ReverseMap();
             CreateMap<ServiceChargeSetup.CalculateChargeRequest, ServiceChargeSetupDTO.CalculateChargeRequest>().ReverseMap();
             CreateMap<ServiceChargeSetupDTO.CalculateChargeResponse, ServiceChargeSetup.CalculateChargeResponse>().ReverseMap();
+
+            // FxRateSetup
+            CreateMap<FxRateSetup.CreateFxRateRequest, FxRateSetupDTO.CreateFxRateRequest>().ReverseMap();
+            CreateMap<FxRateSetup.UpdateFxRateRequest, FxRateSetupDTO.UpdateFxRateRequest>().ReverseMap();
+            CreateMap<FxRateSetupDTO.FxRateListItem, FxRateSetup.FxRateListItem>().ReverseMap();
+            CreateMap<FxRateSetupDTO.FxRateDetailResponse, FxRateSetup.FxRateDetailResponse>().ReverseMap();
+            CreateMap<FxRateSetupDTO.FxRateHistoryItem, FxRateSetup.FxRateHistoryItem>().ReverseMap();
+            CreateMap<FxRateSetup.ConvertRequest, FxRateSetupDTO.ConvertRequest>().ReverseMap();
+            CreateMap<FxRateSetupDTO.ConvertResponse, FxRateSetup.ConvertResponse>().ReverseMap();
+
+            // Branch
+            CreateMap<Branch.CreateBranchRequest, BranchDTO.CreateBranchRequest>().ReverseMap();
+            CreateMap<Branch.UpdateBranchRequest, BranchDTO.UpdateBranchRequest>().ReverseMap();
+            CreateMap<BranchDTO.BranchResponse, Branch.BranchResponse>().ReverseMap();
+
+            // BranchUser
+            CreateMap<BranchUser.CreateBranchUserRequest, BranchUserDTO.CreateBranchUserRequest>().ReverseMap();
+            CreateMap<BranchUser.UpdateBranchUserRequest, BranchUserDTO.UpdateBranchUserRequest>().ReverseMap();
+            CreateMap<BranchUserDTO.BranchUserResponse, BranchUser.BranchUserResponse>().ReverseMap();
         }
     }
 }

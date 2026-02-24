@@ -66,6 +66,8 @@ builder.Services.AddScoped<IUserInformationRepository, UserInformationRepository
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ILoginService, LoginService>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
+builder.Services.AddScoped<IAuthTokenRepository, AuthTokenRepository>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddTransient<ICreateTransactionService, CreateTransactionService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
@@ -85,6 +87,12 @@ builder.Services.AddScoped<IAgentRepository, AgentRepository>();
 builder.Services.AddScoped<IAgentService, AgentService>();
 builder.Services.AddScoped<IServiceChargeSetupRepository, ServiceChargeSetupRepository>();
 builder.Services.AddScoped<IServiceChargeSetupService, ServiceChargeSetupService>();
+builder.Services.AddScoped<IFxRateSetupRepository, FxRateSetupRepository>();
+builder.Services.AddScoped<IFxRateSetupService, FxRateSetupService>();
+builder.Services.AddScoped<IBranchRepository, BranchRepository>();
+builder.Services.AddScoped<IBranchService, BranchService>();
+builder.Services.AddScoped<IBranchUserRepository, BranchUserRepository>();
+builder.Services.AddScoped<IBranchUserService, BranchUserService>();
 
 // Optional: Configure CORS (update policies as needed)
 builder.Services.AddCors(options =>
