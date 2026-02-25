@@ -4,7 +4,7 @@ WORKDIR /src
 
 # Copy solution and project files first for layer caching
 COPY Solution.sln ./
-COPY server/Server.csproj server/
+COPY server/server.csproj server/
 COPY Bussiness/Bussiness.csproj Bussiness/
 COPY DbDeployment/DbDeployment.csproj DbDeployment/
 COPY Domain/Domain.csproj Domain/
