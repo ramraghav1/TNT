@@ -51,6 +51,40 @@ namespace Bussiness.MappingProfiles.Remittance
             CreateMap<BranchUser.CreateBranchUserRequest, BranchUserDTO.CreateBranchUserRequest>().ReverseMap();
             CreateMap<BranchUser.UpdateBranchUserRequest, BranchUserDTO.UpdateBranchUserRequest>().ReverseMap();
             CreateMap<BranchUserDTO.BranchUserResponse, BranchUser.BranchUserResponse>().ReverseMap();
+
+            // AdministrativeDivision
+            CreateMap<AdministrativeDivisionDTO.AdministrativeDivisionResponse, AdministrativeDivision.AdministrativeDivisionResponse>().ReverseMap();
+
+            // AgentAccount
+            CreateMap<AgentAccount.CreateAgentAccountRequest, AgentAccountDTO.CreateAgentAccountRequest>().ReverseMap();
+            CreateMap<AgentAccount.UpdateAgentAccountRequest, AgentAccountDTO.UpdateAgentAccountRequest>().ReverseMap();
+            CreateMap<AgentAccountDTO.AgentAccountResponse, AgentAccount.AgentAccountResponse>().ReverseMap();
+
+            // AgentLedgerEntry
+            CreateMap<AgentLedgerEntry.CreateLedgerEntryRequest, AgentLedgerEntryDTO.CreateLedgerEntryRequest>().ReverseMap();
+            CreateMap<AgentLedgerEntryDTO.LedgerEntryResponse, AgentLedgerEntry.LedgerEntryResponse>().ReverseMap();
+            CreateMap<AgentLedgerEntry.StatementRequest, AgentLedgerEntryDTO.StatementRequest>().ReverseMap();
+            CreateMap<AgentLedgerEntryDTO.StatementResponse, AgentLedgerEntry.StatementResponse>().ReverseMap();
+
+            // ConfigurationType
+            CreateMap<ConfigurationType.CreateConfigurationTypeRequest, ConfigurationTypeDTO.CreateConfigurationTypeRequest>().ReverseMap();
+            CreateMap<ConfigurationType.UpdateConfigurationTypeRequest, ConfigurationTypeDTO.UpdateConfigurationTypeRequest>().ReverseMap();
+            CreateMap<ConfigurationTypeDTO.ConfigurationTypeResponse, ConfigurationType.ConfigurationTypeResponse>().ReverseMap();
+
+            // Configuration
+            CreateMap<Configuration.CreateConfigurationRequest, ConfigurationDTO.CreateConfigurationRequest>().ReverseMap();
+            CreateMap<Configuration.UpdateConfigurationRequest, ConfigurationDTO.UpdateConfigurationRequest>().ReverseMap();
+            CreateMap<ConfigurationDTO.ConfigurationResponse, Configuration.ConfigurationResponse>().ReverseMap();
+
+            // DomesticServiceChargeSetup
+            CreateMap<DomesticServiceChargeSetup.CreateSetupRequest, DomesticServiceChargeSetupDTO.CreateSetupRequest>().ReverseMap();
+            CreateMap<DomesticServiceChargeSetup.SlabRequest, DomesticServiceChargeSetupDTO.SlabRequest>().ReverseMap();
+            CreateMap<DomesticServiceChargeSetup.UpdateSetupRequest, DomesticServiceChargeSetupDTO.UpdateSetupRequest>().ReverseMap();
+            CreateMap<DomesticServiceChargeSetupDTO.SetupListItem, DomesticServiceChargeSetup.SetupListItem>().ReverseMap();
+            CreateMap<DomesticServiceChargeSetupDTO.SetupDetailResponse, DomesticServiceChargeSetup.SetupDetailResponse>().ReverseMap();
+            CreateMap<DomesticServiceChargeSetupDTO.SlabResponse, DomesticServiceChargeSetup.SlabResponse>().ReverseMap();
+            CreateMap<DomesticServiceChargeSetup.CalculateChargeRequest, DomesticServiceChargeSetupDTO.CalculateChargeRequest>().ReverseMap();
+            CreateMap<DomesticServiceChargeSetupDTO.CalculateChargeResponse, DomesticServiceChargeSetup.CalculateChargeResponse>().ReverseMap();
         }
     }
 }

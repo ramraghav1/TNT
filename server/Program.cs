@@ -108,6 +108,18 @@ builder.Services.AddScoped<IBranchRepository, BranchRepository>();
 builder.Services.AddScoped<IBranchService, BranchService>();
 builder.Services.AddScoped<IBranchUserRepository, BranchUserRepository>();
 builder.Services.AddScoped<IBranchUserService, BranchUserService>();
+builder.Services.AddScoped<IAdministrativeDivisionRepository, AdministrativeDivisionRepository>();
+builder.Services.AddScoped<IAdministrativeDivisionService, AdministrativeDivisionService>();
+builder.Services.AddScoped<IAgentAccountRepository, AgentAccountRepository>();
+builder.Services.AddScoped<IAgentAccountService, AgentAccountService>();
+builder.Services.AddScoped<IAgentLedgerEntryRepository, AgentLedgerEntryRepository>();
+builder.Services.AddScoped<IAgentLedgerEntryService, AgentLedgerEntryService>();
+builder.Services.AddScoped<IConfigurationTypeRepository, ConfigurationTypeRepository>();
+builder.Services.AddScoped<IConfigurationTypeService, ConfigurationTypeService>();
+builder.Services.AddScoped<IConfigurationRepository, ConfigurationRepository>();
+builder.Services.AddScoped<IConfigurationService, ConfigurationService>();
+builder.Services.AddScoped<IDomesticServiceChargeSetupRepository, DomesticServiceChargeSetupRepository>();
+builder.Services.AddScoped<IDomesticServiceChargeSetupService, DomesticServiceChargeSetupService>();
 
 // Configure CORS
 var allowedOrigins = Environment.GetEnvironmentVariable("ALLOWED_ORIGINS")?.Split(',') 
