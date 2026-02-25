@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: tnt-api
+    runtime: docker
+    dockerfilePath: ./server/Dockerfile
+    dockerContext: .
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        sync: false # Set manually in Render dashboard
+      - key: ALLOWED_ORIGINS
+        sync: false # Set to your Cloudflare Pages URL
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production

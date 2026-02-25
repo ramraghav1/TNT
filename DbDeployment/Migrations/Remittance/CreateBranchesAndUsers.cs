@@ -2,7 +2,7 @@ using FluentMigrator;
 
 namespace DbDeployment.Migrations.Remittance
 {
-    [Migration(2026022403)]
+    [Migration(202602240003)]
     public class CreateBranchesAndUsers : Migration
     {
         public override void Up()

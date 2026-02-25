@@ -2,7 +2,7 @@
 
 namespace Migrations.Migrations;
 
-[Migration(20250724001)]
+[Migration(202507240001)]
 public class LoginDetailTable : Migration
 {
     public override void Up()

@@ -10,7 +10,7 @@ namespace Migrations
     /// itineraryinstancedayactivities, travelers, payments, itineraryapprovals.
     /// This migration is kept as a no-op for migration history compatibility.
     /// </summary>
-    [Migration(20260221_001)]
+    [Migration(202602210001)]
     public class BookingTables : Migration
     {
         public override void Up()

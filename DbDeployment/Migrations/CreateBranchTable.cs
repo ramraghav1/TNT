@@ -4,7 +4,7 @@ using FluentMigrator;
 namespace DbDeployment.Migrations
 {
 	
-        [Migration(20250810_04)]
+        [Migration(202508100004)]
         public class CreateBranchTable : Migration
         {
             public override void Up()

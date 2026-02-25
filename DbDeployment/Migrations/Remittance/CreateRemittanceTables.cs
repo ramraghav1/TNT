@@ -2,7 +2,7 @@ using FluentMigrator;
 
 namespace DbDeployment.Migrations.Remittance
 {
-    [Migration(2026022301)]
+    [Migration(202602230001)]
     public class CreateRemittanceTables : Migration
     {
         public override void Up()

@@ -58,7 +58,22 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSingleton<IDapperDbContext, DapperDbContext>();
 
 // Register PostgreSQL connection factory as transient (new connection per request)
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// Support DATABASE_URL env var (Render/Neon) or fall back to appsettings
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+string connectionString;
+if (!string.IsNullOrEmpty(databaseUrl) && databaseUrl.StartsWith("postgresql://"))
+{
+    var uri = new Uri(databaseUrl);
+    var userInfo = uri.UserInfo.Split(':');
+    var host = uri.Host;
+    var port = uri.Port > 0 ? uri.Port : 5432;
+    var database = uri.AbsolutePath.TrimStart('/');
+    connectionString = $"Host={host};Port={port};Database={database};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require";
+}
+else
+{
+    connectionString = databaseUrl ?? builder.Configuration.GetConnectionString("DefaultConnection")!;
+}
 builder.Services.AddTransient<IDbConnection>(sp => new NpgsqlConnection(connectionString));
 
 // Register repository and service layers
@@ -94,12 +109,14 @@ builder.Services.AddScoped<IBranchService, BranchService>();
 builder.Services.AddScoped<IBranchUserRepository, BranchUserRepository>();
 builder.Services.AddScoped<IBranchUserService, BranchUserService>();
 
-// Optional: Configure CORS (update policies as needed)
+// Configure CORS
+var allowedOrigins = Environment.GetEnvironmentVariable("ALLOWED_ORIGINS")?.Split(',') 
+    ?? new[] { "http://localhost:4200", "https://localhost:4200" };
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
@@ -114,7 +131,11 @@ app.UseSwaggerUI();
 // Global error handler middleware
 app.UseMiddleware<GlobalExceptionHandler>();
 
-app.UseHttpsRedirection();
+// Only redirect to HTTPS in development (Render handles SSL at proxy level)
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseCors();
 

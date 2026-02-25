@@ -3,7 +3,7 @@ using FluentMigrator;
 
 namespace DbDeployment.Migrations
 {
-    [Migration(20250810_02)]
+    [Migration(202508100002)]
     public class CreateOrganizationTable : Migration
     {
         public override void Up()

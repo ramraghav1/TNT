@@ -1,0 +1,9 @@
+client/
+**/bin/
+**/obj/
+**/node_modules/
+.git/
+.vs/
+*.user
+*.suo
+UpgradeLog*.htm

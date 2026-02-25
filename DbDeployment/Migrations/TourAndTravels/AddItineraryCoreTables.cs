@@ -3,7 +3,7 @@ using FluentMigrator;
 
 namespace DbDeployment.Migrations.TourAndTravels
 {
-    [Migration(2026022202)]
+    [Migration(202602220001)]
     public class AddItineraryCoreTables : Migration
     {
         public override void Up()

@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-[Migration(20250808002)]
+[Migration(202508080001)]
 public class CreateTransactionDetailTable : Migration
 {
     public override void Up()

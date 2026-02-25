@@ -2,7 +2,7 @@
 
 namespace Migrations.Migrations;
 
-[Migration(20250729001)]
+[Migration(202507290001)]
 public class UserInformationTable : Migration
 {
     public override void Up()
@@ -24,7 +24,7 @@ public class UserInformationTable : Migration
         //Delete.Table("userinformation");
     }
 }
-[Migration(20250810_05)]
+[Migration(202508100005)]
 public class AddBranchIdAndOrgIdToUserInformation : Migration
 {
     public override void Up()
