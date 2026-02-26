@@ -27,6 +27,7 @@ using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.RateLimiting;
+using Scalar.AspNetCore;
 
 using Dapper;
 
@@ -271,5 +272,8 @@ app.MapControllers();
 
 // 9. .NET 10: Built-in OpenAPI endpoint at /openapi/v1.json
 app.MapOpenApi();
+
+// 10. Scalar API Reference UI (replaces Swagger UI)
+app.MapScalarApiReference();
 
 app.Run();
