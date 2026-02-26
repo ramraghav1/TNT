@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # Copy solution and project files first for layer caching
@@ -17,12 +17,12 @@ RUN dotnet restore
 # Copy all source code
 COPY . .
 
-# Publish the Server project
+# Publish the Server project with AOT-friendly optimizations
 WORKDIR /src/server
 RUN dotnet publish -c Release -o /app/publish
 
-# Stage 2: Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+# Stage 2: Runtime - use chiseled image for smaller size & security
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
 
 COPY --from=build /app/publish .

@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using System.Data.SqlClient;
+using Npgsql;
 using Microsoft.Extensions.Configuration;
 using Dapper;
 namespace Repository.Dapper
@@ -11,7 +11,7 @@ namespace Repository.Dapper
         public DapperDbContext(IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
-            _connection = new SqlConnection(connectionString);
+            _connection = new NpgsqlConnection(connectionString);
             _connection.Open();
         }
 
