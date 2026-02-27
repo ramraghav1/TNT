@@ -85,6 +85,13 @@ namespace Bussiness.MappingProfiles.Remittance
             CreateMap<DomesticServiceChargeSetupDTO.SlabResponse, DomesticServiceChargeSetup.SlabResponse>().ReverseMap();
             CreateMap<DomesticServiceChargeSetup.CalculateChargeRequest, DomesticServiceChargeSetupDTO.CalculateChargeRequest>().ReverseMap();
             CreateMap<DomesticServiceChargeSetupDTO.CalculateChargeResponse, DomesticServiceChargeSetup.CalculateChargeResponse>().ReverseMap();
+
+            // Voucher
+            CreateMap<Voucher.CreateVoucherRequest, VoucherDTO.CreateVoucherRequest>().ReverseMap();
+            CreateMap<VoucherDTO.VoucherResponse, Voucher.VoucherResponse>().ReverseMap();
+            CreateMap<Voucher.AccountStatementRequest, VoucherDTO.AccountStatementRequest>().ReverseMap();
+            CreateMap<VoucherDTO.AccountStatementResponse, Voucher.AccountStatementResponse>().ReverseMap();
+            CreateMap<VoucherDTO.DailySummary, Voucher.DailySummary>().ReverseMap();
         }
     }
 }

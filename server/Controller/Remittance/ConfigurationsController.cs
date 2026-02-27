@@ -35,6 +35,12 @@ namespace server.Controller.Remittance
             return Ok(_service.GetByTypeId(configurationTypeId));
         }
 
+        [HttpGet("by-type-name/{typeName}")]
+        public IActionResult GetByTypeName(string typeName)
+        {
+            return Ok(_service.GetByTypeName(typeName));
+        }
+
         [HttpGet("{id}")]
         public IActionResult GetById(long id)
         {

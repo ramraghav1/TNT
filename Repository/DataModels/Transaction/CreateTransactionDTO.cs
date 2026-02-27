@@ -19,6 +19,12 @@ namespace Repository.DataModels.Transaction
         public string? receiver_name { get; set; }
         public string? receiver_address { get; set; }
         public string? receiver_mobile { get; set; }
+
+        // Agent & Branch
+        public long? sender_agent_id { get; set; }
+        public long? sender_branch_id { get; set; }
+        public long? payout_agent_id { get; set; }
+        public long? payout_branch_id { get; set; }
     }
     public class ReturnCreateTransactionDTO
     {

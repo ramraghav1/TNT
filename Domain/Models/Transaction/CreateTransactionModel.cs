@@ -18,6 +18,12 @@ namespace Domain.Models.Transaction
         public string? ReceiverName { get; set; }
         public string? ReceiverAddress { get; set; }
         public string? ReceiverMobile { get; set; }
+
+        // Agent & Branch
+        public long? SenderAgentId { get; set; }
+        public long? SenderBranchId { get; set; }
+        public long? PayoutAgentId { get; set; }
+        public long? PayoutBranchId { get; set; }
     }
     public class ReturnCreateTransactionModel
     {

@@ -21,6 +21,10 @@ namespace Bussiness.MappingProfiles.Transaction
             .ForMember(dest => dest.ReceiverName, opt => opt.MapFrom(src => src.receiver_name))
             .ForMember(dest => dest.ReceiverAddress, opt => opt.MapFrom(src => src.receiver_address))
             .ForMember(dest => dest.ReceiverMobile, opt => opt.MapFrom(src => src.receiver_mobile))
+            .ForMember(dest => dest.SenderAgentId, opt => opt.MapFrom(src => src.sender_agent_id))
+            .ForMember(dest => dest.SenderBranchId, opt => opt.MapFrom(src => src.sender_branch_id))
+            .ForMember(dest => dest.PayoutAgentId, opt => opt.MapFrom(src => src.payout_agent_id))
+            .ForMember(dest => dest.PayoutBranchId, opt => opt.MapFrom(src => src.payout_branch_id))
             .ReverseMap();
 
             CreateMap<ReturnCreateTransactionDTO, ReturnCreateTransactionModel>()

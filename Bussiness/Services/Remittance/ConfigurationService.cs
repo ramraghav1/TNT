@@ -10,6 +10,7 @@ namespace Bussiness.Services.Remittance
         ConfigurationResponse Create(CreateConfigurationRequest request);
         List<ConfigurationResponse> GetAll();
         List<ConfigurationResponse> GetByTypeId(long configurationTypeId);
+        List<ConfigurationResponse> GetByTypeName(string typeName);
         ConfigurationResponse? GetById(long id);
         ConfigurationResponse? Update(long id, UpdateConfigurationRequest request);
         bool Delete(long id);
@@ -42,6 +43,12 @@ namespace Bussiness.Services.Remittance
         public List<ConfigurationResponse> GetByTypeId(long configurationTypeId)
         {
             var result = _repository.GetByTypeId(configurationTypeId);
+            return _mapper.Map<List<ConfigurationResponse>>(result);
+        }
+
+        public List<ConfigurationResponse> GetByTypeName(string typeName)
+        {
+            var result = _repository.GetByTypeName(typeName);
             return _mapper.Map<List<ConfigurationResponse>>(result);
         }
 

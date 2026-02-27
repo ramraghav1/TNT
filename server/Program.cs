@@ -220,6 +220,8 @@ builder.Services.AddScoped<IConfigurationRepository, ConfigurationRepository>();
 builder.Services.AddScoped<IConfigurationService, ConfigurationService>();
 builder.Services.AddScoped<IDomesticServiceChargeSetupRepository, DomesticServiceChargeSetupRepository>();
 builder.Services.AddScoped<IDomesticServiceChargeSetupService, DomesticServiceChargeSetupService>();
+builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
+builder.Services.AddScoped<IVoucherService, VoucherService>();
 
 // ────────────────────────────────────────────
 // Configure CORS
