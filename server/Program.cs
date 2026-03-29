@@ -1,5 +1,6 @@
 using Business.Services;
 using Bussiness.Services;
+using Bussiness.Services.Clinic;
 using Bussiness.Services.Organization;
 using Bussiness.Services.Remittance;
 using Bussiness.Services.TourAndTravels;
@@ -13,9 +14,11 @@ using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using Repository.Dapper;
 using Repository.Interfaces;
+using Repository.Interfaces.Clinic;
 using Repository.Interfaces.Remittance;
 using Repository.Interfaces.TourAndTravels;
 using Repository.Repositories;
+using Repository.Repositories.Clinic;
 using Repository.Repositories.Remittance;
 using Repository.Repositories.TourAndTravels;
 using server.MiddleWare;
@@ -45,6 +48,10 @@ builder.Services.Configure<JsonOptions>(options =>
 
 // Enable Dapper snake_case to PascalCase property mapping
 DefaultTypeMap.MatchNamesWithUnderscores = true;
+
+// Register DateOnly/TimeOnly type handlers for Dapper ↔ Npgsql compatibility
+SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
+SqlMapper.AddTypeHandler(new TimeOnlyTypeHandler());
 
 // Load JWT settings from configuration
 var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
@@ -192,6 +199,8 @@ builder.Services.AddScoped<IItineraryService, ItineraryService>();
 builder.Services.AddScoped<IItineraryRepository, ItineraryRepository>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IPricingService, PricingService>();
+builder.Services.AddScoped<IPricingRepository, PricingRepository>();
 
 // Remittance module
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
@@ -223,6 +232,20 @@ builder.Services.AddScoped<IDomesticServiceChargeSetupService, DomesticServiceCh
 builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
 builder.Services.AddScoped<IVoucherService, VoucherService>();
 
+// Clinic module
+builder.Services.AddScoped<ITenantRepository, TenantRepository>();
+builder.Services.AddScoped<ITenantService, TenantService>();
+builder.Services.AddScoped<IPractitionerRepository, PractitionerRepository>();
+builder.Services.AddScoped<IPractitionerService, PractitionerService>();
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IClinicServiceRepository, ClinicServiceRepository>();
+builder.Services.AddScoped<IClinicServiceService, ClinicServiceService>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+builder.Services.AddScoped<IInvoiceService, InvoiceService>();
+
 // ────────────────────────────────────────────
 // Configure CORS
 // ────────────────────────────────────────────
@@ -248,7 +271,14 @@ var app = builder.Build();
 app.UseResponseCompression();
 
 // 2. Exception Handler (ProblemDetails + IExceptionHandler)
-app.UseExceptionHandler();
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler();
+}
 
 // 3. Only redirect to HTTPS in development (Render handles SSL at proxy level)
 if (app.Environment.IsDevelopment())

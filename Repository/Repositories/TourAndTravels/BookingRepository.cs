@@ -248,8 +248,8 @@ namespace Repository.Repositories.TourAndTravels
                     i.booking_reference,
                     t.title AS template_title,
                     i.status,
-                    i.start_date,
-                    i.end_date,
+                    i.start_date::timestamp AS start_date,
+                    i.end_date::timestamp AS end_date,
                     i.total_amount,
                     i.payment_status,
                     i.created_at
@@ -279,8 +279,8 @@ namespace Repository.Repositories.TourAndTravels
                     i.payment_status,
                     i.traveler_approved,
                     i.admin_approved,
-                    i.start_date,
-                    i.end_date,
+                    i.start_date::timestamp AS start_date,
+                    i.end_date::timestamp AS end_date,
                     i.created_at,
                     i.special_requests,
                     t.title AS template_title
@@ -292,7 +292,7 @@ namespace Repository.Repositories.TourAndTravels
             if (booking == null) return null;
 
             string sqlDays = @"
-                SELECT id, day_number, date, title, location, accommodation, transport,
+                SELECT id, day_number, date::timestamp AS date, title, location, accommodation, transport,
                        breakfast_included, lunch_included, dinner_included
                 FROM itinerary_instance_days
                 WHERE itinerary_instance_id = @InstanceId
@@ -589,6 +589,90 @@ namespace Repository.Repositories.TourAndTravels
             day.Activities = _dbConnection.Query<string>(sqlActivities, new { DayId = dayId }).ToList();
 
             return day;
+        }
+
+        // ============================================================
+        // DASHBOARD STATS
+        // ============================================================
+        public DashboardStatsDTO GetDashboardStats()
+        {
+            var stats = new DashboardStatsDTO();
+
+            // Summary counts
+            string sqlCounts = @"
+                SELECT
+                    COUNT(*) AS total_bookings,
+                    COUNT(*) FILTER (WHERE status = 'Confirmed') AS confirmed,
+                    COUNT(*) FILTER (WHERE status = 'Pending') AS pending,
+                    COUNT(*) FILTER (WHERE status = 'Draft') AS draft,
+                    COUNT(*) FILTER (WHERE status = 'Cancelled') AS cancelled,
+                    COALESCE(SUM(total_amount), 0) AS total_revenue,
+                    COALESCE(SUM(amount_paid), 0) AS collected_revenue
+                FROM itinerary_instances;";
+
+            var row = _dbConnection.QuerySingle(sqlCounts);
+            stats.TotalBookings = (int)(long)row.total_bookings;
+            stats.Confirmed = (int)(long)row.confirmed;
+            stats.Pending = (int)(long)row.pending;
+            stats.Draft = (int)(long)row.draft;
+            stats.Cancelled = (int)(long)row.cancelled;
+            stats.TotalRevenue = (decimal)row.total_revenue;
+            stats.CollectedRevenue = (decimal)row.collected_revenue;
+
+            // Total travelers
+            string sqlTravelers = "SELECT COUNT(*) FROM travelers;";
+            stats.TotalTravelers = (int)_dbConnection.ExecuteScalar<long>(sqlTravelers);
+
+            // Total itineraries
+            string sqlItineraries = "SELECT COUNT(*) FROM itineraries;";
+            stats.TotalItineraries = (int)_dbConnection.ExecuteScalar<long>(sqlItineraries);
+
+            // Monthly bookings (last 6 months)
+            string sqlMonthly = @"
+                SELECT TO_CHAR(created_at, 'Mon') AS month, COUNT(*) AS count
+                FROM itinerary_instances
+                WHERE created_at >= NOW() - INTERVAL '6 months'
+                GROUP BY DATE_TRUNC('month', created_at), TO_CHAR(created_at, 'Mon')
+                ORDER BY DATE_TRUNC('month', created_at);";
+            stats.MonthlyBookings = _dbConnection.Query<MonthlyBookingCountDTO>(sqlMonthly).ToList();
+
+            // Monthly revenue (last 6 months)
+            string sqlRevenue = @"
+                SELECT TO_CHAR(created_at, 'Mon') AS month, COALESCE(SUM(total_amount), 0) AS amount
+                FROM itinerary_instances
+                WHERE created_at >= NOW() - INTERVAL '6 months'
+                GROUP BY DATE_TRUNC('month', created_at), TO_CHAR(created_at, 'Mon')
+                ORDER BY DATE_TRUNC('month', created_at);";
+            stats.MonthlyRevenue = _dbConnection.Query<RevenueByMonthDTO>(sqlRevenue).ToList();
+
+            // Top itineraries
+            string sqlTop = @"
+                SELECT t.title AS title, COUNT(*) AS booking_count
+                FROM itinerary_instances i
+                JOIN itineraries t ON t.id = i.template_itinerary_id
+                GROUP BY t.title
+                ORDER BY booking_count DESC
+                LIMIT 5;";
+            stats.TopItineraries = _dbConnection.Query<TopItineraryDTO>(sqlTop).ToList();
+
+            // Recent bookings (last 5)
+            string sqlRecent = @"
+                SELECT i.id AS instance_id, i.booking_reference, t.title AS template_title,
+                       i.status, i.payment_status, i.total_amount, i.created_at
+                FROM itinerary_instances i
+                JOIN itineraries t ON t.id = i.template_itinerary_id
+                ORDER BY i.created_at DESC
+                LIMIT 5;";
+            stats.RecentBookings = _dbConnection.Query<RecentBookingDTO>(sqlRecent).ToList();
+
+            // Payment status breakdown
+            string sqlPayment = @"
+                SELECT payment_status AS label, COUNT(*) AS count
+                FROM itinerary_instances
+                GROUP BY payment_status;";
+            stats.PaymentStatusBreakdown = _dbConnection.Query<StatusCountDTO>(sqlPayment).ToList();
+
+            return stats;
         }
     }
 }

@@ -41,6 +41,17 @@ namespace server.Controller.TourAndTravels
         }
 
         // ===========================
+        // Dashboard Stats
+        // GET /api/bookings/dashboard-stats
+        // ===========================
+        [HttpGet("dashboard-stats")]
+        public ActionResult<DashboardStats> GetDashboardStats()
+        {
+            var stats = _bookingService.GetDashboardStats();
+            return Ok(stats);
+        }
+
+        // ===========================
         // Get full booking detail by instance ID
         // GET /api/bookings/{id}
         // ===========================
