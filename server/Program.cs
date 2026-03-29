@@ -79,6 +79,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddControllers();
 
 // ────────────────────────────────────────────
+// Global Authorization: Require authenticated user by default
+// ────────────────────────────────────────────
+builder.Services.AddAuthorizationBuilder()
+    .SetFallbackPolicy(new Microsoft.AspNetCore.Authorization.AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build());
+
+// ────────────────────────────────────────────
 // .NET 10: Built-in OpenAPI (replaces Swashbuckle)
 // ────────────────────────────────────────────
 builder.Services.AddOpenApi();
@@ -201,6 +209,8 @@ builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IPricingService, PricingService>();
 builder.Services.AddScoped<IPricingRepository, PricingRepository>();
+builder.Services.AddScoped<IDemoRequestRepository, DemoRequestRepository>();
+builder.Services.AddScoped<IDemoRequestService, DemoRequestService>();
 
 // Remittance module
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
@@ -294,6 +304,7 @@ app.UseCors();
 
 // 6. Authentication & Authorization
 app.UseAuthentication();
+app.UseMiddleware<server.MiddleWare.TokenRevocationMiddleware>();
 app.UseAuthorization();
 
 // 7. Output Caching

@@ -69,6 +69,7 @@ namespace Business.Services
             var storeRequest = new Repository.DataModels.AuthTokenDTO.CreateAuthTokenRequest
             {
                 UserId = user.UserId,
+                LoginId = user.LoginId,
                 RefreshToken = refreshTokenHash,
                 AccessToken = accessToken,
                 ExpiresAt = refreshTokenExpiry,
@@ -111,10 +112,27 @@ namespace Business.Services
             var accessTokenExpiry = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiresInMinutes);
             var refreshTokenExpiry = DateTime.UtcNow.AddDays(7);
 
-            // Need user info for the new access token claims
-            var userRecord = _tokenRepo.ValidateCredentials(GetUsernameFromStoredToken(storedToken.UserId));
+            // Get full user info for the new access token claims
+            ValidatedUser? user = null;
+            if (storedToken.LoginId.HasValue)
+            {
+                var userRecord = _tokenRepo.GetUserByLoginId(storedToken.LoginId.Value);
+                if (userRecord != null)
+                {
+                    user = _mapper.Map<ValidatedUser>(userRecord);
+                }
+            }
 
-            string newAccessToken = GenerateAccessTokenFromUserId(storedToken.UserId, userRecord?.Username ?? "", accessTokenExpiry);
+            string newAccessToken;
+            if (user != null)
+            {
+                newAccessToken = GenerateAccessToken(user, accessTokenExpiry);
+            }
+            else
+            {
+                newAccessToken = GenerateAccessTokenFromUserId(storedToken.UserId, "", accessTokenExpiry);
+            }
+
             string newRefreshToken = GenerateSecureRefreshToken();
             string newRefreshTokenHash = HashToken(newRefreshToken);
 
@@ -122,6 +140,7 @@ namespace Business.Services
             var storeRequest = new Repository.DataModels.AuthTokenDTO.CreateAuthTokenRequest
             {
                 UserId = storedToken.UserId,
+                LoginId = storedToken.LoginId,
                 RefreshToken = newRefreshTokenHash,
                 AccessToken = newAccessToken,
                 ExpiresAt = refreshTokenExpiry,
@@ -164,6 +183,7 @@ namespace Business.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
+                new Claim("loginId", user.LoginId.ToString()),
                 new Claim("fullName", user.UserFullName),
                 new Claim(ClaimTypes.Email, user.EmailAddress ?? ""),
                 new Claim("organizationType", user.OrganizationType ?? ""),
