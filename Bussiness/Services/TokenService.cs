@@ -89,7 +89,8 @@ namespace Business.Services
                     Username = user.Username,
                     UserFullName = user.UserFullName,
                     EmailAddress = user.EmailAddress,
-                    MobileNumber = user.MobileNumber
+                    MobileNumber = user.MobileNumber,
+                    OrganizationType = user.OrganizationType
                 }
             };
         }
@@ -165,6 +166,7 @@ namespace Business.Services
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim("fullName", user.UserFullName),
                 new Claim(ClaimTypes.Email, user.EmailAddress ?? ""),
+                new Claim("organizationType", user.OrganizationType ?? ""),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

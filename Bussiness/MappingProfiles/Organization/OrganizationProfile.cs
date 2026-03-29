@@ -30,6 +30,10 @@ namespace Bussiness.MappingProfiles.Organization
                 .ForMember(dest => dest.ContactEmail, opt => opt.MapFrom(src => src.contact_email))
                 .ForMember(dest => dest.ContactPhone, opt => opt.MapFrom(src => src.contact_phone))
                 .ReverseMap();
+
+            // Setup organization mappings
+            CreateMap<SetupOrganizationRequest, SetupOrganizationDTO>().ReverseMap();
+            CreateMap<OrganizationSetupResultDTO, SetupOrganizationResponse>().ReverseMap();
         }
     }
 }

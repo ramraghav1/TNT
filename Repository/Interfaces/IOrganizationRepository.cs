@@ -9,6 +9,6 @@ namespace Repository.Interfaces
          Task<int> UpdateAsync(CreateOrganizationDTO entity);
          Task<int> DeleteAsync(int organizationId);
          Task<IEnumerable<OrganizationDetailDTO>> ListAsync();
+         Task<OrganizationSetupResultDTO> SetupOrganizationWithManagerAsync(SetupOrganizationDTO request);
     }
 }
-

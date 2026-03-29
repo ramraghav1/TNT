@@ -24,15 +24,19 @@ namespace Repository.Repositories
         {
             string sql = @"
                 SELECT
-                    ld.loginid,
+                    ld.id as loginid,
                     ld.userid,
                     ld.username,
                     ld.password AS passwordhash,
                     COALESCE(ui.userfullname, '') AS userfullname,
                     ui.emailaddress,
-                    ui.mobilenumber
+                    ui.mobilenumber,
+                    COALESCE(ld.org_id, ui.org_id) AS orgid,
+                    COALESCE(o.type, o2.type) AS organizationtype
                 FROM logindetail ld
                 LEFT JOIN userinformation ui ON ui.userid = ld.userid
+                LEFT JOIN organization o ON o.id = ld.org_id
+                LEFT JOIN organization o2 ON o2.id = ui.org_id
                 WHERE LOWER(ld.username) = LOWER(@Username)
                 LIMIT 1;";
 

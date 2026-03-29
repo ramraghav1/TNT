@@ -31,6 +31,7 @@ namespace Domain.Models
             public string UserFullName { get; set; } = string.Empty;
             public string? EmailAddress { get; set; }
             public string? MobileNumber { get; set; }
+            public string? OrganizationType { get; set; }
         }
 
         // ===========================
@@ -87,6 +88,8 @@ namespace Domain.Models
             public string UserFullName { get; set; } = string.Empty;
             public string? EmailAddress { get; set; }
             public string? MobileNumber { get; set; }
+            public int? OrgId { get; set; }
+            public string? OrganizationType { get; set; }
         }
     }
 }

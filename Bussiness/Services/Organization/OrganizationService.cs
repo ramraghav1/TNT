@@ -13,6 +13,8 @@ namespace Bussiness.Services.Organization
 		Task<long> InsertOrganization(CreateOrganization objCreateOrganization);
 
 		Task<List<OrganizationDetail>> GetDetails();
+
+		Task<SetupOrganizationResponse> SetupOrganization(SetupOrganizationRequest request);
     }
 	public class OrganizationService: IOrganizationService
     {
@@ -36,6 +38,13 @@ namespace Bussiness.Services.Organization
             var itemList = await _orgRepository.ListAsync();
             var result = _mapper.Map<List<OrganizationDetail>>(itemList);
             return result;
+        }
+
+        public async Task<SetupOrganizationResponse> SetupOrganization(SetupOrganizationRequest request)
+        {
+            var dto = _mapper.Map<SetupOrganizationDTO>(request);
+            var resultDto = await _orgRepository.SetupOrganizationWithManagerAsync(dto);
+            return _mapper.Map<SetupOrganizationResponse>(resultDto);
         }
     }
 }
