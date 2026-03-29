@@ -28,5 +28,8 @@ namespace Repository.Interfaces.TourAndTravels
 
         // Update booking status
         bool UpdateStatus(long instanceId, string status);
+
+        // Dashboard stats
+        DashboardStatsDTO GetDashboardStats();
     }
 }

@@ -159,6 +159,62 @@ namespace Domain.Models.TourAndTravels
             public string PaymentStatus { get; set; } = "Unpaid";
             public DateTime CreatedAt { get; set; }
         }
+
+        // ===========================
+        // Dashboard Stats
+        // ===========================
+        public class DashboardStats
+        {
+            public int TotalBookings { get; set; }
+            public int Confirmed { get; set; }
+            public int Pending { get; set; }
+            public int Draft { get; set; }
+            public int Cancelled { get; set; }
+            public decimal TotalRevenue { get; set; }
+            public decimal CollectedRevenue { get; set; }
+            public int TotalTravelers { get; set; }
+            public int TotalItineraries { get; set; }
+            public List<MonthlyBookingCount> MonthlyBookings { get; set; } = new();
+            public List<RevenueByMonth> MonthlyRevenue { get; set; } = new();
+            public List<TopItinerary> TopItineraries { get; set; } = new();
+            public List<RecentBooking> RecentBookings { get; set; } = new();
+            public List<StatusCount> PaymentStatusBreakdown { get; set; } = new();
+        }
+
+        public class MonthlyBookingCount
+        {
+            public string Month { get; set; } = string.Empty;
+            public int Count { get; set; }
+        }
+
+        public class RevenueByMonth
+        {
+            public string Month { get; set; } = string.Empty;
+            public decimal Amount { get; set; }
+        }
+
+        public class TopItinerary
+        {
+            public string Title { get; set; } = string.Empty;
+            public int BookingCount { get; set; }
+        }
+
+        public class RecentBooking
+        {
+            public long InstanceId { get; set; }
+            public string? BookingReference { get; set; }
+            public string TemplateTitle { get; set; } = string.Empty;
+            public string Status { get; set; } = string.Empty;
+            public string PaymentStatus { get; set; } = string.Empty;
+            public decimal TotalAmount { get; set; }
+            public DateTime CreatedAt { get; set; }
+        }
+
+        public class StatusCount
+        {
+            public string Label { get; set; } = string.Empty;
+            public int Count { get; set; }
+        }
     }
 }
 

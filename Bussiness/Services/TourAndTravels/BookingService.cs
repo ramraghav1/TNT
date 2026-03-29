@@ -17,6 +17,7 @@ namespace Bussiness.Services.TourAndTravels
         PaymentResponse AddPayment(long id, AddPaymentRequest request);
         List<PaymentResponse> GetPayments(long id);
         bool UpdateStatus(long id, string status);
+        DashboardStats GetDashboardStats();
     }
 
     public class BookingService : IBookingService
@@ -103,6 +104,15 @@ namespace Bussiness.Services.TourAndTravels
         public bool UpdateStatus(long id, string status)
         {
             return _repository.UpdateStatus(id, status);
+        }
+
+        // ===========================
+        // Dashboard Stats
+        // ===========================
+        public DashboardStats GetDashboardStats()
+        {
+            var repoStats = _repository.GetDashboardStats();
+            return _mapper.Map<DashboardStats>(repoStats);
         }
     }
 }

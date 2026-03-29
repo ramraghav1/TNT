@@ -20,6 +20,18 @@ namespace Repository.DataModels.Transaction
         public string? receiver_name { get; set; }
         public string? receiver_address { get; set; }
         public string? receiver_mobile { get; set; }
+
+        // Agent & Branch
+        public long? sender_agent_id { get; set; }
+        public string? sender_agent_name { get; set; }
+        public long? sender_branch_id { get; set; }
+        public string? sender_branch_name { get; set; }
+        public long? payout_agent_id { get; set; }
+        public string? payout_agent_name { get; set; }
+        public long? payout_branch_id { get; set; }
+        public string? payout_branch_name { get; set; }
+        public string? status { get; set; }
+        public DateTime? created_at { get; set; }
     }
 }
 

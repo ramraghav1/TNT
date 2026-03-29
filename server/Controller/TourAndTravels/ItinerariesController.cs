@@ -59,8 +59,8 @@ namespace server.Controller.TourAndTravels
 
         // ============================================================
         // 4️⃣ UPDATE
-        [Route("update")]
-        [HttpPost]
+        [Route("update/{id}")]
+        [HttpPut]
         public IActionResult UpdateItinerary(long id, [FromBody] UpdateItineraryRequest request)
         {
             var result = _itineraryService.UpdateItinerary(id, request);
@@ -73,8 +73,8 @@ namespace server.Controller.TourAndTravels
 
         // ============================================================
         // 5️⃣ DELETE
-        [Route("delete")]
-        [HttpPost]
+        [Route("delete/{id}")]
+        [HttpDelete]
         public IActionResult DeleteItinerary(long id)
         {
             var success = _itineraryService.DeleteItinerary(id);

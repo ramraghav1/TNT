@@ -22,6 +22,11 @@ namespace Bussiness.MappingProfiles
                 Itinerary.CreateItineraryDayRequest
             >().ReverseMap();
 
+            CreateMap<
+                ItineraryDTO.DayCostInput,
+                Itinerary.DayCostInput
+            >().ReverseMap();
+
             // ===========================
             // UPDATE MAPPINGS (BOTH DIRECTIONS)
             // ===========================

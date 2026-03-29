@@ -22,6 +22,14 @@ namespace Bussiness.MappingProfiles
             CreateMap<BookingDTO.TravelerResponse, Booking.TravelerResponse>().ReverseMap();
             CreateMap<BookingDTO.PaymentResponse, Booking.PaymentResponse>().ReverseMap();
             CreateMap<BookingDTO.BookingListItem, Booking.BookingListItem>().ReverseMap();
+
+            // Dashboard stats
+            CreateMap<BookingDTO.DashboardStatsDTO, Booking.DashboardStats>().ReverseMap();
+            CreateMap<BookingDTO.MonthlyBookingCountDTO, Booking.MonthlyBookingCount>().ReverseMap();
+            CreateMap<BookingDTO.RevenueByMonthDTO, Booking.RevenueByMonth>().ReverseMap();
+            CreateMap<BookingDTO.TopItineraryDTO, Booking.TopItinerary>().ReverseMap();
+            CreateMap<BookingDTO.RecentBookingDTO, Booking.RecentBooking>().ReverseMap();
+            CreateMap<BookingDTO.StatusCountDTO, Booking.StatusCount>().ReverseMap();
         }
     }
 }
