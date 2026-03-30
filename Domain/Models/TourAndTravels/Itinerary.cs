@@ -23,6 +23,14 @@ namespace Domain.Models.TourAndTravels
             public bool LunchIncluded { get; set; }
             public bool DinnerIncluded { get; set; }
             public List<string> Activities { get; set; } = new();
+            public List<DayCostInput> Costs { get; set; } = new();
+        }
+
+        public class DayCostInput
+        {
+            public string Name { get; set; } = string.Empty;
+            public string Category { get; set; } = string.Empty;
+            public decimal Price { get; set; }
         }
 
         // Response Models
@@ -52,31 +60,28 @@ namespace Domain.Models.TourAndTravels
             public bool LunchIncluded { get; set; }
             public bool DinnerIncluded { get; set; }
             public List<string> Activities { get; set; } = new();
+            public List<DayCostInput> Costs { get; set; } = new();
         }
         public class UpdateItineraryDayRequest
         {
+            public int DayNumber { get; set; }
             public string? Title { get; set; }
             public string? Location { get; set; }
             public string? Accommodation { get; set; }
             public string? Transport { get; set; }
-
-            // Meals
-            public bool? BreakfastIncluded { get; set; }
-            public bool? LunchIncluded { get; set; }
-            public bool? DinnerIncluded { get; set; }
-
-            // Activities can be null if not updating
-            public List<string>? Activities { get; set; }
+            public bool BreakfastIncluded { get; set; }
+            public bool LunchIncluded { get; set; }
+            public bool DinnerIncluded { get; set; }
+            public List<string> Activities { get; set; } = new();
+            public List<DayCostInput> Costs { get; set; } = new();
         }
         public class UpdateItineraryRequest
         {
-            public string? Title { get; set; }
+            public string Title { get; set; } = string.Empty;
             public string? Description { get; set; }
-            public int? DurationDays { get; set; } // Nullable so it can be updated only if needed
+            public int DurationDays { get; set; }
             public string? DifficultyLevel { get; set; }
-
-            // Optional: allow updating days in bulk
-            public List<UpdateItineraryDayRequest>? Days { get; set; }
+            public List<UpdateItineraryDayRequest> Days { get; set; } = new();
         }
     }
 }

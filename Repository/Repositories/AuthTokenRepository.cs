@@ -24,15 +24,19 @@ namespace Repository.Repositories
         {
             string sql = @"
                 SELECT
-                    ld.loginid,
+                    ld.id as loginid,
                     ld.userid,
                     ld.username,
                     ld.password AS passwordhash,
                     COALESCE(ui.userfullname, '') AS userfullname,
                     ui.emailaddress,
-                    ui.mobilenumber
+                    ui.mobilenumber,
+                    COALESCE(ld.org_id, ui.org_id) AS orgid,
+                    COALESCE(o.type, o2.type) AS organizationtype
                 FROM logindetail ld
                 LEFT JOIN userinformation ui ON ui.userid = ld.userid
+                LEFT JOIN organization o ON o.id = ld.org_id
+                LEFT JOIN organization o2 ON o2.id = ui.org_id
                 WHERE LOWER(ld.username) = LOWER(@Username)
                 LIMIT 1;";
 
@@ -46,9 +50,9 @@ namespace Repository.Repositories
         {
             string sql = @"
                 INSERT INTO authtoken
-                    (userid, refreshtoken, accesstoken, issuedat, expiresat, revoked, createdat, updatedat)
+                    (userid, login_id, refreshtoken, accesstoken, issuedat, expiresat, revoked, createdat, updatedat)
                 VALUES
-                    (@UserId, @RefreshToken, @AccessToken, NOW(), @ExpiresAt, false, NOW(), NOW());";
+                    (@UserId, @LoginId, @RefreshToken, @AccessToken, NOW(), @ExpiresAt, false, NOW(), NOW());";
 
             _dbConnection.Execute(sql, request);
         }
@@ -59,7 +63,7 @@ namespace Repository.Repositories
         public AuthTokenResponse? GetByRefreshToken(string refreshTokenHash)
         {
             string sql = @"
-                SELECT tokenid, userid, refreshtoken, accesstoken,
+                SELECT tokenid, userid, login_id AS LoginId, refreshtoken, accesstoken,
                        issuedat, expiresat, revoked, revokedat,
                        ipaddress, useragent
                 FROM authtoken
@@ -100,6 +104,47 @@ namespace Repository.Repositories
                   AND revoked = false;";
 
             _dbConnection.Execute(sql, new { UserId = userId });
+        }
+
+        /// <summary>
+        /// Check if an access token has been revoked in the DB.
+        /// </summary>
+        public bool IsAccessTokenRevoked(string accessToken)
+        {
+            string sql = @"
+                SELECT COUNT(1)
+                FROM authtoken
+                WHERE accesstoken = @AccessToken
+                  AND revoked = true;";
+
+            var count = _dbConnection.ExecuteScalar<int>(sql, new { AccessToken = accessToken });
+            return count > 0;
+        }
+
+        /// <summary>
+        /// Get validated user info by login_id (for refresh token flow).
+        /// </summary>
+        public ValidatedUserResponse? GetUserByLoginId(long loginId)
+        {
+            string sql = @"
+                SELECT
+                    ld.id as loginid,
+                    ld.userid,
+                    ld.username,
+                    ld.password AS passwordhash,
+                    COALESCE(ui.userfullname, '') AS userfullname,
+                    ui.emailaddress,
+                    ui.mobilenumber,
+                    COALESCE(ld.org_id, ui.org_id) AS orgid,
+                    COALESCE(o.type, o2.type) AS organizationtype
+                FROM logindetail ld
+                LEFT JOIN userinformation ui ON ui.userid = ld.userid
+                LEFT JOIN organization o ON o.id = ld.org_id
+                LEFT JOIN organization o2 ON o2.id = ui.org_id
+                WHERE ld.id = @LoginId
+                LIMIT 1;";
+
+            return _dbConnection.QuerySingleOrDefault<ValidatedUserResponse>(sql, new { LoginId = loginId });
         }
     }
 }

@@ -10,6 +10,7 @@ namespace Repository.DataModels
         public class CreateAuthTokenRequest
         {
             public int UserId { get; set; }
+            public long? LoginId { get; set; }
             public string RefreshToken { get; set; } = string.Empty;
             public string? AccessToken { get; set; }
             public DateTime ExpiresAt { get; set; }
@@ -24,6 +25,7 @@ namespace Repository.DataModels
         {
             public int TokenId { get; set; }
             public int UserId { get; set; }
+            public long? LoginId { get; set; }
             public string RefreshToken { get; set; } = string.Empty;
             public string? AccessToken { get; set; }
             public DateTime IssuedAt { get; set; }
@@ -46,6 +48,8 @@ namespace Repository.DataModels
             public string UserFullName { get; set; } = string.Empty;
             public string? EmailAddress { get; set; }
             public string? MobileNumber { get; set; }
+            public int? OrgId { get; set; }
+            public string? OrganizationType { get; set; }
         }
 
     }

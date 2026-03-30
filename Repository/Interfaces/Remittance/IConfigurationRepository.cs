@@ -8,6 +8,7 @@ namespace Repository.Interfaces.Remittance
         ConfigurationResponse Create(CreateConfigurationRequest request);
         List<ConfigurationResponse> GetAll();
         List<ConfigurationResponse> GetByTypeId(long configurationTypeId);
+        List<ConfigurationResponse> GetByTypeName(string typeName);
         ConfigurationResponse? GetById(long id);
         ConfigurationResponse? Update(long id, UpdateConfigurationRequest request);
         bool Delete(long id);

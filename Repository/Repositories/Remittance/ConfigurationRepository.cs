@@ -53,6 +53,19 @@ namespace Repository.Repositories.Remittance
             return _dbConnection.Query<ConfigurationResponse>(sql, new { ConfigurationTypeId = configurationTypeId }).ToList();
         }
 
+        public List<ConfigurationResponse> GetByTypeName(string typeName)
+        {
+            string sql = @"
+                SELECT c.id, c.configuration_type_id, ct.name AS configuration_type_name,
+                       c.code, c.display_name, c.is_active, c.created_at
+                FROM configurations c
+                JOIN configuration_types ct ON ct.id = c.configuration_type_id
+                WHERE ct.name = @TypeName AND c.is_active = true
+                ORDER BY c.display_name;";
+
+            return _dbConnection.Query<ConfigurationResponse>(sql, new { TypeName = typeName }).ToList();
+        }
+
         public ConfigurationResponse? GetById(long id)
         {
             string sql = @"

@@ -94,6 +94,33 @@ namespace Repository.Repositories.TourAndTravels
                                     );
                                 }
                             }
+
+                            // Save day costs (price stored per-day in itinerary_day_costs)
+                            if (day.Costs != null && day.Costs.Any())
+                            {
+                                foreach (var cost in day.Costs)
+                                {
+                                    // Upsert cost_item by name
+                                    string upsertCostItem = @"
+                                INSERT INTO cost_items (name, category, unit_type)
+                                VALUES (@Name, @Category, 'per_person')
+                                ON CONFLICT (name) DO UPDATE SET category = EXCLUDED.category
+                                RETURNING id;";
+
+                                    long costItemId = _dbConnection.QuerySingle<long>(
+                                        upsertCostItem,
+                                        new { cost.Name, cost.Category },
+                                        transaction
+                                    );
+
+                                    // Link cost to this day with price
+                                    _dbConnection.Execute(
+                                        "INSERT INTO itinerary_day_costs (itinerary_day_id, cost_item_id, quantity, price, currency) VALUES (@DayId, @CostItemId, 1, @Price, 'NPR')",
+                                        new { DayId = dayId, CostItemId = costItemId, cost.Price },
+                                        transaction
+                                    );
+                                }
+                            }
                         }
                     }
 
@@ -143,30 +170,190 @@ namespace Repository.Repositories.TourAndTravels
                 ORDER BY day_number";
 
             var days = _dbConnection.Query<ItineraryDayResponse>(sqlDays, new { ItineraryId = id }).ToList();
+
+            var dayIds = days.Select(d => d.Id).ToArray();
+
+            // Load activities for each day
+            string sqlActivities = @"
+                SELECT itinerary_day_id AS DayId, activity
+                FROM itinerary_day_activities
+                WHERE itinerary_day_id = ANY(@DayIds)";
+
+            var allActivities = dayIds.Length > 0
+                ? _dbConnection.Query<dynamic>(sqlActivities, new { DayIds = dayIds }).ToList()
+                : new List<dynamic>();
+
+            foreach (var day in days)
+            {
+                day.Activities = allActivities
+                    .Where(a => (long)a.dayid == day.Id)
+                    .Select(a => (string)a.activity)
+                    .ToList();
+            }
+
+            // Load costs for each day (price stored directly in itinerary_day_costs)
+            string sqlCosts = @"
+                SELECT dc.itinerary_day_id AS DayId, ci.name AS Name, ci.category AS Category, dc.price AS Price
+                FROM itinerary_day_costs dc
+                JOIN cost_items ci ON ci.id = dc.cost_item_id
+                WHERE dc.itinerary_day_id = ANY(@DayIds)";
+
+            var allCosts = dayIds.Length > 0
+                ? _dbConnection.Query<dynamic>(sqlCosts, new { DayIds = dayIds }).ToList()
+                : new List<dynamic>();
+
+            foreach (var day in days)
+            {
+                day.Costs = allCosts
+                    .Where(c => (long)c.dayid == day.Id)
+                    .Select(c => new DayCostInput
+                    {
+                        Name = (string)c.name,
+                        Category = (string)(c.category ?? ""),
+                        Price = c.price != null ? (decimal)c.price : 0
+                    })
+                    .ToList();
+            }
+
             itinerary.Days = days;
 
             return itinerary;
         }
 
         // ============================================================
-        // UPDATE ITINERARY
+        // UPDATE ITINERARY (full replace of days, activities, costs)
         // ============================================================
         public ItineraryResponse? UpdateItinerary(long id, UpdateItineraryRequest request)
         {
-            string sql = @"
-                UPDATE itineraries
-                SET title = COALESCE(@Title, title),
-                    description = COALESCE(@Description, description),
-                    duration_days = COALESCE(@DurationDays, duration_days),
-                    difficulty_level = COALESCE(@DifficultyLevel, difficulty_level)
-                WHERE id = @Id";
+            if (_dbConnection.State != System.Data.ConnectionState.Open)
+                _dbConnection.Open();
 
-            var affected = _dbConnection.Execute(sql, new { request.Title, request.Description, request.DurationDays, request.DifficultyLevel, Id = id });
-            if (affected == 0)
-                return null;
+            using (var transaction = _dbConnection.BeginTransaction())
+            {
+                try
+                {
+                    // 1. Update itinerary header
+                    string updateSql = @"
+                        UPDATE itineraries
+                        SET title = @Title,
+                            description = @Description,
+                            duration_days = @DurationDays,
+                            difficulty_level = @DifficultyLevel
+                        WHERE id = @Id";
 
-            // Return updated entity
-            return GetAllItineraries().FirstOrDefault(x => x.Id == id);
+                    var affected = _dbConnection.Execute(updateSql,
+                        new { request.Title, request.Description, request.DurationDays, request.DifficultyLevel, Id = id },
+                        transaction);
+
+                    if (affected == 0)
+                    {
+                        transaction.Rollback();
+                        return null;
+                    }
+
+                    // 2. Get existing day IDs for cleanup
+                    var existingDayIds = _dbConnection.Query<long>(
+                        "SELECT id FROM itinerary_days WHERE itinerary_id = @Id", new { Id = id }, transaction).ToList();
+
+                    if (existingDayIds.Any())
+                    {
+                        // Delete costs linked to these days
+                        _dbConnection.Execute(
+                            "DELETE FROM itinerary_day_costs WHERE itinerary_day_id = ANY(@Ids)",
+                            new { Ids = existingDayIds.ToArray() }, transaction);
+
+                        // Delete activities
+                        _dbConnection.Execute(
+                            "DELETE FROM itinerary_day_activities WHERE itinerary_day_id = ANY(@Ids)",
+                            new { Ids = existingDayIds.ToArray() }, transaction);
+
+                        // Delete days
+                        _dbConnection.Execute(
+                            "DELETE FROM itinerary_days WHERE itinerary_id = @Id",
+                            new { Id = id }, transaction);
+                    }
+
+                    // 3. Re-insert days with activities and costs (same logic as Create)
+                    if (request.Days != null && request.Days.Any())
+                    {
+                        foreach (var day in request.Days)
+                        {
+                            string insertDayQuery = @"
+                                INSERT INTO itinerary_days
+                                (itinerary_id, day_number, title, location, accommodation, transport,
+                                 breakfast_included, lunch_included, dinner_included)
+                                VALUES
+                                (@ItineraryId, @DayNumber, @Title, @Location, @Accommodation, @Transport,
+                                 @BreakfastIncluded, @LunchIncluded, @DinnerIncluded)
+                                RETURNING id;";
+
+                            long dayId = _dbConnection.QuerySingle<long>(
+                                insertDayQuery,
+                                new
+                                {
+                                    ItineraryId = id,
+                                    day.DayNumber,
+                                    day.Title,
+                                    day.Location,
+                                    day.Accommodation,
+                                    day.Transport,
+                                    day.BreakfastIncluded,
+                                    day.LunchIncluded,
+                                    day.DinnerIncluded
+                                },
+                                transaction);
+
+                            // Activities
+                            if (day.Activities != null && day.Activities.Any())
+                            {
+                                foreach (var activity in day.Activities)
+                                {
+                                    _dbConnection.Execute(
+                                        "INSERT INTO itinerary_day_activities (itinerary_day_id, activity) VALUES (@DayId, @Activity)",
+                                        new { DayId = dayId, Activity = activity },
+                                        transaction);
+                                }
+                            }
+
+                            // Costs
+                            if (day.Costs != null && day.Costs.Any())
+                            {
+                                foreach (var cost in day.Costs)
+                                {
+                                    string upsertCostItem = @"
+                                        INSERT INTO cost_items (name, category, unit_type)
+                                        VALUES (@Name, @Category, 'per_person')
+                                        ON CONFLICT (name) DO UPDATE SET category = EXCLUDED.category
+                                        RETURNING id;";
+
+                                    long costItemId = _dbConnection.QuerySingle<long>(
+                                        upsertCostItem, new { cost.Name, cost.Category }, transaction);
+
+                                    _dbConnection.Execute(
+                                        "INSERT INTO itinerary_day_costs (itinerary_day_id, cost_item_id, quantity, price, currency) VALUES (@DayId, @CostItemId, 1, @Price, 'NPR')",
+                                        new { DayId = dayId, CostItemId = costItemId, cost.Price }, transaction);
+                                }
+                            }
+                        }
+                    }
+
+                    transaction.Commit();
+
+                    return new ItineraryResponse
+                    {
+                        Id = id,
+                        Title = request.Title,
+                        Description = request.Description,
+                        DurationDays = request.DurationDays,
+                        DifficultyLevel = request.DifficultyLevel,
+                    };
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
         }
 
         // ============================================================

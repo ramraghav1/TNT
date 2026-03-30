@@ -119,7 +119,7 @@ namespace Repository.Repositories.Remittance
             if (setup == null) return null;
 
             string sqlSlabs = @"
-                SELECT id, min_amount, max_amount, charge_type, charge_value, currency
+                SELECT id, min_amount, max_amount, charge_type, charge_value, send_commission, payout_commission, currency
                 FROM domestic_service_charge_slabs
                 WHERE setup_id = @SetupId
                 ORDER BY min_amount;";
@@ -229,7 +229,7 @@ namespace Repository.Repositories.Remittance
 
             // Find matching slab for the amount
             string sqlSlab = @"
-                SELECT charge_type, charge_value, currency
+                SELECT charge_type, charge_value, send_commission, payout_commission, currency
                 FROM domestic_service_charge_slabs
                 WHERE setup_id = @SetupId
                   AND min_amount <= @Amount
@@ -246,6 +246,8 @@ namespace Repository.Repositories.Remittance
 
             string chargeType = (string)slab.charge_type;
             decimal chargeValue = (decimal)slab.charge_value;
+            decimal sendCommission = (decimal)slab.send_commission;
+            decimal payoutCommission = (decimal)slab.payout_commission;
             string currency = (string)slab.currency;
 
             decimal serviceCharge = chargeType == "Percentage"
@@ -258,6 +260,8 @@ namespace Repository.Repositories.Remittance
                 ServiceCharge = serviceCharge,
                 ChargeType = chargeType,
                 ChargeValue = chargeValue,
+                SendCommission = sendCommission,
+                PayoutCommission = payoutCommission,
                 TotalDeducted = request.Amount + serviceCharge,
                 Currency = currency
             };
@@ -272,9 +276,9 @@ namespace Repository.Repositories.Remittance
             {
                 string sqlSlab = @"
                     INSERT INTO domestic_service_charge_slabs
-                    (setup_id, min_amount, max_amount, charge_type, charge_value, currency, created_at)
+                    (setup_id, min_amount, max_amount, charge_type, charge_value, send_commission, payout_commission, currency, created_at)
                     VALUES
-                    (@SetupId, @MinAmount, @MaxAmount, @ChargeType, @ChargeValue, @Currency, NOW());";
+                    (@SetupId, @MinAmount, @MaxAmount, @ChargeType, @ChargeValue, @SendCommission, @PayoutCommission, @Currency, NOW());";
 
                 _dbConnection.Execute(sqlSlab, new
                 {
@@ -283,6 +287,8 @@ namespace Repository.Repositories.Remittance
                     slab.MaxAmount,
                     slab.ChargeType,
                     slab.ChargeValue,
+                    slab.SendCommission,
+                    slab.PayoutCommission,
                     slab.Currency
                 }, transaction);
             }

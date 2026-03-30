@@ -28,5 +28,13 @@ namespace Repository.Interfaces
         /// Revoke ALL tokens for a user (force logout everywhere).
         /// </summary>
         void RevokeAllUserTokens(int userId);
-    }
+        /// <summary>
+        /// Check if an access token (by JTI) is revoked.
+        /// </summary>
+        bool IsAccessTokenRevoked(string accessToken);
+
+        /// <summary>
+        /// Get validated user info by login id for refresh token flow.
+        /// </summary>
+        ValidatedUserResponse? GetUserByLoginId(long loginId);    }
 }

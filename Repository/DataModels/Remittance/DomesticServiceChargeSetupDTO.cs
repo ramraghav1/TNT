@@ -21,6 +21,8 @@ namespace Repository.DataModels.Remittance
             public decimal MaxAmount { get; set; }
             public string ChargeType { get; set; } = "Flat";
             public decimal ChargeValue { get; set; }
+            public decimal SendCommission { get; set; }
+            public decimal PayoutCommission { get; set; }
             public string Currency { get; set; } = "NPR";
         }
 
@@ -60,6 +62,8 @@ namespace Repository.DataModels.Remittance
             public decimal MaxAmount { get; set; }
             public string ChargeType { get; set; } = "Flat";
             public decimal ChargeValue { get; set; }
+            public decimal SendCommission { get; set; }
+            public decimal PayoutCommission { get; set; }
             public string Currency { get; set; } = "NPR";
         }
 
@@ -78,6 +82,8 @@ namespace Repository.DataModels.Remittance
             public decimal ServiceCharge { get; set; }
             public string ChargeType { get; set; } = "Flat";
             public decimal ChargeValue { get; set; }
+            public decimal SendCommission { get; set; }
+            public decimal PayoutCommission { get; set; }
             public decimal TotalDeducted { get; set; }
             public string Currency { get; set; } = "NPR";
         }

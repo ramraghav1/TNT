@@ -38,6 +38,21 @@ namespace server.Controller
             var objReturn = await _organizationService.GetDetails();
             return Ok(objReturn);
         }
+
+        [Route("setup")]
+        [HttpPost]
+        public async Task<IActionResult> SetupOrganization([FromBody] SetupOrganizationRequest request)
+        {
+            try
+            {
+                var result = await _organizationService.SetupOrganization(request);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }
 

@@ -1,58 +1,94 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Domain.Models;
 using Business.Services;
+using static Domain.Models.Auth;
+using System.Security.Claims;
 
 [ApiController]
 [Route("api/[controller]")]
+[AllowAnonymous]
 public class LoginController : ControllerBase
 {
-    //private readonly JwtSettings _jwtSettings;
     private readonly ILoginService _loginService;
 
     public LoginController(ILoginService loginService)
     {
-        //_jwtSettings = jwtOptions;
         _loginService = loginService;
     }
+
     [Route("/login")]
     [HttpPost]
-    public IActionResult Post([FromBody] LoginRequest request)
+    public IActionResult Post([FromBody] AuthLoginRequest request)
     {
-
-        return Ok(new { success = true, message = "Login successful" });
-
+        try
+        {
+            var result = _loginService.Login(request);
+            return Ok(result);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Unauthorized(new { success = false, message = "Invalid credentials" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { success = false, message = "An error occurred during login" });
+        }
     }
 
-    //[Route("/loginrequest")]
-    //[HttpPost]
-    //public IActionResult Login([FromBody] LoginRequest request)
-    //{
-    //    bool result = _loginService.CheckUserValid(request);
-    //    if (request.Username == "admin" && request.Password == "password")
-    //    {
-    //        var claims = new[]
-    //        {
-    //            new Claim(ClaimTypes.Name, request.Username),
-    //            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-    //        };
+    [Route("refresh")]
+    [HttpPost]
+    public IActionResult RefreshToken([FromBody] RefreshTokenRequest request)
+    {
+        try
+        {
+            var result = _loginService.RefreshToken(request);
+            return Ok(result);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Unauthorized(new { success = false, message = "Invalid or expired refresh token" });
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, new { success = false, message = "An error occurred during token refresh" });
+        }
+    }
 
-    //        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
-    //        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+    [Authorize]
+    [Route("logout")]
+    [HttpPost]
+    public IActionResult Logout([FromBody] LogoutRequest request)
+    {
+        try
+        {
+            _loginService.Logout(request);
+            return Ok(new { success = true, message = "Logged out successfully" });
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, new { success = false, message = "An error occurred during logout" });
+        }
+    }
 
-    //        var token = new JwtSecurityToken(
-    //            issuer: _jwtSettings.Issuer,
-    //            audience: _jwtSettings.Audience,
-    //            claims: claims,
-    //            expires: DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiresInMinutes),
-    //            signingCredentials: creds
-    //        );
-
-    //        var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-
-    //        return Ok(new { token = tokenString });
-    //    }
-
-    //    return Unauthorized("Invalid credentials");
-    //}
-
+    [Authorize]
+    [Route("logout-all")]
+    [HttpPost]
+    public IActionResult LogoutAll()
+    {
+        try
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized(new { success = false, message = "Invalid token" });
+            }
+            _loginService.LogoutAll(userId);
+            return Ok(new { success = true, message = "Logged out from all devices" });
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, new { success = false, message = "An error occurred" });
+        }
+    }
 }
