@@ -36,24 +36,14 @@ namespace Bussiness.Services
             var dto = _mapper.Map<DemoRequestDTO>(request);
             var id = await _demoRequestRepo.InsertAsync(dto);
 
-            // Send email notification (fire-and-forget, don't fail the request if email fails)
-            _ = Task.Run(async () =>
-            {
-                try
-                {
-                    await _emailService.SendDemoRequestNotificationAsync(
-                        request.FullName,
-                        request.Email,
-                        request.Phone,
-                        request.CompanyName,
-                        request.ProductInterest,
-                        request.Message);
-                }
-                catch (Exception)
-                {
-                    // Log email failure but don't break the demo request
-                }
-            });
+            // Send email notification
+            await _emailService.SendDemoRequestNotificationAsync(
+                request.FullName,
+                request.Email,
+                request.Phone,
+                request.CompanyName,
+                request.ProductInterest,
+                request.Message);
 
             return id;
         }
