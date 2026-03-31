@@ -5,9 +5,14 @@ namespace Repository.Interfaces
     public interface INotificationRepository
     {
         /// <summary>
-        /// Create a notification and assign it to all active users. Returns the notification id.
+        /// Create a broadcast notification (visible to all users). Returns the notification id.
         /// </summary>
-        Task<long> CreateForAllUsersAsync(CreateNotificationDTO dto);
+        Task<long> CreateNotificationAsync(CreateNotificationDTO dto);
+
+        /// <summary>
+        /// Create a targeted notification visible only to specific users. Returns the notification id.
+        /// </summary>
+        Task<long> CreateTargetedNotificationAsync(CreateNotificationDTO dto, IEnumerable<int> targetUserIds);
 
         /// <summary>
         /// Get notifications for a specific user (not deleted), ordered by newest first.

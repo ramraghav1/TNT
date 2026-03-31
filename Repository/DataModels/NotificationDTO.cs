@@ -19,5 +19,6 @@ namespace Repository.DataModels
         public string Message { get; set; } = string.Empty;
         public string? Link { get; set; }
         public string? Icon { get; set; }
+        public bool IsTargeted { get; set; } // false = broadcast to all, true = specific users only
     }
 }

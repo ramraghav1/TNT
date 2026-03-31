@@ -14,35 +14,55 @@ namespace Repository.Repositories
             _db = db;
         }
 
-        public async Task<long> CreateForAllUsersAsync(CreateNotificationDTO dto)
+        public async Task<long> CreateNotificationAsync(CreateNotificationDTO dto)
         {
-            // 1. Insert the notification
+            string sql = @"
+                INSERT INTO notifications (type, title, message, link, icon, is_targeted, created_at)
+                VALUES (@Type, @Title, @Message, @Link, @Icon, false, NOW())
+                RETURNING id;";
+
+            return await _db.ExecuteScalarAsync<long>(sql, dto);
+        }
+
+        public async Task<long> CreateTargetedNotificationAsync(CreateNotificationDTO dto, IEnumerable<int> targetUserIds)
+        {
             string insertNotification = @"
-                INSERT INTO notifications (type, title, message, link, icon, created_at)
-                VALUES (@Type, @Title, @Message, @Link, @Icon, NOW())
+                INSERT INTO notifications (type, title, message, link, icon, is_targeted, created_at)
+                VALUES (@Type, @Title, @Message, @Link, @Icon, true, NOW())
                 RETURNING id;";
 
             var notificationId = await _db.ExecuteScalarAsync<long>(insertNotification, dto);
 
-            // 2. Assign to all active users (from userinformation table)
-            string insertUserNotifications = @"
+            // Insert user_notifications rows for each target user
+            string insertTargets = @"
                 INSERT INTO user_notifications (notification_id, user_id, is_read, is_deleted, created_at)
-                SELECT @NotificationId, userid, false, false, NOW()
-                FROM userinformation;";
+                VALUES (@NotificationId, @UserId, false, false, NOW())
+                ON CONFLICT (notification_id, user_id) DO NOTHING;";
 
-            await _db.ExecuteAsync(insertUserNotifications, new { NotificationId = notificationId });
+            foreach (var userId in targetUserIds)
+            {
+                await _db.ExecuteAsync(insertTargets, new { NotificationId = notificationId, UserId = userId });
+            }
 
             return notificationId;
         }
 
         public async Task<IEnumerable<NotificationDTO>> GetByUserIdAsync(int userId, int limit = 50)
         {
+            // Broadcast (is_targeted=false): show to everyone via LEFT JOIN
+            // Targeted (is_targeted=true): show only if user has a user_notifications row
             string sql = @"
                 SELECT n.id, n.type, n.title, n.message, n.link, n.icon,
-                       un.is_read AS IsRead, n.created_at AS CreatedAt
+                       COALESCE(un.is_read, false) AS IsRead,
+                       n.created_at AS CreatedAt
                 FROM notifications n
-                INNER JOIN user_notifications un ON un.notification_id = n.id
-                WHERE un.user_id = @UserId AND un.is_deleted = false
+                LEFT JOIN user_notifications un
+                    ON un.notification_id = n.id AND un.user_id = @UserId
+                WHERE COALESCE(un.is_deleted, false) = false
+                  AND (
+                    n.is_targeted = false
+                    OR (n.is_targeted = true AND un.user_id IS NOT NULL)
+                  )
                 ORDER BY n.created_at DESC
                 LIMIT @Limit;";
 
@@ -51,40 +71,63 @@ namespace Repository.Repositories
 
         public async Task<int> GetUnreadCountAsync(int userId)
         {
+            // Count unread notifications for this user (broadcast + targeted)
             string sql = @"
                 SELECT COUNT(1)
-                FROM user_notifications
-                WHERE user_id = @UserId AND is_read = false AND is_deleted = false;";
+                FROM notifications n
+                LEFT JOIN user_notifications un
+                    ON un.notification_id = n.id AND un.user_id = @UserId
+                WHERE COALESCE(un.is_read, false) = false
+                  AND COALESCE(un.is_deleted, false) = false
+                  AND (
+                    n.is_targeted = false
+                    OR (n.is_targeted = true AND un.user_id IS NOT NULL)
+                  );";
 
             return await _db.ExecuteScalarAsync<int>(sql, new { UserId = userId });
         }
 
         public async Task MarkAsReadAsync(long notificationId, int userId)
         {
+            // Upsert: insert user_notifications row if not exists, otherwise update
             string sql = @"
-                UPDATE user_notifications
-                SET is_read = true, read_at = NOW()
-                WHERE notification_id = @NotificationId AND user_id = @UserId;";
+                INSERT INTO user_notifications (notification_id, user_id, is_read, is_deleted, read_at, created_at)
+                VALUES (@NotificationId, @UserId, true, false, NOW(), NOW())
+                ON CONFLICT (notification_id, user_id)
+                DO UPDATE SET is_read = true, read_at = NOW();";
 
             await _db.ExecuteAsync(sql, new { NotificationId = notificationId, UserId = userId });
         }
 
         public async Task MarkAllAsReadAsync(int userId)
         {
+            // Insert read entries for all unread notifications visible to this user
             string sql = @"
-                UPDATE user_notifications
-                SET is_read = true, read_at = NOW()
-                WHERE user_id = @UserId AND is_read = false;";
+                INSERT INTO user_notifications (notification_id, user_id, is_read, is_deleted, read_at, created_at)
+                SELECT n.id, @UserId, true, false, NOW(), NOW()
+                FROM notifications n
+                LEFT JOIN user_notifications un
+                    ON un.notification_id = n.id AND un.user_id = @UserId
+                WHERE (
+                    n.is_targeted = false
+                    OR (n.is_targeted = true AND un.user_id IS NOT NULL)
+                  )
+                  AND COALESCE(un.is_read, false) = false
+                  AND COALESCE(un.is_deleted, false) = false
+                ON CONFLICT (notification_id, user_id)
+                DO UPDATE SET is_read = true, read_at = NOW();";
 
             await _db.ExecuteAsync(sql, new { UserId = userId });
         }
 
         public async Task DeleteForUserAsync(long notificationId, int userId)
         {
+            // Upsert: mark as deleted for this user
             string sql = @"
-                UPDATE user_notifications
-                SET is_deleted = true
-                WHERE notification_id = @NotificationId AND user_id = @UserId;";
+                INSERT INTO user_notifications (notification_id, user_id, is_read, is_deleted, created_at)
+                VALUES (@NotificationId, @UserId, false, true, NOW())
+                ON CONFLICT (notification_id, user_id)
+                DO UPDATE SET is_deleted = true;";
 
             await _db.ExecuteAsync(sql, new { NotificationId = notificationId, UserId = userId });
         }

@@ -19,5 +19,6 @@ namespace Domain.Models
         public string Message { get; set; } = string.Empty;
         public string? Link { get; set; }
         public string? Icon { get; set; }
+        public List<int>? TargetUserIds { get; set; } // null/empty = broadcast to all, set = specific users
     }
 }

@@ -35,10 +35,19 @@ namespace Bussiness.Services
         public async Task<long> CreateAndBroadcastAsync(CreateNotification notification)
         {
             var dto = _mapper.Map<CreateNotificationDTO>(notification);
-            var id = await _repo.CreateForAllUsersAsync(dto);
+            long id;
+            bool isTargeted = notification.TargetUserIds != null && notification.TargetUserIds.Count > 0;
 
-            // Broadcast to all connected clients
-            await _hubContext.Clients.All.SendAsync("ReceiveNotification", new
+            if (isTargeted)
+            {
+                id = await _repo.CreateTargetedNotificationAsync(dto, notification.TargetUserIds!);
+            }
+            else
+            {
+                id = await _repo.CreateNotificationAsync(dto);
+            }
+
+            var payload = new
             {
                 id,
                 type = notification.Type,
@@ -48,7 +57,22 @@ namespace Bussiness.Services
                 icon = notification.Icon,
                 isRead = false,
                 createdAt = DateTime.UtcNow
-            });
+            };
+
+            // If targeted to specific users, send only to those users' connections
+            // Otherwise broadcast to all connected clients
+            if (isTargeted)
+            {
+                foreach (var userId in notification.TargetUserIds!)
+                {
+                    await _hubContext.Clients.User(userId.ToString())
+                        .SendAsync("ReceiveNotification", payload);
+                }
+            }
+            else
+            {
+                await _hubContext.Clients.All.SendAsync("ReceiveNotification", payload);
+            }
 
             return id;
         }
