@@ -27,6 +27,10 @@ namespace Server.Controller
                 if (id > 0) return Ok(new { id, message = "Demo request submitted successfully!" });
                 else return BadRequest(new { message = "Failed to submit demo request." });
             }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
             catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });

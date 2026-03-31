@@ -211,6 +211,8 @@ builder.Services.AddScoped<IPricingService, PricingService>();
 builder.Services.AddScoped<IPricingRepository, PricingRepository>();
 builder.Services.AddScoped<IDemoRequestRepository, DemoRequestRepository>();
 builder.Services.AddScoped<IDemoRequestService, DemoRequestService>();
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Remittance module
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();

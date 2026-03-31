@@ -15,17 +15,47 @@ namespace Bussiness.Services
     {
         private readonly IDemoRequestRepository _demoRequestRepo;
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
 
-        public DemoRequestService(IDemoRequestRepository demoRequestRepo, IMapper mapper)
+        public DemoRequestService(IDemoRequestRepository demoRequestRepo, IMapper mapper, IEmailService emailService)
         {
             _demoRequestRepo = demoRequestRepo;
             _mapper = mapper;
+            _emailService = emailService;
         }
 
         public async Task<long> SubmitDemoRequest(DemoRequest request)
         {
+            // Check for duplicate: same email + same product
+            var exists = await _demoRequestRepo.ExistsByEmailAndProductAsync(request.Email, request.ProductInterest);
+            if (exists)
+            {
+                throw new InvalidOperationException($"A demo request for '{request.ProductInterest}' has already been submitted with this email.");
+            }
+
             var dto = _mapper.Map<DemoRequestDTO>(request);
-            return await _demoRequestRepo.InsertAsync(dto);
+            var id = await _demoRequestRepo.InsertAsync(dto);
+
+            // Send email notification (fire-and-forget, don't fail the request if email fails)
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _emailService.SendDemoRequestNotificationAsync(
+                        request.FullName,
+                        request.Email,
+                        request.Phone,
+                        request.CompanyName,
+                        request.ProductInterest,
+                        request.Message);
+                }
+                catch (Exception)
+                {
+                    // Log email failure but don't break the demo request
+                }
+            });
+
+            return id;
         }
 
         public async Task<IEnumerable<DemoRequestDTO>> GetAllDemoRequests()

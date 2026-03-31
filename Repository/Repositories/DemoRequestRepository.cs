@@ -29,5 +29,14 @@ namespace Repository.Repositories
                            FROM demo_request ORDER BY created_at DESC;";
             return await _dbConnection.QueryAsync<DemoRequestDTO>(sql);
         }
+
+        public async Task<bool> ExistsByEmailAndProductAsync(string email, string productInterest)
+        {
+            string sql = @"SELECT COUNT(1) FROM demo_request
+                           WHERE LOWER(email) = LOWER(@Email)
+                             AND LOWER(product_interest) = LOWER(@ProductInterest);";
+            var count = await _dbConnection.ExecuteScalarAsync<int>(sql, new { Email = email, ProductInterest = productInterest });
+            return count > 0;
+        }
     }
 }

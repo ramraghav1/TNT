@@ -6,5 +6,6 @@ namespace Repository.Interfaces
     {
         Task<long> InsertAsync(DemoRequestDTO entity);
         Task<IEnumerable<DemoRequestDTO>> ListAsync();
+        Task<bool> ExistsByEmailAndProductAsync(string email, string productInterest);
     }
 }
