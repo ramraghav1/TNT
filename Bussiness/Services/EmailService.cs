@@ -29,6 +29,12 @@ namespace Bussiness.Services
         public EmailService(IOptions<EmailSettings> settings)
         {
             _settings = settings.Value;
+
+            // Override from env vars if set (Render doesn't support __ in env names reliably)
+            var envUser = Environment.GetEnvironmentVariable("SMTP_USER");
+            var envPass = Environment.GetEnvironmentVariable("SMTP_PASS");
+            if (!string.IsNullOrEmpty(envUser)) _settings.SmtpUser = envUser;
+            if (!string.IsNullOrEmpty(envPass)) _settings.SmtpPass = envPass;
         }
 
         public async Task SendDemoRequestNotificationAsync(
@@ -96,7 +102,7 @@ namespace Bussiness.Services
             };
 
             using var smtp = new SmtpClient();
-            await smtp.ConnectAsync(_settings.SmtpHost, _settings.SmtpPort, SecureSocketOptions.StartTls);
+            await smtp.ConnectAsync(_settings.SmtpHost, _settings.SmtpPort, SecureSocketOptions.Auto);
             await smtp.AuthenticateAsync(_settings.SmtpUser, _settings.SmtpPass);
             await smtp.SendAsync(email);
             await smtp.DisconnectAsync(true);
