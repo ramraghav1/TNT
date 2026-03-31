@@ -12,7 +12,7 @@ namespace DbDeployment.Migrations
 
             Create.ForeignKey("fk_authtoken_logindetail")
                 .FromTable("authtoken").ForeignColumn("login_id")
-                .ToTable("logindetail").PrimaryColumn("loginid");
+                .ToTable("logindetail").PrimaryColumn("id");
         }
 
         public override void Down()

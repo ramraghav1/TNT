@@ -24,7 +24,7 @@ namespace Repository.Repositories
         {
             string sql = @"
                 SELECT
-                    ld.loginid,
+                    ld.id as loginid,
                     ld.userid,
                     ld.username,
                     ld.password AS passwordhash,
@@ -128,7 +128,7 @@ namespace Repository.Repositories
         {
             string sql = @"
                 SELECT
-                    ld.loginid,
+                    ld.id as loginid,
                     ld.userid,
                     ld.username,
                     ld.password AS passwordhash,
@@ -141,7 +141,7 @@ namespace Repository.Repositories
                 LEFT JOIN userinformation ui ON ui.userid = ld.userid
                 LEFT JOIN organization o ON o.id = ld.org_id
                 LEFT JOIN organization o2 ON o2.id = ui.org_id
-                WHERE ld.loginid = @LoginId
+                WHERE ld.id = @LoginId
                 LIMIT 1;";
 
             return _dbConnection.QuerySingleOrDefault<ValidatedUserResponse>(sql, new { LoginId = loginId });
