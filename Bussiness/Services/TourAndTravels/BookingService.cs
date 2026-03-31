@@ -24,11 +24,13 @@ namespace Bussiness.Services.TourAndTravels
     {
         private readonly IBookingRepository _repository;
         private readonly IMapper _mapper;
+        private readonly INotificationService _notificationService;
 
-        public BookingService(IBookingRepository repository, IMapper mapper)
+        public BookingService(IBookingRepository repository, IMapper mapper, INotificationService notificationService)
         {
             _repository = repository;
             _mapper = mapper;
+            _notificationService = notificationService;
         }
 
         // ===========================
@@ -38,7 +40,19 @@ namespace Bussiness.Services.TourAndTravels
         {
             var repoRequest = _mapper.Map<Repository.DataModels.TourAndTravels.BookingDTO.CreateBookingRequest>(request);
             var repoResponse = _repository.CreateBooking(repoRequest);
-            return _mapper.Map<BookingResponse>(repoResponse);
+            var result = _mapper.Map<BookingResponse>(repoResponse);
+
+            // Push real-time notification
+            _ = _notificationService.CreateAndBroadcastAsync(new Domain.Models.CreateNotification
+            {
+                Type = "booking",
+                Title = "New Booking",
+                Message = $"New booking created (Ref: {result.BookingReference})",
+                Link = "/booking-list",
+                Icon = "pi-bookmark"
+            });
+
+            return result;
         }
 
         // ===========================

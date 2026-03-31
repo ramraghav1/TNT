@@ -16,12 +16,14 @@ namespace Bussiness.Services
         private readonly IDemoRequestRepository _demoRequestRepo;
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
+        private readonly INotificationService _notificationService;
 
-        public DemoRequestService(IDemoRequestRepository demoRequestRepo, IMapper mapper, IEmailService emailService)
+        public DemoRequestService(IDemoRequestRepository demoRequestRepo, IMapper mapper, IEmailService emailService, INotificationService notificationService)
         {
             _demoRequestRepo = demoRequestRepo;
             _mapper = mapper;
             _emailService = emailService;
+            _notificationService = notificationService;
         }
 
         public async Task<long> SubmitDemoRequest(DemoRequest request)
@@ -44,6 +46,16 @@ namespace Bussiness.Services
                 request.CompanyName,
                 request.ProductInterest,
                 request.Message);
+
+            // Push real-time notification
+            await _notificationService.CreateAndBroadcastAsync(new Domain.Models.CreateNotification
+            {
+                Type = "demo_request",
+                Title = "New Demo Request",
+                Message = $"{request.FullName} requested a demo for {request.ProductInterest}",
+                Link = "/demo-requests",
+                Icon = "pi-envelope"
+            });
 
             return id;
         }

@@ -92,6 +92,11 @@ builder.Services.AddAuthorizationBuilder()
 builder.Services.AddOpenApi();
 
 // ────────────────────────────────────────────
+// SignalR for real-time notifications
+// ────────────────────────────────────────────
+builder.Services.AddSignalR();
+
+// ────────────────────────────────────────────
 // .NET 10 Best Practice: ProblemDetails for consistent error responses
 // ────────────────────────────────────────────
 builder.Services.AddProblemDetails();
@@ -213,6 +218,8 @@ builder.Services.AddScoped<IDemoRequestRepository, DemoRequestRepository>();
 builder.Services.AddScoped<IDemoRequestService, DemoRequestService>();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 // Remittance module
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
@@ -314,6 +321,9 @@ app.UseOutputCache();
 
 // 8. Map endpoints
 app.MapControllers();
+
+// 8b. SignalR Hub
+app.MapHub<NotificationHub>("/hubs/notifications");
 
 // 9. .NET 10: Built-in OpenAPI endpoint at /openapi/v1.json
 app.MapOpenApi();

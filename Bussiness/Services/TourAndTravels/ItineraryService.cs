@@ -25,11 +25,13 @@ namespace Bussiness.Services.TourAndTravels
     {
         private readonly IItineraryRepository _repository;
         private readonly IMapper _mapper;
+        private readonly INotificationService _notificationService;
 
-        public ItineraryService(IItineraryRepository repository, IMapper mapper)
+        public ItineraryService(IItineraryRepository repository, IMapper mapper, INotificationService notificationService)
         {
             _repository = repository;
             _mapper = mapper;
+            _notificationService = notificationService;
         }
 
         // ----------------------------
@@ -37,12 +39,21 @@ namespace Bussiness.Services.TourAndTravels
         // ----------------------------
         public ItineraryResponse CreateItinerary(CreateItineraryRequest request)
         {
-            // Map domain model → repository DTO
             var repoRequest = _mapper.Map<Repository.DataModels.TourAndTravels.ItineraryDTO.CreateItineraryRequest>(request);
             var repoResponse = _repository.CreateItinerary(repoRequest);
+            var result = _mapper.Map<ItineraryResponse>(repoResponse);
 
-            // Map repository response → domain model
-            return _mapper.Map<ItineraryResponse>(repoResponse);
+            // Push real-time notification
+            _ = _notificationService.CreateAndBroadcastAsync(new Domain.Models.CreateNotification
+            {
+                Type = "itinerary",
+                Title = "New Itinerary Created",
+                Message = $"Itinerary '{request.Title}' has been created",
+                Link = $"/itinerary-list",
+                Icon = "pi-map"
+            });
+
+            return result;
         }
 
         public List<ItineraryResponse> GetAllItineraries()

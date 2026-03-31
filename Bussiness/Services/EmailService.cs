@@ -102,7 +102,8 @@ namespace Bussiness.Services
             };
 
             using var smtp = new SmtpClient();
-            await smtp.ConnectAsync(_settings.SmtpHost, _settings.SmtpPort, SecureSocketOptions.Auto);
+            smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
+            await smtp.ConnectAsync(_settings.SmtpHost, _settings.SmtpPort, SecureSocketOptions.StartTls);
             await smtp.AuthenticateAsync(_settings.SmtpUser, _settings.SmtpPass);
             await smtp.SendAsync(email);
             await smtp.DisconnectAsync(true);
