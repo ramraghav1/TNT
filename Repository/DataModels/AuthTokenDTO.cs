@@ -50,6 +50,7 @@ namespace Repository.DataModels
             public string? MobileNumber { get; set; }
             public int? OrgId { get; set; }
             public string? OrganizationType { get; set; }
+            public long? TenantId { get; set; } // Added for multi-tenancy
         }
 
     }

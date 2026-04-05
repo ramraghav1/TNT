@@ -31,6 +31,7 @@ using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.RateLimiting;
 using Scalar.AspNetCore;
+using System.Globalization;
 
 using Dapper;
 
@@ -77,6 +78,32 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddControllers();
+
+// ────────────────────────────────────────────
+// Configure Localization and Globalization
+// ────────────────────────────────────────────
+var supportedCultures = new[]
+{
+    new CultureInfo("en-US"),
+    new CultureInfo("ne-NP")
+};
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("en-US");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+    options.ApplyCurrentCultureToResponseHeaders = true;
+    // Accept language preference from: Query string, Cookie, Accept-Language header
+    options.RequestCultureProviders = new List<Microsoft.AspNetCore.Localization.IRequestCultureProvider>
+    {
+        new Microsoft.AspNetCore.Localization.QueryStringRequestCultureProvider(),
+        new Microsoft.AspNetCore.Localization.CookieRequestCultureProvider(),
+        new Microsoft.AspNetCore.Localization.AcceptLanguageHeaderRequestCultureProvider()
+    };
+});
+
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 // ────────────────────────────────────────────
 // Global Authorization: Require authenticated user by default
@@ -210,10 +237,25 @@ builder.Services.AddScoped<IOrganizationRepository, OrganizationRepository>();
 builder.Services.AddScoped<IOrganizationService, OrganizationService>();
 builder.Services.AddScoped<IItineraryService, ItineraryService>();
 builder.Services.AddScoped<IItineraryRepository, ItineraryRepository>();
+builder.Services.AddScoped<IItineraryEnhancementsService, ItineraryEnhancementsService>();
+builder.Services.AddScoped<IItineraryEnhancementsRepository, ItineraryEnhancementsRepository>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IPricingService, PricingService>();
 builder.Services.AddScoped<IPricingRepository, PricingRepository>();
+
+// Tour & Travels - Inventory Management
+builder.Services.AddScoped<IHotelService, HotelService>();
+builder.Services.AddScoped<IHotelRepository, HotelRepository>();
+builder.Services.AddScoped<IVehicleService, VehicleService>();
+builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+builder.Services.AddScoped<IGuideService, GuideService>();
+builder.Services.AddScoped<IGuideRepository, GuideRepository>();
+builder.Services.AddScoped<IActivityService, ActivityService>();
+builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+builder.Services.AddScoped<IAvailabilityService, AvailabilityService>();
+builder.Services.AddScoped<IAvailabilityRepository, AvailabilityRepository>();
+
 builder.Services.AddScoped<IDemoRequestRepository, DemoRequestRepository>();
 builder.Services.AddScoped<IDemoRequestService, DemoRequestService>();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
@@ -250,6 +292,16 @@ builder.Services.AddScoped<IDomesticServiceChargeSetupRepository, DomesticServic
 builder.Services.AddScoped<IDomesticServiceChargeSetupService, DomesticServiceChargeSetupService>();
 builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
 builder.Services.AddScoped<IVoucherService, VoucherService>();
+
+// Localization service
+builder.Services.AddScoped<ILocalizationService, LocalizationService>();
+
+// ────────────────────────────────────────────
+// Multi-Tenancy Services
+// ────────────────────────────────────────────
+builder.Services.AddHttpContextAccessor(); // Required for ITenantProvider
+builder.Services.AddScoped<Repository.Repositories.ITenantProvider, Bussiness.Services.JwtTenantProvider>();
+builder.Services.AddScoped<Repository.Repositories.IMultiTenantRepository, Repository.Repositories.MultiTenantRepository>();
 
 // Clinic module
 builder.Services.AddScoped<ITenantRepository, TenantRepository>();
@@ -311,9 +363,16 @@ app.UseRateLimiter();
 // 5. CORS
 app.UseCors();
 
+// 5b. Request Localization
+app.UseRequestLocalization();
+
 // 6. Authentication & Authorization
 app.UseAuthentication();
 app.UseMiddleware<server.MiddleWare.TokenRevocationMiddleware>();
+
+// 6b. Tenant Validation Middleware (after authentication, before authorization)
+app.UseTenantMiddleware();
+
 app.UseAuthorization();
 
 // 7. Output Caching

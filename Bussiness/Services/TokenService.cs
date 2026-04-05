@@ -179,7 +179,7 @@ namespace Business.Services
 
         private string GenerateAccessToken(ValidatedUser user, DateTime expiresAt)
         {
-            var claims = new[]
+            var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
@@ -189,6 +189,12 @@ namespace Business.Services
                 new Claim("organizationType", user.OrganizationType ?? ""),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
+
+            // Add TenantId claim if available (required for multi-tenancy)
+            if (user.TenantId.HasValue)
+            {
+                claims.Add(new Claim("TenantId", user.TenantId.Value.ToString()));
+            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

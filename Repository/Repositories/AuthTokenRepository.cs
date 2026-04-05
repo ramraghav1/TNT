@@ -32,7 +32,8 @@ namespace Repository.Repositories
                     ui.emailaddress,
                     ui.mobilenumber,
                     COALESCE(ld.org_id, ui.org_id) AS orgid,
-                    COALESCE(o.type, o2.type) AS organizationtype
+                    COALESCE(o.type, o2.type) AS organizationtype,
+                    COALESCE(o.tenant_id, o2.tenant_id) AS tenantid
                 FROM logindetail ld
                 LEFT JOIN userinformation ui ON ui.userid = ld.userid
                 LEFT JOIN organization o ON o.id = ld.org_id

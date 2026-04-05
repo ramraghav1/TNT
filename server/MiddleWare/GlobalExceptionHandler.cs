@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using System;
 using System.IO;
 using System.Text.Json;
@@ -16,11 +17,15 @@ namespace server.MiddleWare;
 public sealed class GlobalExceptionHandler : IExceptionHandler
 {
     private readonly ILogger<GlobalExceptionHandler> _logger;
+    private readonly IStringLocalizer<GlobalExceptionHandler> _localizer;
     private readonly string _logFilePath;
 
-    public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
+    public GlobalExceptionHandler(
+        ILogger<GlobalExceptionHandler> logger,
+        IStringLocalizer<GlobalExceptionHandler> localizer)
     {
         _logger = logger;
+        _localizer = localizer;
         _logFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs", "errors.log");
         Directory.CreateDirectory(Path.GetDirectoryName(_logFilePath)!);
     }
@@ -36,11 +41,14 @@ public sealed class GlobalExceptionHandler : IExceptionHandler
         var errorDetails = $"[{DateTime.UtcNow:o}] {httpContext.Request.Method} {httpContext.Request.Path} | {exception.Message}\n{exception.StackTrace}\n";
         await File.AppendAllTextAsync(_logFilePath, errorDetails, cancellationToken);
 
+        // Get localized error message
+        var errorMessage = _localizer["Error_InternalServerError"].Value;
+
         // Return RFC 9457 ProblemDetails response
         var problemDetails = new ProblemDetails
         {
             Status = StatusCodes.Status500InternalServerError,
-            Title = "An internal server error occurred.",
+            Title = errorMessage,
             Type = "https://tools.ietf.org/html/rfc9110#section-15.6.1",
             Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}"
         };
