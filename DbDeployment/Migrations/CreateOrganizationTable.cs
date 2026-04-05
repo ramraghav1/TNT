@@ -3,15 +3,15 @@ using FluentMigrator;
 
 namespace DbDeployment.Migrations
 {
-    [Migration(202608100002)]
+    [Migration(202508100003)]
     public class CreateOrganizationTable : Migration
     {
         public override void Up()
         {
             Create.Table("organization")
                 .WithColumn("id").AsInt64().PrimaryKey().Identity()
-                .WithColumn("name").AsString(255).NotNullable()
-                .WithColumn("type").AsString(50).NotNullable()
+                .WithColumn("organization_name").AsString(255).NotNullable()
+                .WithColumn("organization_type").AsString(50).NotNullable()
                 .WithColumn("country_iso3").AsString(3).NotNullable()
                 .WithColumn("status").AsString(20).WithDefaultValue("ACTIVE")
                 .WithColumn("contact_person").AsString(255).Nullable()

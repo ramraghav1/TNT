@@ -31,6 +31,9 @@ COPY --from=build /app/publish .
 ENV ASPNETCORE_URLS=http://+:${PORT:-10000}
 ENV ASPNETCORE_ENVIRONMENT=Production
 
+# Disable GSSAPI/Kerberos loading since we use username/password auth
+ENV NPGSQL_DISABLE_GSSAPI=1
+
 EXPOSE 10000
 
 ENTRYPOINT ["dotnet", "server.dll"]

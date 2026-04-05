@@ -30,7 +30,7 @@ namespace DbDeployment.Migrations
 
                 Create.ForeignKey("fk_branch_organization")
                     .FromTable("branch").ForeignColumn("organization_id")
-                    .ToTable("organization").PrimaryColumn("organization_id")
+                    .ToTable("organization").PrimaryColumn("id")
                     .OnDeleteOrUpdate(System.Data.Rule.None);
             }
 

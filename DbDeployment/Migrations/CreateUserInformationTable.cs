@@ -40,7 +40,7 @@ public class AddBranchIdAndOrgIdToUserInformation : Migration
 
         Create.ForeignKey("fk_userinformation_organization")
             .FromTable("userinformation").ForeignColumn("org_id")
-            .ToTable("organization").PrimaryColumn("organization_id");
+            .ToTable("organization").PrimaryColumn("id");
     }
 
     public override void Down()

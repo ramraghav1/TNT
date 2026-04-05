@@ -18,6 +18,7 @@ namespace Repository.Repositories
         bool ActivateTenantProduct(long tenantId, int productId, string? subscriptionTier = null);
         bool DeactivateTenantProduct(long tenantId, int productId);
         List<string> GetTenantProducts(long tenantId);
+        List<ProductDTO> GetAllProducts();
     }
 
     public class MultiTenantRepository : IMultiTenantRepository
@@ -47,7 +48,7 @@ namespace Repository.Repositories
                 SELECT id, name, subdomain, logo_url, contact_email, contact_phone, 
                        status, settings_json, created_at, updated_at
                 FROM saas_tenants
-                WHERE subdomain = @Subdomain AND status = 'Active';";
+                WHERE subdomain = @Subdomain;";
 
             var dto = _dbConnection.QuerySingleOrDefault<TenantDTO>(query, new { Subdomain = subdomain });
             return MapToTenant(dto);
@@ -138,6 +139,16 @@ namespace Repository.Repositories
                 WHERE tp.tenant_id = @TenantId AND tp.is_active = true;";
 
             return _dbConnection.Query<string>(query, new { TenantId = tenantId }).ToList();
+        }
+
+        public List<ProductDTO> GetAllProducts()
+        {
+            string query = @"
+                SELECT id, name, display_name, description, is_active
+                FROM products
+                ORDER BY id;";
+
+            return _dbConnection.Query<ProductDTO>(query).ToList();
         }
 
         private Tenant? MapToTenant(TenantDTO? dto)

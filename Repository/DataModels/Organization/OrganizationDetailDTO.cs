@@ -3,7 +3,7 @@ namespace Repository.DataModels.Organization
 {
 	public class OrganizationDetailDTO
 	{
-        public long organization_id { get; set; }
+        public long id { get; set; }
         public string organization_name { get; set; }
         public string organization_type { get; set; }
         public string country_iso3 { get; set; }

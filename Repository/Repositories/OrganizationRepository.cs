@@ -23,7 +23,7 @@ public class OrganizationRepository : IOrganizationRepository
             (organization_name, organization_type, country_iso3, status, contact_person, contact_email, contact_phone, created_at, created_by,updated_by,updated_at)
             VALUES 
            (@organization_name, @organization_type, @country_iso3, @status, @contact_person, @contact_email, @contact_phone,now(), @created_by,@created_by,now())
-            RETURNING organization_id;
+            RETURNING id;
          ";
 
         return await _dbConnection.ExecuteScalarAsync<long>(sql, entity);
@@ -41,7 +41,7 @@ public class OrganizationRepository : IOrganizationRepository
                 contact_person = @ContactPerson,
                 contact_email = @ContactEmail,
                 contact_phone = @ContactPhone
-            WHERE organization_id = @OrganizationId;
+            WHERE id = @OrganizationId;
         ";
 
         return await _dbConnection.ExecuteAsync(sql, entity);
@@ -55,7 +55,7 @@ public class OrganizationRepository : IOrganizationRepository
 
     public async Task<IEnumerable<OrganizationDetailDTO>> ListAsync()
     {
-        string sql = "SELECT * FROM organization ORDER BY id;";
+        string sql = "SELECT id, organization_name, organization_type, country_iso3, status, contact_person, contact_email, contact_phone FROM organization ORDER BY id;";
         return await _dbConnection.QueryAsync<OrganizationDetailDTO>(sql);
     }
 
@@ -70,7 +70,7 @@ public class OrganizationRepository : IOrganizationRepository
             // 1. Create organization
             string orgSql = @"
                 INSERT INTO organization 
-                (name, type, country_iso3, status, contact_person, contact_email, contact_phone, created_at, created_by, updated_by, updated_at)
+                (organization_name, organization_type, country_iso3, status, contact_person, contact_email, contact_phone, created_at, created_by, updated_by, updated_at)
                 VALUES 
                 (@OrganizationName, @OrganizationType, @CountryIso3, @Status, @ContactPerson, @ContactEmail, @ContactPhone, now(), 1, 1, now())
                 RETURNING id;";

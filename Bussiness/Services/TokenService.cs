@@ -91,7 +91,9 @@ namespace Business.Services
                     UserFullName = user.UserFullName,
                     EmailAddress = user.EmailAddress,
                     MobileNumber = user.MobileNumber,
-                    OrganizationType = user.OrganizationType
+                    OrganizationType = user.OrganizationType,
+                    TenantId = user.TenantId,
+                    TenantName = user.TenantName
                 }
             };
         }

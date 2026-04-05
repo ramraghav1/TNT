@@ -32,12 +32,25 @@ namespace Repository.Repositories
                     ui.emailaddress,
                     ui.mobilenumber,
                     COALESCE(ld.org_id, ui.org_id) AS orgid,
-                    COALESCE(o.type, o2.type) AS organizationtype,
-                    COALESCE(o.tenant_id, o2.tenant_id) AS tenantid
+                    COALESCE(o.organization_type, o2.organization_type) AS organizationtype,
+                    COALESCE(ld.tenant_id, ui.tenant_id) AS tenantid,
+                    st.name AS tenantname,
+                    st.subdomain AS tenantsubdomain,
+                    p.name AS productname,
+                    p.display_name AS productdisplayname,
+                    CASE 
+                        WHEN p.name = 'TourAndTravel' THEN 'inventory,availability,itinerary,booking'
+                        WHEN p.name = 'Clinic' THEN 'appointments,patients,practitioners,invoices'
+                        WHEN p.name = 'Remittance' THEN 'agents,branches,transactions,vouchers'
+                        ELSE ''
+                    END AS availablemenus
                 FROM logindetail ld
                 LEFT JOIN userinformation ui ON ui.userid = ld.userid
                 LEFT JOIN organization o ON o.id = ld.org_id
                 LEFT JOIN organization o2 ON o2.id = ui.org_id
+                LEFT JOIN saas_tenants st ON st.id = COALESCE(ld.tenant_id, ui.tenant_id)
+                LEFT JOIN tenant_products tp ON tp.tenant_id = st.id AND tp.is_active = true
+                LEFT JOIN products p ON p.id = tp.product_id
                 WHERE LOWER(ld.username) = LOWER(@Username)
                 LIMIT 1;";
 
@@ -137,11 +150,25 @@ namespace Repository.Repositories
                     ui.emailaddress,
                     ui.mobilenumber,
                     COALESCE(ld.org_id, ui.org_id) AS orgid,
-                    COALESCE(o.type, o2.type) AS organizationtype
+                    COALESCE(o.organization_type, o2.organization_type) AS organizationtype,
+                    COALESCE(ld.tenant_id, ui.tenant_id) AS tenantid,
+                    st.name AS tenantname,
+                    st.subdomain AS tenantsubdomain,
+                    p.name AS productname,
+                    p.display_name AS productdisplayname,
+                    CASE 
+                        WHEN p.name = 'TourAndTravel' THEN 'inventory,availability,itinerary,booking'
+                        WHEN p.name = 'Clinic' THEN 'appointments,patients,practitioners,invoices'
+                        WHEN p.name = 'Remittance' THEN 'agents,branches,transactions,vouchers'
+                        ELSE ''
+                    END AS availablemenus
                 FROM logindetail ld
                 LEFT JOIN userinformation ui ON ui.userid = ld.userid
                 LEFT JOIN organization o ON o.id = ld.org_id
                 LEFT JOIN organization o2 ON o2.id = ui.org_id
+                LEFT JOIN saas_tenants st ON st.id = COALESCE(ld.tenant_id, ui.tenant_id)
+                LEFT JOIN tenant_products tp ON tp.tenant_id = st.id AND tp.is_active = true
+                LEFT JOIN products p ON p.id = tp.product_id
                 WHERE ld.id = @LoginId
                 LIMIT 1;";
 

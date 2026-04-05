@@ -7,18 +7,18 @@ namespace DbDeployment.Migrations.Remittance
     {
         public override void Up()
         {
-            // 1. Drop old branch and organization tables using CASCADE
+            // Drop old branch table (will be recreated as branches)
+            // Note: Do NOT drop organization table - it's still in use!
             Execute.Sql("DROP TABLE IF EXISTS branch CASCADE;");
-            Execute.Sql("DROP TABLE IF EXISTS organization CASCADE;");
 
-            // 3. Add agent_type column to existing agents table
+            // Add agent_type column to existing agents table
             Alter.Table("agents")
                 .AddColumn("agent_type").AsString(50).Nullable()
                 .AddColumn("address").AsString(500).Nullable()
                 .AddColumn("updated_at").AsDateTime().Nullable()
                 .AddColumn("updated_by").AsInt64().Nullable();
 
-            // 4. Create branches table referencing agents
+            // Create branches table referencing agents
             Create.Table("branches")
                 .WithColumn("id").AsInt64().PrimaryKey().Identity()
                 .WithColumn("agent_id").AsInt64().NotNullable()

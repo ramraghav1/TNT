@@ -32,6 +32,8 @@ namespace Domain.Models
             public string? EmailAddress { get; set; }
             public string? MobileNumber { get; set; }
             public string? OrganizationType { get; set; }
+            public long? TenantId { get; set; }
+            public string? TenantName { get; set; }
         }
 
         // ===========================
@@ -90,7 +92,8 @@ namespace Domain.Models
             public string? MobileNumber { get; set; }
             public int? OrgId { get; set; }
             public string? OrganizationType { get; set; }
-            public long? TenantId { get; set; } // Added for multi-tenancy
+            public long? TenantId { get; set; }
+            public string? TenantName { get; set; }
         }
     }
 }

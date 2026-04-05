@@ -110,9 +110,10 @@ namespace DbDeployment.Migrations
 
         public override void Down()
         {
-            Delete.Table("tenant_products");
-            Delete.Table("saas_tenants");
-            Delete.Table("products");
+            // Drop tables with CASCADE to remove any remaining foreign key constraints
+            Execute.Sql("DROP TABLE IF EXISTS tenant_products CASCADE");
+            Execute.Sql("DROP TABLE IF EXISTS saas_tenants CASCADE");
+            Execute.Sql("DROP TABLE IF EXISTS products CASCADE");
         }
     }
 }

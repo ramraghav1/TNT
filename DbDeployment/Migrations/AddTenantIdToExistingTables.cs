@@ -173,64 +173,91 @@ namespace DbDeployment.Migrations
 
         public override void Down()
         {
-            // Remove tenant_id columns in reverse order
+            // Remove tenant_id columns in reverse order with existence checks
 
-            if (Schema.Table("branches").Column("tenant_id").Exists())
+            if (Schema.Table("branches").Exists() && Schema.Table("branches").Column("tenant_id").Exists())
             {
                 Delete.ForeignKey("fk_branches_tenant").OnTable("branches");
                 Delete.Index("idx_branches_tenant").OnTable("branches");
                 Delete.Column("tenant_id").FromTable("branches");
             }
 
-            if (Schema.Table("agents").Column("tenant_id").Exists())
+            if (Schema.Table("agents").Exists() && Schema.Table("agents").Column("tenant_id").Exists())
             {
                 Delete.ForeignKey("fk_agents_tenant").OnTable("agents");
                 Delete.Index("idx_agents_tenant").OnTable("agents");
                 Delete.Column("tenant_id").FromTable("agents");
             }
 
-            if (Schema.Table("organizations").Column("tenant_id").Exists())
+            if (Schema.Table("organizations").Exists() && Schema.Table("organizations").Column("tenant_id").Exists())
             {
                 Delete.ForeignKey("fk_organizations_tenant").OnTable("organizations");
                 Delete.Index("idx_organizations_tenant").OnTable("organizations");
                 Delete.Column("tenant_id").FromTable("organizations");
             }
 
-            Delete.ForeignKey("fk_users_tenant").OnTable("users");
-            Delete.Index("idx_users_tenant").OnTable("users");
-            Delete.Column("tenant_id").FromTable("users");
+            if (Schema.Table("users").Exists() && Schema.Table("users").Column("tenant_id").Exists())
+            {
+                Delete.ForeignKey("fk_users_tenant").OnTable("users");
+                Delete.Index("idx_users_tenant").OnTable("users");
+                Delete.Column("tenant_id").FromTable("users");
+            }
 
-            Delete.ForeignKey("fk_package_departures_tenant").OnTable("package_departures");
-            Delete.Index("idx_package_departures_tenant").OnTable("package_departures");
-            Delete.Column("tenant_id").FromTable("package_departures");
+            if (Schema.Table("package_departures").Exists() && Schema.Table("package_departures").Column("tenant_id").Exists())
+            {
+                Delete.ForeignKey("fk_package_departures_tenant").OnTable("package_departures");
+                Delete.Index("idx_package_departures_tenant").OnTable("package_departures");
+                Delete.Column("tenant_id").FromTable("package_departures");
+            }
 
-            Delete.ForeignKey("fk_availability_tenant").OnTable("availability");
-            Delete.Index("idx_availability_tenant").OnTable("availability");
-            Delete.Column("tenant_id").FromTable("availability");
+            if (Schema.Table("availability").Exists() && Schema.Table("availability").Column("tenant_id").Exists())
+            {
+                Delete.ForeignKey("fk_availability_tenant").OnTable("availability");
+                Delete.Index("idx_availability_tenant").OnTable("availability");
+                Delete.Column("tenant_id").FromTable("availability");
+            }
 
-            Delete.ForeignKey("fk_activities_tenant").OnTable("activities");
-            Delete.Index("idx_activities_tenant").OnTable("activities");
-            Delete.Column("tenant_id").FromTable("activities");
+            if (Schema.Table("activities").Exists() && Schema.Table("activities").Column("tenant_id").Exists())
+            {
+                Delete.ForeignKey("fk_activities_tenant").OnTable("activities");
+                Delete.Index("idx_activities_tenant").OnTable("activities");
+                Delete.Column("tenant_id").FromTable("activities");
+            }
 
-            Delete.ForeignKey("fk_guides_tenant").OnTable("guides");
-            Delete.Index("idx_guides_tenant").OnTable("guides");
-            Delete.Column("tenant_id").FromTable("guides");
+            if (Schema.Table("guides").Exists() && Schema.Table("guides").Column("tenant_id").Exists())
+            {
+                Delete.ForeignKey("fk_guides_tenant").OnTable("guides");
+                Delete.Index("idx_guides_tenant").OnTable("guides");
+                Delete.Column("tenant_id").FromTable("guides");
+            }
 
-            Delete.ForeignKey("fk_vehicles_tenant").OnTable("vehicles");
-            Delete.Index("idx_vehicles_tenant").OnTable("vehicles");
-            Delete.Column("tenant_id").FromTable("vehicles");
+            if (Schema.Table("vehicles").Exists() && Schema.Table("vehicles").Column("tenant_id").Exists())
+            {
+                Delete.ForeignKey("fk_vehicles_tenant").OnTable("vehicles");
+                Delete.Index("idx_vehicles_tenant").OnTable("vehicles");
+                Delete.Column("tenant_id").FromTable("vehicles");
+            }
 
-            Delete.ForeignKey("fk_hotels_tenant").OnTable("hotels");
-            Delete.Index("idx_hotels_tenant").OnTable("hotels");
-            Delete.Column("tenant_id").FromTable("hotels");
+            if (Schema.Table("hotels").Exists() && Schema.Table("hotels").Column("tenant_id").Exists())
+            {
+                Delete.ForeignKey("fk_hotels_tenant").OnTable("hotels");
+                Delete.Index("idx_hotels_tenant").OnTable("hotels");
+                Delete.Column("tenant_id").FromTable("hotels");
+            }
 
-            Delete.ForeignKey("fk_itinerary_instances_tenant").OnTable("itinerary_instances");
-            Delete.Index("idx_itinerary_instances_tenant").OnTable("itinerary_instances");
-            Delete.Column("tenant_id").FromTable("itinerary_instances");
+            if (Schema.Table("itinerary_instances").Exists() && Schema.Table("itinerary_instances").Column("tenant_id").Exists())
+            {
+                Delete.ForeignKey("fk_itinerary_instances_tenant").OnTable("itinerary_instances");
+                Delete.Index("idx_itinerary_instances_tenant").OnTable("itinerary_instances");
+                Delete.Column("tenant_id").FromTable("itinerary_instances");
+            }
 
-            Delete.ForeignKey("fk_itineraries_tenant").OnTable("itineraries");
-            Delete.Index("idx_itineraries_tenant").OnTable("itineraries");
-            Delete.Column("tenant_id").FromTable("itineraries");
+            if (Schema.Table("itineraries").Exists() && Schema.Table("itineraries").Column("tenant_id").Exists())
+            {
+                Delete.ForeignKey("fk_itineraries_tenant").OnTable("itineraries");
+                Delete.Index("idx_itineraries_tenant").OnTable("itineraries");
+                Delete.Column("tenant_id").FromTable("itineraries");
+            }
         }
     }
 }

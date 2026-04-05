@@ -36,13 +36,18 @@ namespace server.Controller
         public IActionResult GetCurrentTenant()
         {
             // TenantId is extracted from JWT - NOT from frontend
-            var tenantId = _tenantProvider.GetRequiredTenantId();
+            var tenantId = _tenantProvider.GetTenantId();
             
-            var tenant = _tenantRepository.GetTenantById(tenantId);
+            if (tenantId == null)
+            {
+                return Unauthorized(new { message = "Tenant context not found. Please ensure you are logged in with a tenant-associated account." });
+            }
+            
+            var tenant = _tenantRepository.GetTenantById(tenantId.Value);
             if (tenant == null)
                 return NotFound(new { message = "Tenant not found" });
 
-            var products = _tenantRepository.GetTenantProducts(tenantId);
+            var products = _tenantRepository.GetTenantProducts(tenantId.Value);
 
             var response = new TenantResponse
             {
@@ -64,10 +69,15 @@ namespace server.Controller
         [HttpPut("current")]
         public IActionResult UpdateCurrentTenant([FromBody] MultiTenantUpdateRequest request)
         {
-            var tenantId = _tenantProvider.GetRequiredTenantId();
+            var tenantId = _tenantProvider.GetTenantId();
+            
+            if (tenantId == null)
+            {
+                return Unauthorized(new { message = "Tenant context not found. Please ensure you are logged in with a tenant-associated account." });
+            }
 
             var success = _tenantRepository.UpdateTenant(
-                tenantId,
+                tenantId.Value,
                 request.Name,
                 request.LogoUrl,
                 request.ContactPhone
@@ -85,18 +95,23 @@ namespace server.Controller
         [HttpGet("current/products")]
         public IActionResult GetCurrentTenantProducts()
         {
-            var tenantId = _tenantProvider.GetRequiredTenantId();
-            var products = _tenantRepository.GetTenantProducts(tenantId);
+            var tenantId = _tenantProvider.GetTenantId();
+            
+            if (tenantId == null)
+            {
+                return Unauthorized(new { message = "Tenant context not found. Please ensure you are logged in with a tenant-associated account." });
+            }
+            
+            var products = _tenantRepository.GetTenantProducts(tenantId.Value);
             
             return Ok(new { products });
         }
 
         /// <summary>
-        /// ADMIN ONLY: Get tenant by subdomain (for support/admin purposes)
-        /// This would typically require super-admin role
+        /// Get tenant by subdomain (public for subdomain availability check)
         /// </summary>
         [HttpGet("by-subdomain/{subdomain}")]
-        [Authorize(Roles = "SuperAdmin")]
+        [AllowAnonymous]
         public IActionResult GetTenantBySubdomain(string subdomain)
         {
             var tenant = _tenantRepository.GetTenantBySubdomain(subdomain);
@@ -107,10 +122,21 @@ namespace server.Controller
         }
 
         /// <summary>
-        /// ADMIN ONLY: Create new tenant (for onboarding)
+        /// Check if subdomain is available (public endpoint for tenant registration)
+        /// </summary>
+        [HttpGet("check-subdomain/{subdomain}")]
+        [AllowAnonymous]
+        public IActionResult CheckSubdomainAvailability(string subdomain)
+        {
+            var tenant = _tenantRepository.GetTenantBySubdomain(subdomain);
+            return Ok(new { available = tenant == null });
+        }
+
+        /// <summary>
+        /// Create new tenant (requires authentication)
+        /// Only authenticated users can create tenants
         /// </summary>
         [HttpPost]
-        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> CreateTenant([FromBody] MultiTenantCreateRequest request)
         {
             // Map DTO settings to Domain TenantSettings

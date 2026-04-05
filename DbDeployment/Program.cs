@@ -35,5 +35,65 @@ var serviceProvider = new ServiceCollection()
 
 using var scope = serviceProvider.CreateScope();
 var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
-runner.MigrateUp();
-//runner.MigrateDown(202507240001);
+
+// Check command line arguments
+var cmdArgs = Environment.GetCommandLineArgs();
+if (cmdArgs.Length > 1 && cmdArgs[1].ToLower() == "reset")
+{
+    Console.WriteLine("⚠️  RESET MODE: Dropping all tables and re-running migrations...");
+    Console.WriteLine("Are you sure you want to drop  all tables? This will delete ALL data! (y/N): ");
+    var confirm = Console.ReadLine()?.Trim().ToLower();
+    
+    if (confirm == "y" || confirm == "yes")
+    {
+        try
+        {
+            Console.WriteLine("🗑️  Dropping all tables with CASCADE...");
+            
+            // Get database connection to execute raw SQL
+            using var conn = new Npgsql.NpgsqlConnection(connectionString);
+            conn.Open();
+            
+            // Drop all tables with CASCADE (PostgreSQL specific)
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = @"
+                DO $$ DECLARE
+                    r RECORD;
+                BEGIN
+                    FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = 'public') LOOP
+                        EXECUTE 'DROP TABLE IF EXISTS ' || quote_ident(r.tablename) || ' CASCADE';
+                    END LOOP;
+                END $$;";
+            cmd.ExecuteNonQuery();
+            
+            Console.WriteLine("✅ All tables dropped successfully.");
+            Console.WriteLine("🔄 Running all migrations...");
+            
+            runner.MigrateUp();
+            
+            Console.WriteLine("✅ All migrations completed successfully!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ Error during migration: {ex.Message}");
+            throw;
+        }
+    }
+    else
+    {
+        Console.WriteLine("Reset cancelled.");
+    }
+}
+else if (cmdArgs.Length > 1 && cmdArgs[1].ToLower() == "down")
+{
+    Console.WriteLine("Rolling back last migration...");
+    runner.Rollback(1);
+    Console.WriteLine("✅ Rolled back 1 migration.");
+}
+else
+{
+    // Normal migration up
+    Console.WriteLine("Running migrations...");
+    runner.MigrateUp();
+    Console.WriteLine("✅ Migrations completed.");
+}

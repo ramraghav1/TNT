@@ -50,7 +50,12 @@ namespace Repository.DataModels
             public string? MobileNumber { get; set; }
             public int? OrgId { get; set; }
             public string? OrganizationType { get; set; }
-            public long? TenantId { get; set; } // Added for multi-tenancy
+            public long? TenantId { get; set; }
+            public string? TenantName { get; set; }
+            public string? TenantSubdomain { get; set; }
+            public string? ProductName { get; set; }
+            public string? ProductDisplayName { get; set; }
+            public string? AvailableMenus { get; set; } // Comma-separated list of available features/menus
         }
 
     }
