@@ -23,6 +23,7 @@ using Repository.Repositories.Remittance;
 using Repository.Repositories.TourAndTravels;
 using server.MiddleWare;
 using System.Data;
+using Serilog.Context;
 using System.IO.Compression;
 using System.Text;
 using System.Text.Json;
@@ -34,8 +35,34 @@ using Scalar.AspNetCore;
 using System.Globalization;
 
 using Dapper;
+using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// ────────────────────────────────────────────
+// Configure Serilog for structured logging
+// ────────────────────────────────────────────
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .Enrich.WithProperty("Application", "TNT-API")
+    .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}] [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+    .WriteTo.File(
+        path: "logs/tnt-.log",
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 7,
+        outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}] [{Level:u3}] {Message:lj}{NewLine}{Exception}",
+        restrictedToMinimumLevel: builder.Environment.IsDevelopment() ? LogEventLevel.Debug : LogEventLevel.Warning
+    )
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
+try
+{
+    Log.Information("Starting TNT API application");
 
 // ────────────────────────────────────────────
 // .NET 10 Best Practice: Configure JSON options globally
@@ -390,4 +417,14 @@ app.MapOpenApi();
 // 10. Scalar API Reference UI (replaces Swagger UI)
 app.MapScalarApiReference();
 
-app.Run();
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application terminated unexpectedly");
+}
+finally
+{
+    Log.Information("Shutting down TNT API application");
+    Log.CloseAndFlush();
+}
