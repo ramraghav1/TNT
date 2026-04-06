@@ -39,7 +39,7 @@ namespace Repository.Repositories.TourAndTravels
                     VALUES
                     (@TemplateId, @SourceInstanceId, 'Draft', @StartDate, @EndDate,
                      false, @BookingRef, @SpecialRequests,
-                     'Unpaid', 0, 0, 0,
+                     'Unpaid', @TotalAmount, 0, @TotalAmount,
                      false, false, NOW())
                     RETURNING id;";
 
@@ -50,7 +50,8 @@ namespace Repository.Repositories.TourAndTravels
                     request.StartDate,
                     request.EndDate,
                     BookingRef = bookingRef,
-                    request.SpecialRequests
+                    request.SpecialRequests,
+                    request.TotalAmount
                 }, transaction);
 
                 if (request.SourceInstanceId.HasValue && request.SourceInstanceId.Value > 0)
@@ -93,9 +94,9 @@ namespace Repository.Repositories.TourAndTravels
                     BookingReference = bookingRef,
                     Status = "Draft",
                     IsCustomized = false,
-                    TotalAmount = 0,
+                    TotalAmount = request.TotalAmount,
                     AmountPaid = 0,
-                    BalanceAmount = 0,
+                    BalanceAmount = request.TotalAmount,
                     PaymentStatus = "Unpaid",
                     TravelerApproved = false,
                     AdminApproved = false,
@@ -673,6 +674,75 @@ namespace Repository.Repositories.TourAndTravels
             stats.PaymentStatusBreakdown = _dbConnection.Query<StatusCountDTO>(sqlPayment).ToList();
 
             return stats;
+        }
+
+        // ============================================================
+        // ASSIGN INVENTORY TO BOOKING
+        // ============================================================
+        public bool AssignInventory(long instanceId, AssignInventoryRequest request)
+        {
+            if (_dbConnection.State != ConnectionState.Open)
+                _dbConnection.Open();
+
+            string sql = @"
+                INSERT INTO booking_inventory
+                (booking_instance_id, inventory_type, inventory_id, start_date, end_date, quantity, price, notes, created_at)
+                VALUES
+                (@InstanceId, @InventoryType, @InventoryId, @StartDate, @EndDate, @Quantity, @Price, @Notes, NOW());";
+
+            int rows = _dbConnection.Execute(sql, new
+            {
+                InstanceId = instanceId,
+                request.InventoryType,
+                request.InventoryId,
+                request.StartDate,
+                request.EndDate,
+                request.Quantity,
+                request.Price,
+                request.Notes
+            });
+            return rows > 0;
+        }
+
+        // ============================================================
+        // GET INVENTORY ASSIGNED TO BOOKING
+        // ============================================================
+        public List<BookingInventoryItemDTO> GetBookingInventory(long instanceId)
+        {
+            if (_dbConnection.State != ConnectionState.Open)
+                _dbConnection.Open();
+
+            string sql = @"
+                SELECT bi.id, bi.inventory_type, bi.inventory_id,
+                       CASE
+                           WHEN bi.inventory_type = 'guide'   THEN g.full_name
+                           WHEN bi.inventory_type = 'vehicle' THEN COALESCE(v.model, v.vehicle_type)
+                           WHEN bi.inventory_type = 'hotel'   THEN h.name
+                           ELSE ''
+                       END AS inventory_name,
+                       bi.start_date, bi.end_date, bi.quantity, bi.price, bi.notes, bi.created_at
+                FROM booking_inventory bi
+                LEFT JOIN guides   g ON g.id = bi.inventory_id AND bi.inventory_type = 'guide'
+                LEFT JOIN vehicles v ON v.id = bi.inventory_id AND bi.inventory_type = 'vehicle'
+                LEFT JOIN hotels   h ON h.id = bi.inventory_id AND bi.inventory_type = 'hotel'
+                WHERE bi.booking_instance_id = @InstanceId
+                ORDER BY bi.inventory_type, bi.created_at;";
+
+            return _dbConnection.Query<BookingInventoryItemDTO>(sql, new { InstanceId = instanceId }).ToList();
+        }
+
+        // ============================================================
+        // REMOVE INVENTORY ITEM FROM BOOKING
+        // ============================================================
+        public bool RemoveInventoryItem(long itemId)
+        {
+            if (_dbConnection.State != ConnectionState.Open)
+                _dbConnection.Open();
+
+            int rows = _dbConnection.Execute(
+                "DELETE FROM booking_inventory WHERE id = @Id;",
+                new { Id = itemId });
+            return rows > 0;
         }
     }
 }

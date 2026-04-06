@@ -34,6 +34,7 @@ namespace Domain.Models
             public string? OrganizationType { get; set; }
             public long? TenantId { get; set; }
             public string? TenantName { get; set; }
+            public string? TenantLogoUrl { get; set; }
         }
 
         // ===========================
@@ -94,6 +95,7 @@ namespace Domain.Models
             public string? OrganizationType { get; set; }
             public long? TenantId { get; set; }
             public string? TenantName { get; set; }
+            public string? TenantLogoUrl { get; set; }
         }
     }
 }

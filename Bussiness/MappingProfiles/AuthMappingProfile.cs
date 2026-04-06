@@ -19,7 +19,8 @@ namespace Bussiness.MappingProfiles
                 .ForMember(dest => dest.OrgId, opt => opt.MapFrom(src => src.OrgId))
                 .ForMember(dest => dest.OrganizationType, opt => opt.MapFrom(src => src.OrganizationType))
                 .ForMember(dest => dest.TenantId, opt => opt.MapFrom(src => src.TenantId))
-                .ForMember(dest => dest.TenantName, opt => opt.MapFrom(src => src.TenantName));
+                .ForMember(dest => dest.TenantName, opt => opt.MapFrom(src => src.TenantName))
+                .ForMember(dest => dest.TenantLogoUrl, opt => opt.MapFrom(src => src.TenantLogoUrl));
 
             // Map DB token record → Domain token record (if needed in future)
             CreateMap<AuthTokenDTO.AuthTokenResponse, Auth.AuthTokenRecord>().ReverseMap();

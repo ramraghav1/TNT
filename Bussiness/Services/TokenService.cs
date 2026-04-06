@@ -93,7 +93,8 @@ namespace Business.Services
                     MobileNumber = user.MobileNumber,
                     OrganizationType = user.OrganizationType,
                     TenantId = user.TenantId,
-                    TenantName = user.TenantName
+                    TenantName = user.TenantName,
+                    TenantLogoUrl = user.TenantLogoUrl
                 }
             };
         }

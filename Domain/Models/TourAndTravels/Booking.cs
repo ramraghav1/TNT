@@ -15,6 +15,7 @@ namespace Domain.Models.TourAndTravels
             public DateTime EndDate { get; set; }
             public List<TravelerRequest> Travelers { get; set; } = new();
             public string? SpecialRequests { get; set; }
+            public decimal TotalAmount { get; set; }
         }
 
         // Traveler information
@@ -214,6 +215,34 @@ namespace Domain.Models.TourAndTravels
         {
             public string Label { get; set; } = string.Empty;
             public int Count { get; set; }
+        }
+
+        // ===========================
+        // Booking Inventory Assignment
+        // ===========================
+        public class AssignInventoryRequest
+        {
+            public string InventoryType { get; set; } = string.Empty; // "guide", "vehicle", "hotel"
+            public long InventoryId { get; set; }
+            public DateTime StartDate { get; set; }
+            public DateTime EndDate { get; set; }
+            public int Quantity { get; set; } = 1;
+            public decimal Price { get; set; }
+            public string? Notes { get; set; }
+        }
+
+        public class BookingInventoryItem
+        {
+            public long Id { get; set; }
+            public string InventoryType { get; set; } = string.Empty;
+            public long InventoryId { get; set; }
+            public string InventoryName { get; set; } = string.Empty;
+            public DateTime StartDate { get; set; }
+            public DateTime EndDate { get; set; }
+            public int Quantity { get; set; }
+            public decimal Price { get; set; }
+            public string? Notes { get; set; }
+            public DateTime CreatedAt { get; set; }
         }
     }
 }

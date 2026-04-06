@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Domain.Models.TourAndTravels;
 using Repository.Interfaces.TourAndTravels;
@@ -18,6 +19,9 @@ namespace Bussiness.Services.TourAndTravels
         List<PaymentResponse> GetPayments(long id);
         bool UpdateStatus(long id, string status);
         DashboardStats GetDashboardStats();
+        bool AssignInventory(long instanceId, AssignInventoryRequest request);
+        List<BookingInventoryItem> GetBookingInventory(long instanceId);
+        bool RemoveInventoryItem(long itemId);
     }
 
     public class BookingService : IBookingService
@@ -127,6 +131,47 @@ namespace Bussiness.Services.TourAndTravels
         {
             var repoStats = _repository.GetDashboardStats();
             return _mapper.Map<DashboardStats>(repoStats);
+        }
+
+        // ===========================
+        // Inventory Assignment
+        // ===========================
+        public bool AssignInventory(long instanceId, AssignInventoryRequest request)
+        {
+            var repoRequest = new Repository.DataModels.TourAndTravels.BookingDTO.AssignInventoryRequest
+            {
+                InventoryType = request.InventoryType,
+                InventoryId = request.InventoryId,
+                StartDate = request.StartDate,
+                EndDate = request.EndDate,
+                Quantity = request.Quantity,
+                Price = request.Price,
+                Notes = request.Notes
+            };
+            return _repository.AssignInventory(instanceId, repoRequest);
+        }
+
+        public List<BookingInventoryItem> GetBookingInventory(long instanceId)
+        {
+            var items = _repository.GetBookingInventory(instanceId);
+            return items.Select(i => new BookingInventoryItem
+            {
+                Id = i.Id,
+                InventoryType = i.InventoryType,
+                InventoryId = i.InventoryId,
+                InventoryName = i.InventoryName,
+                StartDate = i.StartDate,
+                EndDate = i.EndDate,
+                Quantity = i.Quantity,
+                Price = i.Price,
+                Notes = i.Notes,
+                CreatedAt = i.CreatedAt
+            }).ToList();
+        }
+
+        public bool RemoveInventoryItem(long itemId)
+        {
+            return _repository.RemoveInventoryItem(itemId);
         }
     }
 }

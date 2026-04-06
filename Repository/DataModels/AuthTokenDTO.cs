@@ -52,6 +52,7 @@ namespace Repository.DataModels
             public string? OrganizationType { get; set; }
             public long? TenantId { get; set; }
             public string? TenantName { get; set; }
+            public string? TenantLogoUrl { get; set; }
             public string? TenantSubdomain { get; set; }
             public string? ProductName { get; set; }
             public string? ProductDisplayName { get; set; }

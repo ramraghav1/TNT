@@ -125,6 +125,41 @@ namespace server.Controller.TourAndTravels
             if (!result) return NotFound();
             return Ok(new { message = $"Status updated to {request.Status}." });
         }
+
+        // ===========================
+        // Assign inventory to booking
+        // POST /api/bookings/{id}/inventory
+        // ===========================
+        [HttpPost("{id:long}/inventory")]
+        public IActionResult AssignInventory(long id, [FromBody] AssignInventoryRequest request)
+        {
+            var result = _bookingService.AssignInventory(id, request);
+            if (!result) return BadRequest(new { message = "Failed to assign inventory item." });
+            return Ok(new { message = "Inventory assigned successfully." });
+        }
+
+        // ===========================
+        // Get inventory assigned to booking
+        // GET /api/bookings/{id}/inventory
+        // ===========================
+        [HttpGet("{id:long}/inventory")]
+        public ActionResult<List<BookingInventoryItem>> GetBookingInventory(long id)
+        {
+            var items = _bookingService.GetBookingInventory(id);
+            return Ok(items);
+        }
+
+        // ===========================
+        // Remove inventory item from booking
+        // DELETE /api/bookings/inventory/{itemId}
+        // ===========================
+        [HttpDelete("inventory/{itemId:long}")]
+        public IActionResult RemoveInventoryItem(long itemId)
+        {
+            var result = _bookingService.RemoveInventoryItem(itemId);
+            if (!result) return NotFound();
+            return Ok(new { message = "Inventory item removed." });
+        }
     }
 
     // Helper class for status update endpoint

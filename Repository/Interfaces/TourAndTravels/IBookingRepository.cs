@@ -31,5 +31,10 @@ namespace Repository.Interfaces.TourAndTravels
 
         // Dashboard stats
         DashboardStatsDTO GetDashboardStats();
+
+        // Inventory assignment
+        bool AssignInventory(long instanceId, AssignInventoryRequest request);
+        List<BookingInventoryItemDTO> GetBookingInventory(long instanceId);
+        bool RemoveInventoryItem(long itemId);
     }
 }

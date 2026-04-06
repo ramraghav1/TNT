@@ -24,10 +24,10 @@ namespace Repository.Repositories.TourAndTravels
             string insertQuery = @"
                 INSERT INTO guides
                 (full_name, phone, email, experience_years, languages, specialization,
-                 certification_number, price_per_day, rating, bio, photo, is_active, created_by)
+                 certification_number, price_per_day, bio, photo, is_active, created_by)
                 VALUES
                 (@FullName, @Phone, @Email, @ExperienceYears, @Languages::jsonb, @Specialization,
-                 @CertificationNumber, @PricePerDay, @Rating, @Bio, @Photo, true, @CreatedBy)
+                 @CertificationNumber, @PricePerDay, @Bio, @Photo, true, @CreatedBy)
                 RETURNING id;";
 
             long guideId = _dbConnection.QuerySingle<long>(
