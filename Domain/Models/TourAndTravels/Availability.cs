@@ -81,6 +81,10 @@ namespace Domain.Models.TourAndTravels
             public string? Color { get; set; }
             public string? Description { get; set; }
             public long? LinkedBookingId { get; set; }
+            // Assigned resources (for Booking events)
+            public string? GuideName { get; set; }
+            public string? VehicleName { get; set; }
+            public string? HotelName { get; set; }
         }
 
         public class CalendarViewResponse

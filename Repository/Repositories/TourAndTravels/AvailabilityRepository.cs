@@ -319,14 +319,31 @@ namespace Repository.Repositories.TourAndTravels
         {
             var response = new Availability.CalendarViewResponse();
             
-            // Get booking events
+            // Get booking events with assigned guide / vehicle / hotel names
             string bookingQuery = @"
                 SELECT 
-                    ii.id, ii.template_itinerary_id, ii.start_date, ii.end_date, ii.status,
-                    i.title
+                    ii.id,
+                    ii.template_itinerary_id,
+                    ii.start_date,
+                    ii.end_date,
+                    ii.status,
+                    i.title,
+                    STRING_AGG(DISTINCT g.full_name, ', ')  AS guide_names,
+                    STRING_AGG(DISTINCT
+                        CASE WHEN v.model IS NOT NULL AND v.model <> ''
+                             THEN v.vehicle_type || ' - ' || v.model
+                             ELSE v.vehicle_type
+                        END, ', ')                          AS vehicle_names,
+                    STRING_AGG(DISTINCT h.name, ', ')       AS hotel_names
                 FROM itinerary_instances ii
                 JOIN itineraries i ON i.id = ii.template_itinerary_id
+                LEFT JOIN itinerary_instance_days iid ON iid.itinerary_instance_id = ii.id
+                LEFT JOIN itinerary_instance_day_assignments a ON a.instance_day_id = iid.id
+                LEFT JOIN guides  g ON g.id = a.guide_id
+                LEFT JOIN vehicles v ON v.id = a.vehicle_id
+                LEFT JOIN hotels   h ON h.id = a.hotel_id
                 WHERE ii.start_date <= @EndDate AND ii.end_date >= @StartDate
+                GROUP BY ii.id, ii.template_itinerary_id, ii.start_date, ii.end_date, ii.status, i.title
                 ORDER BY ii.start_date;";
 
             var bookings = _dbConnection.Query(bookingQuery, new { request.StartDate, request.EndDate }).ToList();
@@ -342,8 +359,11 @@ namespace Repository.Repositories.TourAndTravels
                     EndDate = ((DateOnly)booking.end_date).ToDateTime(TimeOnly.MinValue),
                     Status = booking.status,
                     Color = GetStatusColor(booking.status),
-                    LinkedBookingId = booking.id
-                    });
+                    LinkedBookingId = booking.id,
+                    GuideName   = string.IsNullOrWhiteSpace((string?)booking.guide_names)   ? null : (string)booking.guide_names,
+                    VehicleName = string.IsNullOrWhiteSpace((string?)booking.vehicle_names) ? null : (string)booking.vehicle_names,
+                    HotelName   = string.IsNullOrWhiteSpace((string?)booking.hotel_names)   ? null : (string)booking.hotel_names
+                });
             }
 
             // Get block events

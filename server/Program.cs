@@ -282,6 +282,8 @@ builder.Services.AddScoped<IActivityService, ActivityService>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IAvailabilityService, AvailabilityService>();
 builder.Services.AddScoped<IAvailabilityRepository, AvailabilityRepository>();
+builder.Services.AddScoped<IDepartureManagementService, DepartureManagementService>();
+builder.Services.AddScoped<IDepartureManagementRepository, DepartureManagementRepository>();
 
 builder.Services.AddScoped<IDemoRequestRepository, DemoRequestRepository>();
 builder.Services.AddScoped<IDemoRequestService, DemoRequestService>();
