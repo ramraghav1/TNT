@@ -421,10 +421,10 @@ app.MapControllers();
 app.MapHub<NotificationHub>("/hubs/notifications");
 
 // 9. .NET 10: Built-in OpenAPI endpoint at /openapi/v1.json
-app.MapOpenApi();
+app.MapOpenApi().AllowAnonymous();
 
 // 10. Scalar API Reference UI (replaces Swagger UI)
-app.MapScalarApiReference();
+app.MapScalarApiReference(options => options.WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient)).AllowAnonymous();
 
     app.Run();
 }

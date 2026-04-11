@@ -17,15 +17,23 @@ RUN dotnet restore
 # Copy all source code
 COPY . .
 
-# Publish the Server project with AOT-friendly optimizations
+# Publish the Server project
 WORKDIR /src/server
-RUN dotnet publish -c Release -o /app/publish
+RUN dotnet publish -c Release -o /app/publish/server
 
-# Stage 2: Runtime - use chiseled image for smaller size & security
+# Publish the DbDeployment project
+WORKDIR /src/DbDeployment
+RUN dotnet publish -c Release -o /app/publish/migrations
+
+# Stage 2: Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
 
-COPY --from=build /app/publish .
+COPY --from=build /app/publish/server ./server
+COPY --from=build /app/publish/migrations ./migrations
+COPY entrypoint.sh ./entrypoint.sh
+
+RUN chmod +x ./entrypoint.sh
 
 # Render uses PORT env variable
 ENV ASPNETCORE_URLS=http://+:${PORT:-10000}
@@ -36,4 +44,4 @@ ENV NPGSQL_DISABLE_GSSAPI=1
 
 EXPOSE 10000
 
-ENTRYPOINT ["dotnet", "server.dll"]
+ENTRYPOINT ["sh", "./entrypoint.sh"]
