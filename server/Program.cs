@@ -82,7 +82,8 @@ SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
 SqlMapper.AddTypeHandler(new TimeOnlyTypeHandler());
 
 // Load JWT settings from configuration
-var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
+var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>()
+    ?? throw new InvalidOperationException("JWT configuration section 'Jwt' is missing. Set Jwt__SecretKey, Jwt__Issuer, Jwt__Audience environment variables.");
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
