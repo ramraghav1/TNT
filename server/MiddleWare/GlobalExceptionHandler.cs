@@ -31,33 +31,49 @@ public sealed class GlobalExceptionHandler : IExceptionHandler
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
+        // Map known exception types to appropriate HTTP status codes
+        var (statusCode, rfcType) = exception switch
+        {
+            UnauthorizedAccessException => (
+                StatusCodes.Status401Unauthorized,
+                "https://tools.ietf.org/html/rfc9110#section-15.5.2"),
+            _ => (
+                StatusCodes.Status500InternalServerError,
+                "https://tools.ietf.org/html/rfc9110#section-15.6.1")
+        };
+
         // Structured logging with context (Serilog handles file/console routing)
-        _logger.LogError(exception,
-            "Unhandled exception: {Method} {Path} | User: {User} | IP: {IP}",
+        var logLevel = statusCode >= 500 ? Microsoft.Extensions.Logging.LogLevel.Error
+                                         : Microsoft.Extensions.Logging.LogLevel.Warning;
+        _logger.Log(logLevel, exception,
+            "Unhandled exception [{Status}]: {Method} {Path} | User: {User} | IP: {IP}",
+            statusCode,
             httpContext.Request.Method,
             httpContext.Request.Path,
             httpContext.User?.Identity?.Name ?? "Anonymous",
             httpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown");
 
         // Get localized error message
-        var errorMessage = _localizer["Error_InternalServerError"].Value;
+        var errorMessage = statusCode == StatusCodes.Status401Unauthorized
+            ? exception.Message
+            : _localizer["Error_InternalServerError"].Value;
 
         // Return RFC 9457 ProblemDetails response
         var problemDetails = new ProblemDetails
         {
-            Status = StatusCodes.Status500InternalServerError,
+            Status = statusCode,
             Title = errorMessage,
-            Type = "https://tools.ietf.org/html/rfc9110#section-15.6.1",
+            Type = rfcType,
             Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}"
         };
 
         // Include stack trace in development only
-        if (_environment.IsDevelopment())
+        if (_environment.IsDevelopment() && statusCode >= 500)
         {
             problemDetails.Detail = exception.ToString();
         }
 
-        httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        httpContext.Response.StatusCode = statusCode;
         await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
         return true; // Exception is handled

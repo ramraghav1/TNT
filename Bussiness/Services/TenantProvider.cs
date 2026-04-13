@@ -21,7 +21,7 @@ namespace Bussiness.Services
         public long? GetTenantId()
         {
             var user = _httpContextAccessor.HttpContext?.User;
-            if (user == null || !user.Identity?.IsAuthenticated == true)
+            if (user == null || user.Identity?.IsAuthenticated != true)
                 return null;
 
             // Extract TenantId from JWT claims
