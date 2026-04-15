@@ -253,9 +253,19 @@ namespace Repository.Repositories.TourAndTravels
                     i.end_date::timestamp AS end_date,
                     i.total_amount,
                     i.payment_status,
-                    i.created_at
+                    i.created_at,
+                    tr.full_name AS primary_traveler_name,
+                    tr.contact_number AS primary_traveler_contact,
+                    tr.email AS primary_traveler_email
                 FROM itinerary_instances i
                 JOIN itineraries t ON t.id = i.template_itinerary_id
+                LEFT JOIN LATERAL (
+                    SELECT full_name, contact_number, email
+                    FROM itinerary_instance_travelers
+                    WHERE itinerary_instance_id = i.id
+                    ORDER BY id ASC
+                    LIMIT 1
+                ) tr ON true
                 ORDER BY i.created_at DESC;";
 
             return _dbConnection.Query<BookingListItem>(sql).ToList();

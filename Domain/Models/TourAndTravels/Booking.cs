@@ -159,6 +159,9 @@ namespace Domain.Models.TourAndTravels
             public decimal TotalAmount { get; set; }
             public string PaymentStatus { get; set; } = "Unpaid";
             public DateTime CreatedAt { get; set; }
+            public string? PrimaryTravelerName { get; set; }
+            public string? PrimaryTravelerContact { get; set; }
+            public string? PrimaryTravelerEmail { get; set; }
         }
 
         // ===========================
