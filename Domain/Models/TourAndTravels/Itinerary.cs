@@ -9,6 +9,8 @@ namespace Domain.Models.TourAndTravels
             public string? Description { get; set; }
             public int DurationDays { get; set; }
             public string? DifficultyLevel { get; set; }
+            public string PricingMode { get; set; } = "DAILY_ACTIVITY";
+            public decimal? OverallPrice { get; set; }
             public List<CreateItineraryDayRequest> Days { get; set; } = new();
         }
 
@@ -22,6 +24,7 @@ namespace Domain.Models.TourAndTravels
             public bool BreakfastIncluded { get; set; }
             public bool LunchIncluded { get; set; }
             public bool DinnerIncluded { get; set; }
+            public decimal? DailyCost { get; set; }
             public List<string> Activities { get; set; } = new();
             public List<DayCostInput> Costs { get; set; } = new();
         }
@@ -41,6 +44,8 @@ namespace Domain.Models.TourAndTravels
             public string? Description { get; set; }
             public int DurationDays { get; set; }
             public string? DifficultyLevel { get; set; }
+            public string PricingMode { get; set; } = "DAILY_ACTIVITY";
+            public decimal? OverallPrice { get; set; }
         }
 
         public class ItineraryDetailResponse : ItineraryResponse
@@ -59,6 +64,7 @@ namespace Domain.Models.TourAndTravels
             public bool BreakfastIncluded { get; set; }
             public bool LunchIncluded { get; set; }
             public bool DinnerIncluded { get; set; }
+            public decimal? DailyCost { get; set; }
             public List<string> Activities { get; set; } = new();
             public List<DayCostInput> Costs { get; set; } = new();
         }
@@ -72,6 +78,7 @@ namespace Domain.Models.TourAndTravels
             public bool BreakfastIncluded { get; set; }
             public bool LunchIncluded { get; set; }
             public bool DinnerIncluded { get; set; }
+            public decimal? DailyCost { get; set; }
             public List<string> Activities { get; set; } = new();
             public List<DayCostInput> Costs { get; set; } = new();
         }
@@ -81,6 +88,8 @@ namespace Domain.Models.TourAndTravels
             public string? Description { get; set; }
             public int DurationDays { get; set; }
             public string? DifficultyLevel { get; set; }
+            public string PricingMode { get; set; } = "DAILY_ACTIVITY";
+            public decimal? OverallPrice { get; set; }
             public List<UpdateItineraryDayRequest> Days { get; set; } = new();
         }
     }

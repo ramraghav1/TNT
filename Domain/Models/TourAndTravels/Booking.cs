@@ -136,6 +136,32 @@ namespace Domain.Models.TourAndTravels
         }
 
         // ===========================
+        // Update Booking (edit existing instance)
+        // ===========================
+        public class UpdateBookingRequest
+        {
+            public DateTime StartDate { get; set; }
+            public DateTime EndDate { get; set; }
+            public string? SpecialRequests { get; set; }
+            public decimal TotalAmount { get; set; }
+            public List<TravelerRequest> Travelers { get; set; } = new();
+            public List<UpdateBookingDayRequest> Days { get; set; } = new();
+        }
+
+        public class UpdateBookingDayRequest
+        {
+            public long Id { get; set; }        // instance_day id
+            public string? Title { get; set; }
+            public string? Location { get; set; }
+            public string? Accommodation { get; set; }
+            public string? Transport { get; set; }
+            public bool BreakfastIncluded { get; set; }
+            public bool LunchIncluded { get; set; }
+            public bool DinnerIncluded { get; set; }
+            public List<string> Activities { get; set; } = new();
+        }
+
+        // ===========================
         // Approval
         // ===========================
         public class ApproveBookingRequest

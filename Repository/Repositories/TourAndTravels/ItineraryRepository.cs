@@ -32,9 +32,9 @@ namespace Repository.Repositories.TourAndTravels
                 {
                     string insertItineraryQuery = @"
                 INSERT INTO itineraries
-                (title, description, duration_days, difficulty_level)
+                (title, description, duration_days, difficulty_level, pricing_mode, overall_price)
                 VALUES
-                (@Title, @Description, @DurationDays, @DifficultyLevel)
+                (@Title, @Description, @DurationDays, @DifficultyLevel, @PricingMode, @OverallPrice)
                 RETURNING id;";
 
                     long itineraryId = _dbConnection.QuerySingle<long>(
@@ -50,10 +50,10 @@ namespace Repository.Repositories.TourAndTravels
                             string insertDayQuery = @"
                         INSERT INTO itinerary_days
                         (itinerary_id, day_number, title, location, accommodation, transport,
-                         breakfast_included, lunch_included, dinner_included)
+                         breakfast_included, lunch_included, dinner_included, daily_cost)
                         VALUES
                         (@ItineraryId, @DayNumber, @Title, @Location, @Accommodation, @Transport,
-                         @BreakfastIncluded, @LunchIncluded, @DinnerIncluded)
+                         @BreakfastIncluded, @LunchIncluded, @DinnerIncluded, @DailyCost)
                         RETURNING id;";
 
                             long dayId = _dbConnection.QuerySingle<long>(
@@ -68,7 +68,8 @@ namespace Repository.Repositories.TourAndTravels
                                     day.Transport,
                                     day.BreakfastIncluded,
                                     day.LunchIncluded,
-                                    day.DinnerIncluded
+                                    day.DinnerIncluded,
+                                    day.DailyCost
                                 },
                                 transaction
                             );
@@ -133,6 +134,8 @@ namespace Repository.Repositories.TourAndTravels
                         Description = request.Description,
                         DurationDays = request.DurationDays,
                         DifficultyLevel = request.DifficultyLevel,
+                        PricingMode = request.PricingMode,
+                        OverallPrice = request.OverallPrice,
                     };
                 }
                 catch
@@ -148,7 +151,7 @@ namespace Repository.Repositories.TourAndTravels
         // ============================================================
         public List<ItineraryResponse> GetAllItineraries()
         {
-            string sql = "SELECT id, title, description, duration_days, difficulty_level FROM itineraries";
+            string sql = "SELECT id, title, description, duration_days, difficulty_level, pricing_mode, overall_price FROM itineraries";
             return _dbConnection.Query<ItineraryResponse>(sql).ToList();
         }
 
@@ -157,14 +160,14 @@ namespace Repository.Repositories.TourAndTravels
         // ============================================================
         public ItineraryDetailResponse? GetItineraryById(long id)
         {
-            string sqlItinerary = "SELECT id, title, description, duration_days, difficulty_level FROM itineraries WHERE id = @Id";
+            string sqlItinerary = "SELECT id, title, description, duration_days, difficulty_level, pricing_mode, overall_price FROM itineraries WHERE id = @Id";
             var itinerary = _dbConnection.QuerySingleOrDefault<ItineraryDetailResponse>(sqlItinerary, new { Id = id });
 
             if (itinerary == null)
                 return null;
 
             string sqlDays = @"
-                SELECT id, day_number, title, location, accommodation, transport, breakfast_included, lunch_included, dinner_included
+                SELECT id, day_number, title, location, accommodation, transport, breakfast_included, lunch_included, dinner_included, daily_cost
                 FROM itinerary_days
                 WHERE itinerary_id = @ItineraryId
                 ORDER BY day_number";
@@ -238,11 +241,13 @@ namespace Repository.Repositories.TourAndTravels
                         SET title = @Title,
                             description = @Description,
                             duration_days = @DurationDays,
-                            difficulty_level = @DifficultyLevel
+                            difficulty_level = @DifficultyLevel,
+                            pricing_mode = @PricingMode,
+                            overall_price = @OverallPrice
                         WHERE id = @Id";
 
                     var affected = _dbConnection.Execute(updateSql,
-                        new { request.Title, request.Description, request.DurationDays, request.DifficultyLevel, Id = id },
+                        new { request.Title, request.Description, request.DurationDays, request.DifficultyLevel, request.PricingMode, request.OverallPrice, Id = id },
                         transaction);
 
                     if (affected == 0)
@@ -281,10 +286,10 @@ namespace Repository.Repositories.TourAndTravels
                             string insertDayQuery = @"
                                 INSERT INTO itinerary_days
                                 (itinerary_id, day_number, title, location, accommodation, transport,
-                                 breakfast_included, lunch_included, dinner_included)
+                                 breakfast_included, lunch_included, dinner_included, daily_cost)
                                 VALUES
                                 (@ItineraryId, @DayNumber, @Title, @Location, @Accommodation, @Transport,
-                                 @BreakfastIncluded, @LunchIncluded, @DinnerIncluded)
+                                 @BreakfastIncluded, @LunchIncluded, @DinnerIncluded, @DailyCost)
                                 RETURNING id;";
 
                             long dayId = _dbConnection.QuerySingle<long>(
@@ -299,7 +304,8 @@ namespace Repository.Repositories.TourAndTravels
                                     day.Transport,
                                     day.BreakfastIncluded,
                                     day.LunchIncluded,
-                                    day.DinnerIncluded
+                                    day.DinnerIncluded,
+                                    day.DailyCost
                                 },
                                 transaction);
 
@@ -346,6 +352,8 @@ namespace Repository.Repositories.TourAndTravels
                         Description = request.Description,
                         DurationDays = request.DurationDays,
                         DifficultyLevel = request.DifficultyLevel,
+                        PricingMode = request.PricingMode,
+                        OverallPrice = request.OverallPrice,
                     };
                 }
                 catch

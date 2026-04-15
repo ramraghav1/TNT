@@ -18,6 +18,7 @@ namespace Bussiness.Services.TourAndTravels
         PaymentResponse AddPayment(long id, AddPaymentRequest request);
         List<PaymentResponse> GetPayments(long id);
         bool UpdateStatus(long id, string status);
+        BookingDetailResponse? UpdateBooking(long instanceId, UpdateBookingRequest request);
         DashboardStats GetDashboardStats();
         bool AssignInventory(long instanceId, AssignInventoryRequest request);
         List<BookingInventoryItem> GetBookingInventory(long instanceId);
@@ -122,6 +123,16 @@ namespace Bussiness.Services.TourAndTravels
         public bool UpdateStatus(long id, string status)
         {
             return _repository.UpdateStatus(id, status);
+        }
+
+        // ===========================
+        // Update full booking (header + travelers + days)
+        // ===========================
+        public BookingDetailResponse? UpdateBooking(long instanceId, UpdateBookingRequest request)
+        {
+            var repoRequest = _mapper.Map<Repository.DataModels.TourAndTravels.BookingDTO.UpdateBookingRequest>(request);
+            var repoResponse = _repository.UpdateBooking(instanceId, repoRequest);
+            return repoResponse == null ? null : _mapper.Map<BookingDetailResponse>(repoResponse);
         }
 
         // ===========================

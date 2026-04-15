@@ -127,6 +127,19 @@ namespace server.Controller.TourAndTravels
         }
 
         // ===========================
+        // Update full booking (instance header + travelers + days)
+        // PUT /api/bookings/{id}
+        // Only this instance is updated — template/other bookings untouched
+        // ===========================
+        [HttpPut("{id:long}")]
+        public ActionResult<BookingDetailResponse> UpdateBooking(long id, [FromBody] UpdateBookingRequest request)
+        {
+            var result = _bookingService.UpdateBooking(id, request);
+            if (result == null) return NotFound();
+            return Ok(result);
+        }
+
+        // ===========================
         // Assign inventory to booking
         // POST /api/bookings/{id}/inventory
         // ===========================

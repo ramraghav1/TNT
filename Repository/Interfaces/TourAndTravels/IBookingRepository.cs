@@ -29,6 +29,9 @@ namespace Repository.Interfaces.TourAndTravels
         // Update booking status
         bool UpdateStatus(long instanceId, string status);
 
+        // Update full booking (header + travelers + days)
+        BookingDetailResponse? UpdateBooking(long instanceId, UpdateBookingRequest request);
+
         // Dashboard stats
         DashboardStatsDTO GetDashboardStats();
 

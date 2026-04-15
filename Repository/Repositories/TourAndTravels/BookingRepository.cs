@@ -30,17 +30,21 @@ namespace Repository.Repositories.TourAndTravels
             {
                 string bookingRef = $"BK-{DateTime.UtcNow:yyyyMMddHHmmss}-{new Random().Next(1000, 9999)}";
 
+                // Calculate total persons from all travelers
+                int totalPerson = request.Travelers.Sum(t => t.Adults + t.Children + t.Seniors);
+                if (totalPerson < 1) totalPerson = 1;
+
                 string sqlInstance = @"
                     INSERT INTO itinerary_instances
                     (template_itinerary_id, source_instance_id, status, start_date, end_date,
                      is_customized, booking_reference, special_requests,
                      payment_status, total_amount, amount_paid, balance_amount,
-                     traveler_approved, admin_approved, created_at)
+                     traveler_approved, admin_approved, total_person, created_at)
                     VALUES
                     (@TemplateId, @SourceInstanceId, 'Draft', @StartDate, @EndDate,
                      false, @BookingRef, @SpecialRequests,
                      'Unpaid', @TotalAmount, 0, @TotalAmount,
-                     false, false, NOW())
+                     false, false, @TotalPerson, NOW())
                     RETURNING id;";
 
                 long instanceId = _dbConnection.QuerySingle<long>(sqlInstance, new
@@ -51,7 +55,8 @@ namespace Repository.Repositories.TourAndTravels
                     request.EndDate,
                     BookingRef = bookingRef,
                     request.SpecialRequests,
-                    request.TotalAmount
+                    request.TotalAmount,
+                    TotalPerson = totalPerson
                 }, transaction);
 
                 if (request.SourceInstanceId.HasValue && request.SourceInstanceId.Value > 0)
@@ -261,13 +266,14 @@ namespace Repository.Repositories.TourAndTravels
                 JOIN itineraries t ON t.id = i.template_itinerary_id
                 LEFT JOIN LATERAL (
                     SELECT full_name, contact_number, email
-                    FROM itinerary_instance_travelers
+                    FROM travelers
                     WHERE itinerary_instance_id = i.id
                     ORDER BY id ASC
                     LIMIT 1
                 ) tr ON true
                 ORDER BY i.created_at DESC;";
 
+            
             return _dbConnection.Query<BookingListItem>(sql).ToList();
         }
 
@@ -753,6 +759,125 @@ namespace Repository.Repositories.TourAndTravels
                 "DELETE FROM booking_inventory WHERE id = @Id;",
                 new { Id = itemId });
             return rows > 0;
+        }
+
+        // ============================================================
+        // UPDATE BOOKING (header + travelers + all days)
+        // Only this instance is updated — template and other instances untouched
+        // ============================================================
+        public BookingDetailResponse? UpdateBooking(long instanceId, UpdateBookingRequest request)
+        {
+            if (_dbConnection.State != ConnectionState.Open)
+                _dbConnection.Open();
+
+            using var transaction = _dbConnection.BeginTransaction();
+            try
+            {
+                // 1. Update instance header
+                int totalPerson = request.Travelers.Sum(t => t.Adults + t.Children + t.Seniors);
+                if (totalPerson < 1) totalPerson = 1;
+
+                string sqlUpdateInstance = @"
+                    UPDATE itinerary_instances
+                    SET start_date = @StartDate,
+                        end_date = @EndDate,
+                        special_requests = @SpecialRequests,
+                        total_amount = @TotalAmount,
+                        balance_amount = @TotalAmount - amount_paid,
+                        total_person = @TotalPerson,
+                        is_customized = true
+                    WHERE id = @InstanceId;";
+
+                int rows = _dbConnection.Execute(sqlUpdateInstance, new
+                {
+                    InstanceId = instanceId,
+                    request.StartDate,
+                    request.EndDate,
+                    request.SpecialRequests,
+                    request.TotalAmount,
+                    TotalPerson = totalPerson
+                }, transaction);
+
+                if (rows == 0)
+                {
+                    transaction.Rollback();
+                    return null;
+                }
+
+                // 2. Replace travelers: delete existing, re-insert
+                _dbConnection.Execute(
+                    "DELETE FROM travelers WHERE itinerary_instance_id = @InstanceId;",
+                    new { InstanceId = instanceId }, transaction);
+
+                foreach (var t in request.Travelers)
+                {
+                    _dbConnection.Execute(@"
+                        INSERT INTO travelers
+                        (itinerary_instance_id, full_name, contact_number, email, nationality, adults, children, seniors)
+                        VALUES (@InstanceId, @FullName, @ContactNumber, @Email, @Nationality, @Adults, @Children, @Seniors);",
+                        new
+                        {
+                            InstanceId = instanceId,
+                            t.FullName,
+                            t.ContactNumber,
+                            t.Email,
+                            t.Nationality,
+                            t.Adults,
+                            t.Children,
+                            t.Seniors
+                        }, transaction);
+                }
+
+                // 3. Update each day (only update, never delete/add days)
+                foreach (var day in request.Days)
+                {
+                    _dbConnection.Execute(@"
+                        UPDATE itinerary_instance_days
+                        SET title = @Title,
+                            location = @Location,
+                            accommodation = @Accommodation,
+                            transport = @Transport,
+                            breakfast_included = @BreakfastIncluded,
+                            lunch_included = @LunchIncluded,
+                            dinner_included = @DinnerIncluded
+                        WHERE id = @DayId AND itinerary_instance_id = @InstanceId;",
+                        new
+                        {
+                            DayId = day.Id,
+                            InstanceId = instanceId,
+                            day.Title,
+                            day.Location,
+                            day.Accommodation,
+                            day.Transport,
+                            day.BreakfastIncluded,
+                            day.LunchIncluded,
+                            day.DinnerIncluded
+                        }, transaction);
+
+                    // Replace activities for this day
+                    _dbConnection.Execute(
+                        "DELETE FROM itinerary_instance_day_activities WHERE instance_day_id = @DayId;",
+                        new { DayId = day.Id }, transaction);
+
+                    foreach (var activity in day.Activities)
+                    {
+                        _dbConnection.Execute(@"
+                            INSERT INTO itinerary_instance_day_activities (instance_day_id, activity)
+                            VALUES (@DayId, @Activity);",
+                            new { DayId = day.Id, Activity = activity }, transaction);
+                    }
+                }
+
+                transaction.Commit();
+
+                // Return the full updated booking detail
+                return GetBookingById(instanceId);
+            }
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
         }
     }
 }
