@@ -18,6 +18,7 @@ namespace Domain.Models.TourAndTravels
         {
             public int DayNumber { get; set; }
             public string? Title { get; set; }
+            public string? Description { get; set; }
             public string? Location { get; set; }
             public string? Accommodation { get; set; }
             public string? Transport { get; set; }
@@ -58,6 +59,7 @@ namespace Domain.Models.TourAndTravels
             public long Id { get; set; }
             public int DayNumber { get; set; }
             public string? Title { get; set; }
+            public string? Description { get; set; }
             public string? Location { get; set; }
             public string? Accommodation { get; set; }
             public string? Transport { get; set; }
@@ -72,6 +74,7 @@ namespace Domain.Models.TourAndTravels
         {
             public int DayNumber { get; set; }
             public string? Title { get; set; }
+            public string? Description { get; set; }
             public string? Location { get; set; }
             public string? Accommodation { get; set; }
             public string? Transport { get; set; }

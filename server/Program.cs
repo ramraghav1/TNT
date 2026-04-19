@@ -271,6 +271,10 @@ builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IPricingService, PricingService>();
 builder.Services.AddScoped<IPricingRepository, PricingRepository>();
 
+// Tour & Travels - Itinerary Proposals
+builder.Services.AddScoped<IItineraryProposalService, ItineraryProposalService>();
+builder.Services.AddScoped<IItineraryProposalRepository, ItineraryProposalRepository>();
+
 // Tour & Travels - Inventory Management
 builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
@@ -289,9 +293,14 @@ builder.Services.AddScoped<IDepartureManagementRepository, DepartureManagementRe
 builder.Services.AddScoped<IFinanceRepository, FinanceRepository>();
 builder.Services.AddScoped<IFinanceService, FinanceService>();
 
+// Multi-Currency / Exchange Rates
+builder.Services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
+builder.Services.AddScoped<IExchangeRateService, ExchangeRateService>();
+
 builder.Services.AddScoped<IDemoRequestRepository, DemoRequestRepository>();
 builder.Services.AddScoped<IDemoRequestService, DemoRequestService>();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.Configure<CompanySettings>(builder.Configuration.GetSection("CompanySettings"));
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
@@ -368,7 +377,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(allowedOrigins)
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
 
@@ -402,6 +412,15 @@ app.UseRateLimiter();
 
 // 5. CORS
 app.UseCors();
+
+// 5a. Serve uploaded files (payment screenshots etc.)
+var uploadsPath = Path.Combine(app.Environment.ContentRootPath, "uploads");
+if (!Directory.Exists(uploadsPath)) Directory.CreateDirectory(uploadsPath);
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(uploadsPath),
+    RequestPath = "/uploads"
+});
 
 // 5b. Request Localization
 app.UseRequestLocalization();
