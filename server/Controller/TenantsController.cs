@@ -133,6 +133,71 @@ namespace server.Controller
         }
 
         /// <summary>
+        /// Get all tenants (admin only)
+        /// </summary>
+        [HttpGet("all")]
+        public IActionResult GetAllTenants()
+        {
+            var tenants = _tenantRepository.GetAllTenants();
+            var response = tenants.Select(t => new TenantResponse
+            {
+                Id = t.Id,
+                Name = t.Name,
+                Subdomain = t.Subdomain,
+                Status = t.Status,
+                Settings = t.Settings,
+                Products = _tenantRepository.GetTenantProducts(t.Id).ToArray()
+            });
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Get tenant by ID (admin only)
+        /// </summary>
+        [HttpGet("{id}")]
+        public IActionResult GetTenantById(long id)
+        {
+            var tenant = _tenantRepository.GetTenantById(id);
+            if (tenant == null)
+                return NotFound(new { message = "Tenant not found" });
+
+            var products = _tenantRepository.GetTenantProducts(id);
+            var response = new TenantResponse
+            {
+                Id = tenant.Id,
+                Name = tenant.Name,
+                Subdomain = tenant.Subdomain,
+                Status = tenant.Status,
+                Settings = tenant.Settings,
+                Products = products.ToArray()
+            };
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Update tenant by ID (admin only)
+        /// </summary>
+        [HttpPut("{id}")]
+        public IActionResult UpdateTenantById(long id, [FromBody] MultiTenantUpdateRequest request)
+        {
+            var tenant = _tenantRepository.GetTenantById(id);
+            if (tenant == null)
+                return NotFound(new { message = "Tenant not found" });
+
+            var success = _tenantRepository.UpdateTenant(
+                id,
+                request.Name,
+                request.LogoUrl,
+                request.ContactPhone
+            );
+
+            if (!success)
+                return BadRequest(new { message = "Failed to update tenant" });
+
+            return Ok(new { message = "Tenant updated successfully" });
+        }
+
+        /// <summary>
         /// Create new tenant (requires authentication)
         /// Only authenticated users can create tenants
         /// </summary>
