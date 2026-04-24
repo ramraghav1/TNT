@@ -50,10 +50,10 @@ namespace Repository.Repositories.TourAndTravels
                             string insertDayQuery = @"
                         INSERT INTO itinerary_days
                         (itinerary_id, day_number, title, description, location, accommodation, transport,
-                         breakfast_included, lunch_included, dinner_included, daily_cost)
+                         breakfast_included, lunch_included, dinner_included, daily_cost, hotel_id, guide_id)
                         VALUES
                         (@ItineraryId, @DayNumber, @Title, @Description, @Location, @Accommodation, @Transport,
-                         @BreakfastIncluded, @LunchIncluded, @DinnerIncluded, @DailyCost)
+                         @BreakfastIncluded, @LunchIncluded, @DinnerIncluded, @DailyCost, @HotelId, @GuideId)
                         RETURNING id;";
 
                             long dayId = _dbConnection.QuerySingle<long>(
@@ -70,7 +70,9 @@ namespace Repository.Repositories.TourAndTravels
                                     day.BreakfastIncluded,
                                     day.LunchIncluded,
                                     day.DinnerIncluded,
-                                    day.DailyCost
+                                    day.DailyCost,
+                                    day.HotelId,
+                                    day.GuideId
                                 },
                                 transaction
                             );
@@ -168,7 +170,7 @@ namespace Repository.Repositories.TourAndTravels
                 return null;
 
             string sqlDays = @"
-                SELECT id, day_number, title, description, location, accommodation, transport, breakfast_included, lunch_included, dinner_included, daily_cost
+                SELECT id, day_number, title, description, location, accommodation, transport, breakfast_included, lunch_included, dinner_included, daily_cost, hotel_id, guide_id
                 FROM itinerary_days
                 WHERE itinerary_id = @ItineraryId
                 ORDER BY day_number";
@@ -287,10 +289,10 @@ namespace Repository.Repositories.TourAndTravels
                             string insertDayQuery = @"
                                 INSERT INTO itinerary_days
                                 (itinerary_id, day_number, title, description, location, accommodation, transport,
-                                 breakfast_included, lunch_included, dinner_included, daily_cost)
+                                 breakfast_included, lunch_included, dinner_included, daily_cost, hotel_id, guide_id)
                                 VALUES
                                 (@ItineraryId, @DayNumber, @Title, @Description, @Location, @Accommodation, @Transport,
-                                 @BreakfastIncluded, @LunchIncluded, @DinnerIncluded, @DailyCost)
+                                 @BreakfastIncluded, @LunchIncluded, @DinnerIncluded, @DailyCost, @HotelId, @GuideId)
                                 RETURNING id;";
 
                             long dayId = _dbConnection.QuerySingle<long>(
@@ -307,7 +309,9 @@ namespace Repository.Repositories.TourAndTravels
                                     day.BreakfastIncluded,
                                     day.LunchIncluded,
                                     day.DinnerIncluded,
-                                    day.DailyCost
+                                    day.DailyCost,
+                                    day.HotelId,
+                                    day.GuideId
                                 },
                                 transaction);
 
@@ -386,9 +390,9 @@ namespace Repository.Repositories.TourAndTravels
         {
             string sql = @"
                 INSERT INTO itinerary_days 
-                    (itinerary_id, day_number, title, description, location, accommodation, transport, breakfast_included, lunch_included, dinner_included)
+                    (itinerary_id, day_number, title, description, location, accommodation, transport, breakfast_included, lunch_included, dinner_included, hotel_id, guide_id)
                 VALUES 
-                    (@ItineraryId, @DayNumber, @Title, @Description, @Location, @Accommodation, @Transport, @BreakfastIncluded, @LunchIncluded, @DinnerIncluded)
+                    (@ItineraryId, @DayNumber, @Title, @Description, @Location, @Accommodation, @Transport, @BreakfastIncluded, @LunchIncluded, @DinnerIncluded, @HotelId, @GuideId)
                 RETURNING id;";
 
             var dayId = _dbConnection.ExecuteScalar<long>(sql, new
@@ -402,7 +406,9 @@ namespace Repository.Repositories.TourAndTravels
                 request.Transport,
                 request.BreakfastIncluded,
                 request.LunchIncluded,
-                request.DinnerIncluded
+                request.DinnerIncluded,
+                request.HotelId,
+                request.GuideId
             });
 
             return new ItineraryDayResponse
@@ -435,7 +441,9 @@ namespace Repository.Repositories.TourAndTravels
                     transport = COALESCE(@Transport, transport),
                     breakfast_included = COALESCE(@BreakfastIncluded, breakfast_included),
                     lunch_included = COALESCE(@LunchIncluded, lunch_included),
-                    dinner_included = COALESCE(@DinnerIncluded, dinner_included)
+                    dinner_included = COALESCE(@DinnerIncluded, dinner_included),
+                    hotel_id = @HotelId,
+                    guide_id = @GuideId
                 WHERE id = @DayId AND itinerary_id = @ItineraryId";
 
             var affected = _dbConnection.Execute(sql, new
@@ -448,6 +456,8 @@ namespace Repository.Repositories.TourAndTravels
                 request.BreakfastIncluded,
                 request.LunchIncluded,
                 request.DinnerIncluded,
+                request.HotelId,
+                request.GuideId,
                 DayId = dayId,
                 ItineraryId = itineraryId
             });

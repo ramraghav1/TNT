@@ -41,6 +41,7 @@ namespace Bussiness.Services.TourAndTravels
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
         private readonly INotificationService _notificationService;
+        private readonly IBookingService _bookingService;
         private readonly ILogger<ItineraryProposalService> _logger;
 
         public ItineraryProposalService(
@@ -48,12 +49,14 @@ namespace Bussiness.Services.TourAndTravels
             IMapper mapper,
             IEmailService emailService,
             INotificationService notificationService,
+            IBookingService bookingService,
             ILogger<ItineraryProposalService> logger)
         {
             _repository = repository;
             _mapper = mapper;
             _emailService = emailService;
             _notificationService = notificationService;
+            _bookingService = bookingService;
             _logger = logger;
         }
 
@@ -179,14 +182,58 @@ namespace Bussiness.Services.TourAndTravels
 
             if (updated)
             {
-                _ = _notificationService.CreateAndBroadcastAsync(new CreateNotification
+                // Auto-create booking from the accepted proposal
+                try
                 {
-                    Type = "proposal",
-                    Title = "Proposal Accepted",
-                    Message = $"{proposal.TravelerName} accepted the itinerary proposal for {proposal.ItineraryTitle}",
-                    Link = "/proposals",
-                    Icon = "pi-check-circle"
-                });
+                    var bookingRequest = new Booking.CreateBookingRequest
+                    {
+                        ItineraryId = proposal.ItineraryId,
+                        StartDate = proposal.StartDate,
+                        EndDate = proposal.EndDate,
+                        TotalAmount = proposal.TotalAmount,
+                        SpecialRequests = proposal.Notes,
+                        Travelers = new List<Booking.TravelerRequest>
+                        {
+                            new Booking.TravelerRequest
+                            {
+                                FullName = proposal.TravelerName,
+                                Email = proposal.TravelerEmail,
+                                ContactNumber = proposal.TravelerPhone,
+                                Adults = 1
+                            }
+                        }
+                    };
+
+                    var booking = _bookingService.CreateBooking(bookingRequest);
+                    _logger.LogInformation(
+                        "Auto-created booking {BookingRef} from accepted proposal {ProposalId} for {Traveler}",
+                        booking.BookingReference, proposal.Id, proposal.TravelerName);
+
+                    // Update proposal status to confirmed since booking is created
+                    _repository.UpdateProposalStatus(proposal.Id, "Confirmed");
+
+                    _ = _notificationService.CreateAndBroadcastAsync(new CreateNotification
+                    {
+                        Type = "proposal",
+                        Title = "Proposal Accepted & Booking Created",
+                        Message = $"{proposal.TravelerName} accepted the proposal for {proposal.ItineraryTitle}. Booking {booking.BookingReference} created automatically.",
+                        Link = "/booking-list",
+                        Icon = "pi-check-circle"
+                    });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to auto-create booking from proposal {ProposalId}. Proposal is accepted but booking needs manual creation.", proposal.Id);
+
+                    _ = _notificationService.CreateAndBroadcastAsync(new CreateNotification
+                    {
+                        Type = "proposal",
+                        Title = "Proposal Accepted (Booking Failed)",
+                        Message = $"{proposal.TravelerName} accepted the proposal for {proposal.ItineraryTitle}, but auto-booking failed. Please create booking manually.",
+                        Link = "/proposals",
+                        Icon = "pi-exclamation-triangle"
+                    });
+                }
             }
 
             return updated;

@@ -24,11 +24,13 @@ namespace Repository.Repositories.TourAndTravels
             string insertQuery = @"
                 INSERT INTO activities
                 (name, activity_type, location, duration_hours, difficulty_level, max_participants,
-                 min_participants, equipment, price_per_person, description, safety_instructions, images,
+                 min_participants, equipment, price_per_person, price_per_person_usd, price_per_person_inr,
+                 description, safety_instructions, images,
                  is_active, created_by)
                 VALUES
                 (@Name, @ActivityType, @Location, @DurationHours, @DifficultyLevel, @MaxParticipants,
-                 @MinParticipants, @Equipment::jsonb, @PricePerPerson, @Description, @SafetyInstructions, @Images::jsonb,
+                 @MinParticipants, @Equipment::jsonb, @PricePerPerson, @PricePerPersonUsd, @PricePerPersonInr,
+                 @Description, @SafetyInstructions, @Images::jsonb,
                  true, @CreatedBy)
                 RETURNING id;";
 
@@ -45,6 +47,8 @@ namespace Repository.Repositories.TourAndTravels
                     request.MinParticipants,
                     Equipment = JsonConvert.SerializeObject(request.Equipment ?? new List<string>()),
                     request.PricePerPerson,
+                    request.PricePerPersonUsd,
+                    request.PricePerPersonInr,
                     request.Description,
                     request.SafetyInstructions,
                     Images = JsonConvert.SerializeObject(request.Images ?? new List<string>()),
@@ -64,7 +68,8 @@ namespace Repository.Repositories.TourAndTravels
             string query = @"
                 SELECT 
                     id, name, activity_type, location, duration_hours, difficulty_level, max_participants,
-                    min_participants, equipment, price_per_person, description, safety_instructions, images,
+                    min_participants, equipment, price_per_person, price_per_person_usd, price_per_person_inr,
+                    description, safety_instructions, images,
                     is_active, created_by, created_at
                 FROM activities
                 WHERE (@IncludeInactive = true OR is_active = true)
@@ -86,6 +91,8 @@ namespace Repository.Repositories.TourAndTravels
                     ? new List<string>() 
                     : JsonConvert.DeserializeObject<List<string>>(a.Equipment) ?? new List<string>(),
                 PricePerPerson = a.PricePerPerson,
+                PricePerPersonUsd = a.PricePerPersonUsd,
+                PricePerPersonInr = a.PricePerPersonInr,
                 Description = a.Description,
                 SafetyInstructions = a.SafetyInstructions,
                 Images = string.IsNullOrWhiteSpace(a.Images) 
@@ -101,7 +108,8 @@ namespace Repository.Repositories.TourAndTravels
             string query = @"
                 SELECT 
                     id, name, activity_type, location, duration_hours, difficulty_level, max_participants,
-                    min_participants, equipment, price_per_person, description, safety_instructions, images,
+                    min_participants, equipment, price_per_person, price_per_person_usd, price_per_person_inr,
+                    description, safety_instructions, images,
                     is_active, created_by, created_at
                 FROM activities
                 WHERE id = @Id;";
@@ -125,6 +133,8 @@ namespace Repository.Repositories.TourAndTravels
                     ? new List<string>() 
                     : JsonConvert.DeserializeObject<List<string>>(activity.Equipment) ?? new List<string>(),
                 PricePerPerson = activity.PricePerPerson,
+                PricePerPersonUsd = activity.PricePerPersonUsd,
+                PricePerPersonInr = activity.PricePerPersonInr,
                 Description = activity.Description,
                 SafetyInstructions = activity.SafetyInstructions,
                 Images = string.IsNullOrWhiteSpace(activity.Images) 
@@ -185,6 +195,16 @@ namespace Repository.Repositories.TourAndTravels
             {
                 updateFields.Add("price_per_person = @PricePerPerson");
                 parameters.Add("PricePerPerson", request.PricePerPerson);
+            }
+            if (request.PricePerPersonUsd.HasValue)
+            {
+                updateFields.Add("price_per_person_usd = @PricePerPersonUsd");
+                parameters.Add("PricePerPersonUsd", request.PricePerPersonUsd);
+            }
+            if (request.PricePerPersonInr.HasValue)
+            {
+                updateFields.Add("price_per_person_inr = @PricePerPersonInr");
+                parameters.Add("PricePerPersonInr", request.PricePerPersonInr);
             }
             if (request.Description != null)
             {

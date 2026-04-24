@@ -64,9 +64,9 @@ namespace Repository.Repositories.TourAndTravels
                         {
                             string insertRoomQuery = @"
                                 INSERT INTO hotel_rooms
-                                (hotel_id, room_type, capacity, total_rooms, price_per_night, features)
+                                (hotel_id, room_type, capacity, total_rooms, price_per_night, price_per_night_usd, price_per_night_inr, features)
                                 VALUES
-                                (@HotelId, @RoomType, @Capacity, @TotalRooms, @PricePerNight, @Features::jsonb);";
+                                (@HotelId, @RoomType, @Capacity, @TotalRooms, @PricePerNight, @PricePerNightUsd, @PricePerNightInr, @Features::jsonb);";
 
                             _dbConnection.Execute(
                                 insertRoomQuery,
@@ -77,6 +77,8 @@ namespace Repository.Repositories.TourAndTravels
                                     room.Capacity,
                                     room.TotalRooms,
                                     room.PricePerNight,
+                                    room.PricePerNightUsd,
+                                    room.PricePerNightInr,
                                     Features = JsonConvert.SerializeObject(room.Features ?? new List<string>())
                                 },
                                 transaction
@@ -152,7 +154,7 @@ namespace Repository.Repositories.TourAndTravels
             // Load rooms
             string roomsQuery = @"
                 SELECT 
-                    id, hotel_id, room_type, capacity, total_rooms, price_per_night, features
+                    id, hotel_id, room_type, capacity, total_rooms, price_per_night, price_per_night_usd, price_per_night_inr, features
                 FROM hotel_rooms
                 WHERE hotel_id = @HotelId
                 ORDER BY room_type;";
@@ -182,6 +184,8 @@ namespace Repository.Repositories.TourAndTravels
                     Capacity = r.Capacity,
                     TotalRooms = r.TotalRooms,
                     PricePerNight = r.PricePerNight,
+                    PricePerNightUsd = r.PricePerNightUsd,
+                    PricePerNightInr = r.PricePerNightInr,
                     Features = string.IsNullOrWhiteSpace(r.Features) 
                         ? new List<string>() 
                         : JsonConvert.DeserializeObject<List<string>>(r.Features) ?? new List<string>()
@@ -270,9 +274,9 @@ namespace Repository.Repositories.TourAndTravels
                         {
                             string insertRoomQuery = @"
                                 INSERT INTO hotel_rooms
-                                (hotel_id, room_type, capacity, total_rooms, price_per_night, features)
+                                (hotel_id, room_type, capacity, total_rooms, price_per_night, price_per_night_usd, price_per_night_inr, features)
                                 VALUES
-                                (@HotelId, @RoomType, @Capacity, @TotalRooms, @PricePerNight, @Features::jsonb);";
+                                (@HotelId, @RoomType, @Capacity, @TotalRooms, @PricePerNight, @PricePerNightUsd, @PricePerNightInr, @Features::jsonb);";
 
                             _dbConnection.Execute(
                                 insertRoomQuery,
@@ -283,6 +287,8 @@ namespace Repository.Repositories.TourAndTravels
                                     room.Capacity,
                                     room.TotalRooms,
                                     room.PricePerNight,
+                                    room.PricePerNightUsd,
+                                    room.PricePerNightInr,
                                     Features = JsonConvert.SerializeObject(room.Features ?? new List<string>())
                                 },
                                 transaction

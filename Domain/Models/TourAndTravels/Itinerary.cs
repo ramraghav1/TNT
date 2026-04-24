@@ -26,6 +26,8 @@ namespace Domain.Models.TourAndTravels
             public bool LunchIncluded { get; set; }
             public bool DinnerIncluded { get; set; }
             public decimal? DailyCost { get; set; }
+            public long? HotelId { get; set; }
+            public long? GuideId { get; set; }
             public List<string> Activities { get; set; } = new();
             public List<DayCostInput> Costs { get; set; } = new();
         }
@@ -67,6 +69,8 @@ namespace Domain.Models.TourAndTravels
             public bool LunchIncluded { get; set; }
             public bool DinnerIncluded { get; set; }
             public decimal? DailyCost { get; set; }
+            public long? HotelId { get; set; }
+            public long? GuideId { get; set; }
             public List<string> Activities { get; set; } = new();
             public List<DayCostInput> Costs { get; set; } = new();
         }
@@ -82,6 +86,8 @@ namespace Domain.Models.TourAndTravels
             public bool LunchIncluded { get; set; }
             public bool DinnerIncluded { get; set; }
             public decimal? DailyCost { get; set; }
+            public long? HotelId { get; set; }
+            public long? GuideId { get; set; }
             public List<string> Activities { get; set; } = new();
             public List<DayCostInput> Costs { get; set; } = new();
         }

@@ -32,6 +32,8 @@ namespace Repository.DataModels.TourAndTravels
         public int Capacity { get; set; }
         public int TotalRooms { get; set; }
         public decimal PricePerNight { get; set; }
+        public decimal? PricePerNightUsd { get; set; }
+        public decimal? PricePerNightInr { get; set; }
         public string? Features { get; set; }
     }
 
@@ -47,7 +49,11 @@ namespace Repository.DataModels.TourAndTravels
         public int Capacity { get; set; }
         public string? Features { get; set; }
         public decimal PricePerDay { get; set; }
+        public decimal? PricePerDayUsd { get; set; }
+        public decimal? PricePerDayInr { get; set; }
         public decimal? PricePerKm { get; set; }
+        public decimal? PricePerKmUsd { get; set; }
+        public decimal? PricePerKmInr { get; set; }
         public string? DriverName { get; set; }
         public string? DriverContact { get; set; }
         public string? InsuranceNumber { get; set; }
@@ -74,6 +80,8 @@ namespace Repository.DataModels.TourAndTravels
         public string? Specialization { get; set; }
         public string? CertificationNumber { get; set; }
         public decimal PricePerDay { get; set; }
+        public decimal? PricePerDayUsd { get; set; }
+        public decimal? PricePerDayInr { get; set; }
         public decimal? Rating { get; set; }
         public string? Bio { get; set; }
         public string? Photo { get; set; }
@@ -98,6 +106,8 @@ namespace Repository.DataModels.TourAndTravels
         public int? MinParticipants { get; set; }
         public string? Equipment { get; set; }
         public decimal PricePerPerson { get; set; }
+        public decimal? PricePerPersonUsd { get; set; }
+        public decimal? PricePerPersonInr { get; set; }
         public string? Description { get; set; }
         public string? SafetyInstructions { get; set; }
         public string? Images { get; set; }

@@ -24,11 +24,13 @@ namespace Repository.Repositories.TourAndTravels
             string insertQuery = @"
                 INSERT INTO vehicles
                 (vehicle_type, model, registration_number, capacity, features, price_per_day,
-                 price_per_km, driver_name, driver_contact, insurance_number, insurance_expiry, 
+                 price_per_day_usd, price_per_day_inr, price_per_km, price_per_km_usd, price_per_km_inr,
+                 driver_name, driver_contact, insurance_number, insurance_expiry, 
                  permit_number, permit_expiry, description, is_active, created_by)
                 VALUES
                 (@VehicleType, @Model, @RegistrationNumber, @Capacity, @Features::jsonb, @PricePerDay,
-                 @PricePerKm, @DriverName, @DriverContact, @InsuranceNumber, @InsuranceExpiry,
+                 @PricePerDayUsd, @PricePerDayInr, @PricePerKm, @PricePerKmUsd, @PricePerKmInr,
+                 @DriverName, @DriverContact, @InsuranceNumber, @InsuranceExpiry,
                  @PermitNumber, @PermitExpiry, @Description, true, @CreatedBy)
                 RETURNING id;";
 
@@ -42,7 +44,11 @@ namespace Repository.Repositories.TourAndTravels
                     request.Capacity,
                     Features = JsonConvert.SerializeObject(request.Features ?? new List<string>()),
                     request.PricePerDay,
+                    request.PricePerDayUsd,
+                    request.PricePerDayInr,
                     request.PricePerKm,
+                    request.PricePerKmUsd,
+                    request.PricePerKmInr,
                     request.DriverName,
                     request.DriverContact,
                     request.InsuranceNumber,
@@ -66,7 +72,8 @@ namespace Repository.Repositories.TourAndTravels
             string query = @"
                 SELECT 
                     id, vehicle_type, model, registration_number, capacity, features, price_per_day,
-                    price_per_km, driver_name, driver_contact, insurance_number, insurance_expiry, 
+                    price_per_day_usd, price_per_day_inr, price_per_km, price_per_km_usd, price_per_km_inr,
+                    driver_name, driver_contact, insurance_number, insurance_expiry, 
                     permit_number, permit_expiry, description, is_active, created_by, created_at
                 FROM vehicles
                 WHERE (@IncludeInactive = true OR is_active = true)
@@ -85,7 +92,11 @@ namespace Repository.Repositories.TourAndTravels
                     ? new List<string>() 
                     : JsonConvert.DeserializeObject<List<string>>(v.Features) ?? new List<string>(),
                 PricePerDay = v.PricePerDay,
+                PricePerDayUsd = v.PricePerDayUsd,
+                PricePerDayInr = v.PricePerDayInr,
                 PricePerKm = v.PricePerKm,
+                PricePerKmUsd = v.PricePerKmUsd,
+                PricePerKmInr = v.PricePerKmInr,
                 DriverName = v.DriverName,
                 DriverContact = v.DriverContact,
                 InsuranceNumber = v.InsuranceNumber,
@@ -104,7 +115,8 @@ namespace Repository.Repositories.TourAndTravels
             string query = @"
                 SELECT 
                     id, vehicle_type, model, registration_number, capacity, features, price_per_day,
-                    price_per_km, driver_name, driver_contact, insurance_number, insurance_expiry,
+                    price_per_day_usd, price_per_day_inr, price_per_km, price_per_km_usd, price_per_km_inr,
+                    driver_name, driver_contact, insurance_number, insurance_expiry,
                     permit_number, permit_expiry, description, is_active, created_by, created_at
                 FROM vehicles
                 WHERE id = @Id;";
@@ -125,7 +137,11 @@ namespace Repository.Repositories.TourAndTravels
                     ? new List<string>() 
                     : JsonConvert.DeserializeObject<List<string>>(vehicle.Features) ?? new List<string>(),
                 PricePerDay = vehicle.PricePerDay,
+                PricePerDayUsd = vehicle.PricePerDayUsd,
+                PricePerDayInr = vehicle.PricePerDayInr,
                 PricePerKm = vehicle.PricePerKm,
+                PricePerKmUsd = vehicle.PricePerKmUsd,
+                PricePerKmInr = vehicle.PricePerKmInr,
                 DriverName = vehicle.DriverName,
                 DriverContact = vehicle.DriverContact,
                 InsuranceNumber = vehicle.InsuranceNumber,
@@ -175,10 +191,30 @@ namespace Repository.Repositories.TourAndTravels
                 updateFields.Add("price_per_day = @PricePerDay");
                 parameters.Add("PricePerDay", request.PricePerDay);
             }
+            if (request.PricePerDayUsd.HasValue)
+            {
+                updateFields.Add("price_per_day_usd = @PricePerDayUsd");
+                parameters.Add("PricePerDayUsd", request.PricePerDayUsd);
+            }
+            if (request.PricePerDayInr.HasValue)
+            {
+                updateFields.Add("price_per_day_inr = @PricePerDayInr");
+                parameters.Add("PricePerDayInr", request.PricePerDayInr);
+            }
             if (request.PricePerKm.HasValue)
             {
                 updateFields.Add("price_per_km = @PricePerKm");
                 parameters.Add("PricePerKm", request.PricePerKm);
+            }
+            if (request.PricePerKmUsd.HasValue)
+            {
+                updateFields.Add("price_per_km_usd = @PricePerKmUsd");
+                parameters.Add("PricePerKmUsd", request.PricePerKmUsd);
+            }
+            if (request.PricePerKmInr.HasValue)
+            {
+                updateFields.Add("price_per_km_inr = @PricePerKmInr");
+                parameters.Add("PricePerKmInr", request.PricePerKmInr);
             }
             if (request.DriverName != null)
             {

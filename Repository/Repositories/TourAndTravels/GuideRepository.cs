@@ -24,10 +24,10 @@ namespace Repository.Repositories.TourAndTravels
             string insertQuery = @"
                 INSERT INTO guides
                 (full_name, phone, email, experience_years, languages, specialization,
-                 certification_number, price_per_day, bio, photo, is_active, created_by)
+                 certification_number, price_per_day, price_per_day_usd, price_per_day_inr, bio, photo, is_active, created_by)
                 VALUES
                 (@FullName, @Phone, @Email, @ExperienceYears, @Languages::jsonb, @Specialization,
-                 @CertificationNumber, @PricePerDay, @Bio, @Photo, true, @CreatedBy)
+                 @CertificationNumber, @PricePerDay, @PricePerDayUsd, @PricePerDayInr, @Bio, @Photo, true, @CreatedBy)
                 RETURNING id;";
 
             long guideId = _dbConnection.QuerySingle<long>(
@@ -42,6 +42,8 @@ namespace Repository.Repositories.TourAndTravels
                     request.Specialization,
                     request.CertificationNumber,
                     request.PricePerDay,
+                    request.PricePerDayUsd,
+                    request.PricePerDayInr,
                     request.Bio,
                     request.Photo,
                     CreatedBy = userId
@@ -60,7 +62,7 @@ namespace Repository.Repositories.TourAndTravels
             string query = @"
                 SELECT 
                     id, full_name, phone, email, experience_years, languages, specialization,
-                    certification_number, price_per_day, rating, bio, photo, is_active, created_by, created_at
+                    certification_number, price_per_day, price_per_day_usd, price_per_day_inr, rating, bio, photo, is_active, created_by, created_at
                 FROM guides
                 WHERE (@IncludeInactive = true OR is_active = true)
                 ORDER BY full_name;";
@@ -80,6 +82,8 @@ namespace Repository.Repositories.TourAndTravels
                 Specialization = g.Specialization,
                 CertificationNumber = g.CertificationNumber,
                 PricePerDay = g.PricePerDay,
+                PricePerDayUsd = g.PricePerDayUsd,
+                PricePerDayInr = g.PricePerDayInr,
                 Rating = g.Rating,
                 Bio = g.Bio,
                 Photo = g.Photo,
@@ -93,7 +97,7 @@ namespace Repository.Repositories.TourAndTravels
             string query = @"
                 SELECT 
                     id, full_name, phone, email, experience_years, languages, specialization,
-                    certification_number, price_per_day, rating, bio, photo, is_active, created_by, created_at
+                    certification_number, price_per_day, price_per_day_usd, price_per_day_inr, rating, bio, photo, is_active, created_by, created_at
                 FROM guides
                 WHERE id = @Id;";
 
@@ -115,6 +119,8 @@ namespace Repository.Repositories.TourAndTravels
                 Specialization = guide.Specialization,
                 CertificationNumber = guide.CertificationNumber,
                 PricePerDay = guide.PricePerDay,
+                PricePerDayUsd = guide.PricePerDayUsd,
+                PricePerDayInr = guide.PricePerDayInr,
                 Rating = guide.Rating,
                 Bio = guide.Bio,
                 Photo = guide.Photo,
@@ -168,6 +174,16 @@ namespace Repository.Repositories.TourAndTravels
             {
                 updateFields.Add("price_per_day = @PricePerDay");
                 parameters.Add("PricePerDay", request.PricePerDay);
+            }
+            if (request.PricePerDayUsd.HasValue)
+            {
+                updateFields.Add("price_per_day_usd = @PricePerDayUsd");
+                parameters.Add("PricePerDayUsd", request.PricePerDayUsd);
+            }
+            if (request.PricePerDayInr.HasValue)
+            {
+                updateFields.Add("price_per_day_inr = @PricePerDayInr");
+                parameters.Add("PricePerDayInr", request.PricePerDayInr);
             }
             if (request.Bio != null)
             {
